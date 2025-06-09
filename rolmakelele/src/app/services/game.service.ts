@@ -159,6 +159,7 @@ export class GameService {
       this.socket.on('game_error', (err: any) => {
         this.zone.run(() => {
           this.snackBar.open(err.message, 'Cerrar', { duration: 3000 });
+          if(err.code === "ROOM_NOT_FOUND"){ this.router.navigate(['/rooms']); }
         });
       });
     }
