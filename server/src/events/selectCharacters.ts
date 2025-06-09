@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import config from '../config/config';
 import characterService from '../models/character.model';
 import { GameRoom, Player, CharacterState } from '../types/game.types';
+import { sanitizeRoom } from '../utils/sanitizeRoom';
 import { ClientEvents, ServerEvents, SelectCharactersData } from '../types/socket.types';
 
 export function registerSelectCharacters(
@@ -66,6 +67,6 @@ export function registerSelectCharacters(
       playerRoom.status = 'character_selection';
     }
 
-    io.to(playerRoom.id).emit(ServerEvents.ROOM_UPDATED, { room: playerRoom });
+    io.to(playerRoom.id).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(playerRoom) });
   });
 }

@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
+import { sanitizeRoom } from '../utils/sanitizeRoom';
 import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types';
 
 export function registerJoinRoom(
@@ -30,9 +31,9 @@ export function registerJoinRoom(
           existingPlayer.reconnectTimer = undefined;
         }
         socket.join(data.roomId);
-        socket.emit(ServerEvents.ROOM_JOINED, { room });
+        socket.emit(ServerEvents.ROOM_JOINED, { room: sanitizeRoom(room) });
 
-        io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+        io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
         return;
       } else {
         socket.emit(ServerEvents.ERROR, {
@@ -72,9 +73,9 @@ export function registerJoinRoom(
       room.status = 'character_selection';
     }
     socket.join(data.roomId);
-    socket.emit(ServerEvents.ROOM_JOINED, { room });
+    socket.emit(ServerEvents.ROOM_JOINED, { room: sanitizeRoom(room) });
 
-    io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+    io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
 
     io.emit(ServerEvents.ROOMS_LIST, {
       rooms: Array.from(rooms.values()).map(r => ({

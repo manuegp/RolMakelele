@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
+import { sanitizeRoom } from '../utils/sanitizeRoom';
 import { ClientEvents, ServerEvents, CreateRoomData } from '../types/socket.types';
 
 export function registerCreateRoom(
@@ -34,7 +35,7 @@ export function registerCreateRoom(
     rooms.set(roomId, newRoom);
 
     socket.join(roomId);
-    socket.emit(ServerEvents.ROOM_JOINED, { room: newRoom });
+    socket.emit(ServerEvents.ROOM_JOINED, { room: sanitizeRoom(newRoom) });
 
     io.emit(ServerEvents.ROOMS_LIST, {
       rooms: Array.from(rooms.values()).map(r => ({

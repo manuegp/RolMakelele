@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
+import { sanitizeRoom } from '../utils/sanitizeRoom';
 import { ClientEvents, ServerEvents } from '../types/socket.types';
 
 export function registerReady(
@@ -68,7 +69,7 @@ export function registerReady(
       playerRoom.currentTurn = turnOrder[0];
 
       io.to(playerRoom.id).emit(ServerEvents.GAME_STARTED, {
-        room: playerRoom,
+        room: sanitizeRoom(playerRoom),
         turnOrder
       });
 
@@ -88,7 +89,7 @@ export function registerReady(
         }))
       });
     } else {
-      io.to(playerRoom.id).emit(ServerEvents.ROOM_UPDATED, { room: playerRoom });
+      io.to(playerRoom.id).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(playerRoom) });
     }
   });
 }

@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { GameRoom } from '../types/game.types';
+import { sanitizeRoom } from '../utils/sanitizeRoom';
 import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types';
 
 export function registerJoinAsSpectator(
@@ -28,9 +29,9 @@ export function registerJoinAsSpectator(
 
     room.spectators.push(socket.id);
     socket.join(data.roomId);
-    socket.emit(ServerEvents.ROOM_JOINED, { room });
+    socket.emit(ServerEvents.ROOM_JOINED, { room: sanitizeRoom(room) });
 
-    io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+    io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
 
     io.to(data.roomId).emit(ServerEvents.CHAT_MESSAGE, {
       username: 'Sistema',

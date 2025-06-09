@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ServerEvents } from "../types/socket.types";
 import config from "../config/config";
+import { sanitizeRoom } from "../utils/sanitizeRoom";
 
 export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
@@ -38,11 +39,11 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
               }
             }
 
-            io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+            io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
           }
         }, config.reconnectTimeout * 1000);
 
-        io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+        io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
         
         // Enviar mensaje de chat
         io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
@@ -65,7 +66,7 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
           rooms.delete(roomId);
         } else {
           // Notificar a todos los clientes en la sala que hubo un cambio
-          io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+          io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room: sanitizeRoom(room) });
           
           // Enviar mensaje de chat
           io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
