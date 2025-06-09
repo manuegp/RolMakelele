@@ -10,6 +10,7 @@ export class GameService {
   private socket: any;
   private username = '';
   private selectedCharacters: string[] = [];
+  private currentRoomId: string | null = null;
 
   private readonly API_BASE = 'http://localhost:3001';
 
@@ -44,6 +45,9 @@ export class GameService {
         this.zone.run(() => this.rooms$.next(data.rooms));
       });
       this.socket.on('room_joined', (data: any) => {
+        this.currentRoomId = data.room.id;
+      });
+      this.socket.on('game_started', (data: any) => {
         const roomId = data.room.id;
         this.zone.run(() => {
           this.router.navigate(['/combat', roomId]);
