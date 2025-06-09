@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
 declare const io: any;
 
@@ -66,6 +66,25 @@ export class GameService {
 
   getCurrentRoomId() { return this.currentRoomId; }
   isInGame() { return this.currentRoomId !== null; }
+
+  async roomExists(roomId: string): Promise<boolean> {
+    try {
+      const res = await firstValueFrom(
+        this.http.get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+      );
+      this.rooms$.next(res.rooms);
+      return res.rooms.some(r => r.id === roomId);
+    } catch {
+      return false;
+    }
+  }
+
+  clearRoom() {
+    this.currentRoomId = null;
+    this.currentRoom$.next(null);
+    this.turnInfo$.next(null);
+    sessionStorage.removeItem('roomId');
+  }
 
   private ensureSocket() {
     if (!this.socket) {
@@ -159,7 +178,10 @@ export class GameService {
       this.socket.on('game_error', (err: any) => {
         this.zone.run(() => {
           this.snackBar.open(err.message, 'Cerrar', { duration: 3000 });
-          if(err.code === "ROOM_NOT_FOUND"){ this.router.navigate(['/rooms']); }
+          if (err.code === 'ROOM_NOT_FOUND') {
+            this.clearRoom();
+            this.router.navigate(['/rooms']);
+          }
         });
       });
     }
