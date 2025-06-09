@@ -10,6 +10,7 @@ export class GameService {
   private socket: any;
   private username = '';
   private selectedCharacters: string[] = [];
+  private currentRoomId: string | null = null;
 
   private readonly API_BASE = 'http://localhost:3001';
 
@@ -37,6 +38,9 @@ export class GameService {
   setUsername(name: string) { this.username = name; }
   setSelectedCharacters(ids: string[]) { this.selectedCharacters = ids; }
 
+  getCurrentRoomId() { return this.currentRoomId; }
+  isInGame() { return this.currentRoomId !== null; }
+
   private ensureSocket() {
     if (!this.socket) {
       this.socket = io('http://localhost:3001');
@@ -45,6 +49,7 @@ export class GameService {
       });
       this.socket.on('room_joined', (data: any) => {
         const roomId = data.room.id;
+        this.currentRoomId = roomId;
         this.zone.run(() => {
           this.router.navigate(['/combat', roomId]);
         });
@@ -66,5 +71,9 @@ export class GameService {
     this.ensureSocket();
     this.socket.emit('create_room', { roomName, username: this.username });
     this.socket.emit('select_characters', { characterIds: this.selectedCharacters });
+  }
+
+  leaveGame() {
+    this.currentRoomId = null;
   }
 }
