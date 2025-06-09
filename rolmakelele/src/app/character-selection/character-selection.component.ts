@@ -20,6 +20,7 @@ export class CharacterSelectionComponent implements OnInit {
 
   ngOnInit() {
     this.roomId = this.route.snapshot.paramMap.get('roomId')!;
+    this.game.connect();
     this.game.fetchCharacters();
     this.game.characters$.subscribe(c => (this.characters = c));
     this.game.currentRoom$.subscribe(c => (this.room = c));

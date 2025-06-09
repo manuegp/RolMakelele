@@ -20,6 +20,7 @@ export class CombatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.game.connect();
     this.room$ = this.game.currentRoom$;
     this.turn$ = this.game.turnInfo$;
   }
