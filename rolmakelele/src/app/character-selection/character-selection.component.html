@@ -1,9 +1,5 @@
 <div class="container">
   <h2 class="mb-3">Elige 4 personajes</h2>
-  <div class="mb-3">
-    <label class="form-label">Nombre de usuario</label>
-    <input class="form-control" [(ngModel)]="username" />
-  </div>
   <div class="row">
     <div class="col-md-3 mb-3" *ngFor="let char of characters">
       <div class="card" [class.border-primary]="selected.includes(char.id)">
@@ -16,5 +12,5 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="selected.length !== 4 || !username" (click)="next()">Continuar</button>
+  <button class="btn btn-primary" [disabled]="selected.length !== 4" (click)="ready()">Estoy listo</button>
 </div>

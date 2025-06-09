@@ -1,13 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'rolmakelele';
+  username = '';
+
+  constructor(public game: GameService) {}
+
+  ngOnInit() {
+    this.username = this.game.getUsername();
+  }
+
+  change() {
+    if (this.username) {
+      this.game.setUsername(this.username);
+    }
+  }
 }

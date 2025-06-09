@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 
 @Component({
@@ -11,13 +11,14 @@ import { GameService } from '../services/game.service';
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {
-  username = '';
   selected: string[] = [];
   characters: any[] = [];
+  roomId!: string;
 
-  constructor(private game: GameService, private router: Router) {}
+  constructor(private game: GameService, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.roomId = this.route.snapshot.paramMap.get('roomId')!;
     this.game.fetchCharacters();
     this.game.characters$.subscribe(c => (this.characters = c));
   }
@@ -30,11 +31,11 @@ export class CharacterSelectionComponent implements OnInit {
     }
   }
 
-  next() {
-    if (this.username && this.selected.length === 4) {
-      this.game.setUsername(this.username);
+  ready() {
+    if (this.selected.length === 4) {
       this.game.setSelectedCharacters(this.selected);
-      this.router.navigate(['/rooms']);
+      this.game.sendSelectedCharacters();
+      this.game.ready();
     }
   }
 }

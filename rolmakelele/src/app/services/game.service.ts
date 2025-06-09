@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
 
 declare const io: any;
@@ -19,7 +20,17 @@ export class GameService {
   characters$ = new BehaviorSubject<any[]>([]);
   rooms$ = new BehaviorSubject<any[]>([]);
 
-  constructor(private http: HttpClient, private router: Router, private zone: NgZone) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private zone: NgZone,
+    private snackBar: MatSnackBar
+  ) {
+    const stored = sessionStorage.getItem('username');
+    if (stored) {
+      this.username = stored;
+    }
+  }
 
   fetchCharacters() {
     this.http
@@ -37,7 +48,16 @@ export class GameService {
       });
   }
 
-  setUsername(name: string) { this.username = name; }
+  setUsername(name: string) {
+    this.username = name;
+    sessionStorage.setItem('username', name);
+  }
+  getUsername() {
+    return this.username;
+  }
+  hasUsername() {
+    return this.username.trim().length > 0;
+  }
   setSelectedCharacters(ids: string[]) { this.selectedCharacters = ids; }
 
   getCurrentRoomId() { return this.currentRoomId; }
@@ -54,7 +74,7 @@ export class GameService {
         this.currentRoomId = roomId;
         this.zone.run(() => {
           this.currentRoom$.next(data.room);
-          this.router.navigate(['/combat', roomId]);
+          this.router.navigate(['/characters', roomId]);
         });
       });
       this.socket.on('room_updated', (data: any) => {
@@ -69,6 +89,7 @@ export class GameService {
             characterIndex: first.characterIndex,
             timeRemaining: null
           });
+          this.router.navigate(['/combat', data.room.id]);
         });
       });
       this.socket.on('turn_started', (data: any) => {
@@ -79,7 +100,12 @@ export class GameService {
           this.currentRoomId = null;
           this.currentRoom$.next(null);
           this.turnInfo$.next(null);
-          this.router.navigate(['/select']);
+          this.router.navigate(['/rooms']);
+        });
+      });
+      this.socket.on('game_error', (err: any) => {
+        this.zone.run(() => {
+          this.snackBar.open(err.message, 'Cerrar', { duration: 3000 });
         });
       });
     }
@@ -92,13 +118,21 @@ export class GameService {
   joinRoom(roomId: string) {
     this.ensureSocket();
     this.socket.emit('join_room', { roomId, username: this.username });
-    this.socket.emit('select_characters', { characterIds: this.selectedCharacters });
   }
 
   createRoom(roomName: string) {
     this.ensureSocket();
     this.socket.emit('create_room', { roomName, username: this.username });
+  }
+
+  sendSelectedCharacters() {
+    this.ensureSocket();
     this.socket.emit('select_characters', { characterIds: this.selectedCharacters });
+  }
+
+  ready() {
+    this.ensureSocket();
+    this.socket.emit('ready');
   }
 
   leaveGame() {

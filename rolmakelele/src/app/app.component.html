@@ -1,4 +1,11 @@
-<nav class="navbar navbar-dark bg-dark mb-3">
-  <a class="navbar-brand ms-2" routerLink="/">Rolmakelele</a>
+<nav class="navbar navbar-dark bg-dark mb-3 px-2">
+  <a class="navbar-brand" routerLink="/">Rolmakelele</a>
+  <div class="ms-auto" *ngIf="game.hasUsername()">
+    <input
+      class="form-control form-control-sm d-inline-block w-auto"
+      [(ngModel)]="username"
+      (change)="change()"
+    />
+  </div>
 </nav>
 <router-outlet></router-outlet>
