@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.username = this.game.getUsername();
+    this.game.connect();
   }
 
   change() {

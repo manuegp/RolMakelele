@@ -84,7 +84,17 @@ export class GameService {
         sessionStorage.setItem('roomId', roomId);
         this.zone.run(() => {
           this.currentRoom$.next(data.room);
-          this.router.navigate(['/characters', roomId]);
+          if (
+            data.room.status === 'waiting' ||
+            data.room.status === 'character_selection'
+          ) {
+            this.router.navigate(['/characters', roomId]);
+          } else {
+            if (data.room.currentTurn) {
+              this.turnInfo$.next(data.room.currentTurn);
+            }
+            this.router.navigate(['/combat', roomId]);
+          }
         });
       });
       this.socket.on('room_updated', (data: any) => {
