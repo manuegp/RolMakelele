@@ -32,7 +32,10 @@ export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string,
               winnerUsername: winner.username,
               reason: 'player_left'
             });
+            rooms.delete(roomId);
           }
+        }else if (room.status === 'character_selection') {
+          room.status = 'waiting';
         }
         
         // Notificar a todos los clientes en la sala que hubo un cambio

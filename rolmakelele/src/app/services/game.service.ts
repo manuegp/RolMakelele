@@ -166,6 +166,7 @@ export class GameService {
     if (this.currentRoomId) {
       this.ensureSocket();
       this.socket.emit('leave_room');
+      this.router.navigate(['/rooms']);
     }
     this.currentRoomId = null;
     sessionStorage.removeItem('roomId');
