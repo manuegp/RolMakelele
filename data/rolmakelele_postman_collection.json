@@ -1,0 +1,1418 @@
+{
+  "info": {
+    "name": "RolMakelele API",
+    "description": "Colección para probar el servidor de juego de rol por turnos RolMakelele",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "REST API",
+      "description": "Endpoints REST para interactuar con el servidor",
+      "item": [
+        {
+          "name": "Health Check",
+          "description": "Verificar que el servidor está funcionando correctamente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Characters",
+          "description": "Obtener la lista de todos los personajes disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/characters",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "characters"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rooms",
+          "description": "Obtener la lista de todas las salas disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["api", "rooms"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Socket.IO - Jugador 1",
+      "description": "Eventos de Socket.IO para el primer jugador",
+      "item": [
+        {
+          "name": "1. Conectar al Servidor",
+          "description": "Establecer una conexión con el servidor Socket.IO",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.text();",
+                  "const sidRegex = /\"sid\":\"([^\"]+)\"/;",
+                  "const match = response.match(sidRegex);",
+                  "",
+                  "if (match && match[1]) {",
+                  "    pm.collectionVariables.set('player1_sid', match[1]);",
+                  "    console.log('Socket ID guardado: ' + match[1]);",
+                  "} else {",
+                  "    console.error('No se encontró el Socket ID en la respuesta');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Crear Sala",
+          "description": "Crear una nueva sala de juego",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.text();",
+                  "const jsonStart = response.indexOf('{');",
+                  "",
+                  "if (jsonStart !== -1) {",
+                  "    const jsonText = response.substring(jsonStart);",
+                  "    try {",
+                  "        const data = JSON.parse(jsonText);",
+                  "        if (data.room && data.room.id) {",
+                  "            pm.collectionVariables.set('room_id', data.room.id);",
+                  "            console.log('Room ID guardado: ' + data.room.id);",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error('Error al parsear la respuesta JSON', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"create_room\",{\"roomName\":\"Sala de Prueba\",\"username\":\"Jugador1\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Recibir Eventos (Polling)",
+          "description": "Escuchar eventos del servidor a través de polling",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Seleccionar Personajes",
+          "description": "Seleccionar 4 personajes para el juego",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"select_characters\",{\"characterIds\":[\"c001\",\"c002\",\"c003\",\"c004\"]}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Marcar como Listo",
+          "description": "Indicar que el jugador está listo para comenzar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"ready\",{}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Realizar Acción",
+          "description": "Ejecutar una acción durante el turno",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"perform_action\",{\"sourceCharacterIndex\":0,\"targetPlayerId\":\"{{player2_id}}\",\"targetCharacterIndex\":0,\"abilityIndex\":0}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Enviar Mensaje de Chat",
+          "description": "Enviar un mensaje al chat de la sala",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"chat_message\",{\"message\":\"Hola, soy el Jugador 1!\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Abandonar Sala",
+          "description": "Salir de la sala actual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"leave_room\",{}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player1_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player1_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Socket.IO - Jugador 2",
+      "description": "Eventos de Socket.IO para el segundo jugador",
+      "item": [
+        {
+          "name": "1. Conectar al Servidor",
+          "description": "Establecer una conexión con el servidor Socket.IO",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.text();",
+                  "const sidRegex = /\"sid\":\"([^\"]+)\"/;",
+                  "const match = response.match(sidRegex);",
+                  "",
+                  "if (match && match[1]) {",
+                  "    pm.collectionVariables.set('player2_sid', match[1]);",
+                  "    console.log('Socket ID guardado: ' + match[1]);",
+                  "} else {",
+                  "    console.error('No se encontró el Socket ID en la respuesta');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Unirse a Sala",
+          "description": "Unirse a una sala existente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.text();",
+                  "const jsonStart = response.indexOf('{');",
+                  "",
+                  "if (jsonStart !== -1) {",
+                  "    const jsonText = response.substring(jsonStart);",
+                  "    try {",
+                  "        const data = JSON.parse(jsonText);",
+                  "        if (data.room && data.room.players && data.room.players.length > 0) {",
+                  "            // Obtener el ID del jugador actual",
+                  "            for (let player of data.room.players) {",
+                  "                if (player.username === 'Jugador2') {",
+                  "                    pm.collectionVariables.set('player2_id', player.id);",
+                  "                    console.log('Player 2 ID guardado: ' + player.id);",
+                  "                    break;",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    } catch (e) {",
+                  "        console.error('Error al parsear la respuesta JSON', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"join_room\",{\"roomId\":\"{{room_id}}\",\"username\":\"Jugador2\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Recibir Eventos (Polling)",
+          "description": "Escuchar eventos del servidor a través de polling",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Seleccionar Personajes",
+          "description": "Seleccionar 4 personajes para el juego",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"select_characters\",{\"characterIds\":[\"c003\",\"c004\",\"c005\",\"c006\"]}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Marcar como Listo",
+          "description": "Indicar que el jugador está listo para comenzar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"ready\",{}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Realizar Acción",
+          "description": "Ejecutar una acción durante el turno",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"perform_action\",{\"sourceCharacterIndex\":0,\"targetPlayerId\":\"{{player1_id}}\",\"targetCharacterIndex\":0,\"abilityIndex\":0}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Enviar Mensaje de Chat",
+          "description": "Enviar un mensaje al chat de la sala",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"chat_message\",{\"message\":\"Hola, soy el Jugador 2!\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Abandonar Sala",
+          "description": "Salir de la sala actual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"leave_room\",{}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{player2_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{player2_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Socket.IO - Espectador",
+      "description": "Eventos de Socket.IO para un espectador",
+      "item": [
+        {
+          "name": "1. Conectar al Servidor",
+          "description": "Establecer una conexión con el servidor Socket.IO",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.text();",
+                  "const sidRegex = /\"sid\":\"([^\"]+)\"/;",
+                  "const match = response.match(sidRegex);",
+                  "",
+                  "if (match && match[1]) {",
+                  "    pm.collectionVariables.set('spectator_sid', match[1]);",
+                  "    console.log('Socket ID guardado: ' + match[1]);",
+                  "} else {",
+                  "    console.error('No se encontró el Socket ID en la respuesta');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Unirse como Espectador",
+          "description": "Unirse a una sala como espectador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"join_as_spectator\",{\"roomId\":\"{{room_id}}\",\"username\":\"Espectador1\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{spectator_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{spectator_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Recibir Eventos (Polling)",
+          "description": "Escuchar eventos del servidor a través de polling",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{spectator_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{spectator_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Enviar Mensaje de Chat",
+          "description": "Enviar un mensaje al chat de la sala como espectador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"chat_message\",{\"message\":\"¡Vaya partida más interesante!\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{spectator_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{spectator_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Abandonar Sala",
+          "description": "Salir de la sala como espectador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"leave_room\",{}]"
+            },
+            "url": {
+              "raw": "http://localhost:3001/socket.io/?EIO=4&transport=polling&sid={{spectator_sid}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{spectator_sid}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "player1_sid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player2_sid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "spectator_sid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "room_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player1_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "player2_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+
+{
+  "info": {
+    "name": "RolMakelele API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "item": [
+    {
+      "name": "REST API",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Characters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/characters",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "characters"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Rooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "rooms"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Socket.IO Events",
+      "item": [
+        {
+          "name": "Connect",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Guardar el socket ID para usarlo en otras solicitudes",
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('socketId', jsonData.socketId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"create_room\", {\"roomName\": \"Sala de Prueba\", \"username\": \"Jugador1\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Join Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"join_room\", {\"roomId\": \"ROOM_ID_HERE\", \"username\": \"Jugador2\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Join As Spectator",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"join_as_spectator\", {\"roomId\": \"ROOM_ID_HERE\", \"username\": \"Espectador1\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Select Characters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"select_characters\", {\"characterIds\": [\"c001\", \"c002\", \"c003\", \"c004\"]}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ready",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"ready\", {}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perform Action",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"perform_action\", {\"sourceCharacterIndex\": 0, \"targetPlayerId\": \"TARGET_PLAYER_ID\", \"targetCharacterIndex\": 0, \"abilityIndex\": 0}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Leave Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"leave_room\", {}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "42[\"chat_message\", {\"message\": \"Hola a todos!\"}]"
+            },
+            "url": {
+              "raw": "http://localhost:3000/socket.io/?EIO=4&transport=polling&sid={{socketId}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["socket.io", ""],
+              "query": [
+                {
+                  "key": "EIO",
+                  "value": "4"
+                },
+                {
+                  "key": "transport",
+                  "value": "polling"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{socketId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "socketId",
+      "value": ""
+    }
+  ]
+}
+
