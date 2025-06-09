@@ -1,11 +1,11 @@
-
 import { v4 as uuidv4 } from 'uuid';
-import { Server, Socket, } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { CreateRoomData, ServerEvents } from '../types/socket.types';
 import { Player, GameRoom } from '../types/game.types';
 import config from '../config/config';
 
-export const create_room = (data: CreateRoomData) => {
+export function createRoomHandler(io: Server, rooms: Map<string, GameRoom>) {
+  return (socket: Socket) => (data: CreateRoomData): void => {
     const roomId = uuidv4();
     const newRoom: GameRoom = {
       id: roomId,
@@ -17,26 +17,21 @@ export const create_room = (data: CreateRoomData) => {
       maxSpectators: config.maxSpectatorsPerRoom,
       createdAt: new Date()
     };
-    
-    // Añadir al jugador como primer jugador
+
     const player: Player = {
       id: socket.id,
       username: data.username,
       selectedCharacters: [],
       isReady: false
     };
-    
+
     newRoom.players.push(player);
     rooms.set(roomId, newRoom);
-    
-    // Unir al socket a la sala
+
     socket.join(roomId);
-    
-    // Notificar al cliente que se unió correctamente
     socket.emit(ServerEvents.ROOM_JOINED, { room: newRoom });
-    
-    // Actualizar la lista de salas para todos
-    io.emit(ServerEvents.ROOMS_LIST, { 
+
+    io.emit(ServerEvents.ROOMS_LIST, {
       rooms: Array.from(rooms.values()).map(r => ({
         id: r.id,
         name: r.name,
@@ -45,4 +40,5 @@ export const create_room = (data: CreateRoomData) => {
         status: r.status
       }))
     });
-  }
+  };
+}
