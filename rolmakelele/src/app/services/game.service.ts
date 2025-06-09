@@ -89,10 +89,21 @@ export class GameService {
       });
       this.socket.on('room_updated', (data: any) => {
         this.zone.run(() => {
+          const previous = this.currentRoom$.value;
           this.currentRoom$.next(data.room);
           if (data.room.id === this.currentRoomId && data.room.status === 'waiting') {
             this.turnInfo$.next(null);
             this.router.navigate(['/characters', data.room.id]);
+          }
+          if (previous && data.room.id === this.currentRoomId) {
+            const myId = this.socket.id;
+            const prevOpp = previous.players.find((p: any) => p.id !== myId);
+            const opp = data.room.players.find((p: any) => p.id !== myId);
+            if (opp && opp.isDisconnected && !(prevOpp && prevOpp.isDisconnected)) {
+              this.snackBar.open('Tu rival se ha desconectado. Esperando reconexión...', 'Cerrar', { duration: 3000 });
+            } else if (opp && !opp.isDisconnected && prevOpp && prevOpp.isDisconnected) {
+              this.snackBar.open('Tu rival se ha reconectado.', 'Cerrar', { duration: 3000 });
+            }
           }
         });
       });
@@ -119,6 +130,12 @@ export class GameService {
               message = 'El rival se ha rendido. ¡Has ganado!';
             } else {
               message = 'Has abandonado la partida.';
+            }
+          } else if (data.reason === 'player_disconnected_timeout') {
+            if (data.winnerId === this.socket.id) {
+              message = 'Tu rival no volvió a conectarse. ¡Has ganado!';
+            } else {
+              message = 'Tardaste demasiado en reconectarte.';
             }
           }
           this.snackBar.open(message, 'Cerrar', { duration: 3000 });

@@ -6,7 +6,8 @@ import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types'
 export function registerJoinRoom(
   io: Server,
   socket: Socket,
-  rooms: Map<string, GameRoom>
+  rooms: Map<string, GameRoom>,
+  disconnectTimers: Map<string, NodeJS.Timeout>
 ) {
   socket.on(ClientEvents.JOIN_ROOM, (data: JoinRoomData) => {
     const room = rooms.get(data.roomId);
@@ -17,6 +18,39 @@ export function registerJoinRoom(
         code: 'ROOM_NOT_FOUND'
       });
       return;
+    }
+
+    // Comprobar si ya existe un jugador con ese nombre (reconexión)
+    const existingIndex = room.players.findIndex(p => p.username === data.username);
+    if (existingIndex !== -1) {
+      const existing = room.players[existingIndex];
+      if (existing.isDisconnected) {
+        existing.id = socket.id;
+        existing.isDisconnected = false;
+        existing.disconnectedAt = undefined;
+        const key = `${room.id}:${data.username}`;
+        const timer = disconnectTimers.get(key);
+        if (timer) {
+          clearTimeout(timer);
+          disconnectTimers.delete(key);
+        }
+        socket.join(data.roomId);
+        socket.emit(ServerEvents.ROOM_JOINED, { room });
+        io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+        io.to(data.roomId).emit(ServerEvents.CHAT_MESSAGE, {
+          username: 'Sistema',
+          message: `${data.username} se ha reconectado`,
+          timestamp: new Date(),
+          isSpectator: false
+        });
+        return;
+      } else {
+        socket.emit(ServerEvents.ERROR, {
+          message: 'Nombre de usuario en uso',
+          code: 'USERNAME_TAKEN'
+        });
+        return;
+      }
     }
 
     if (room.status !== 'waiting') {

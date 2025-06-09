@@ -59,6 +59,8 @@ export interface Player {
   username: string;
   selectedCharacters: CharacterState[];
   isReady: boolean;
+  isDisconnected?: boolean;
+  disconnectedAt?: number;
 }
 
 // Estados posibles de una sala

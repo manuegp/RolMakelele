@@ -38,6 +38,7 @@ const io = new Server(server, {
 });
 
 const rooms: Map<string, GameRoom> = new Map();
+const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
 let characters: Character[] = [];
 
 try {
@@ -73,14 +74,14 @@ io.on('connection', socket => {
   });
 
   registerCreateRoom(io, socket, rooms);
-  registerJoinRoom(io, socket, rooms);
+  registerJoinRoom(io, socket, rooms, disconnectTimers);
   registerJoinAsSpectator(io, socket, rooms);
   registerSelectCharacters(io, socket, rooms);
   registerReady(io, socket, rooms);
   registerPerformAction(io, socket, rooms);
   registerLeaveRoom(io, socket, rooms);
   registerChatMessage(io, socket, rooms);
-  registerDisconnect(io, socket, rooms);
+  registerDisconnect(io, socket, rooms, disconnectTimers);
 });
 
 server.listen(config.port, () => {
