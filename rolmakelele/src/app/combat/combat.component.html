@@ -1,4 +1,8 @@
 <div class="container">
   <h2 class="mb-3">Combate - Sala {{ roomId }}</h2>
-  <p>Combate en progreso...</p>
+
+  <ng-container *ngIf="room$ | async as room">
+    <p *ngIf="room.status !== 'in_game'">Esperando a otro jugador...</p>
+    <p *ngIf="room.status === 'in_game'">Juego iniciado!</p>
+  </ng-container>
 </div>

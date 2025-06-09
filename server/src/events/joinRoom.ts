@@ -43,6 +43,9 @@ export function registerJoinRoom(
     };
 
     room.players.push(player);
+    if (room.players.length === config.maxPlayersPerRoom && room.status === 'waiting') {
+      room.status = 'character_selection';
+    }
     socket.join(data.roomId);
     socket.emit(ServerEvents.ROOM_JOINED, { room });
 

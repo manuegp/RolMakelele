@@ -11,6 +11,8 @@ export class GameService {
   private username = '';
   private selectedCharacters: string[] = [];
   private currentRoomId: string | null = null;
+  currentRoom$ = new BehaviorSubject<any | null>(null);
+  turnInfo$ = new BehaviorSubject<any | null>(null);
 
   private readonly API_BASE = 'http://localhost:3001';
 
@@ -51,7 +53,33 @@ export class GameService {
         const roomId = data.room.id;
         this.currentRoomId = roomId;
         this.zone.run(() => {
+          this.currentRoom$.next(data.room);
           this.router.navigate(['/combat', roomId]);
+        });
+      });
+      this.socket.on('room_updated', (data: any) => {
+        this.zone.run(() => this.currentRoom$.next(data.room));
+      });
+      this.socket.on('game_started', (data: any) => {
+        this.zone.run(() => {
+          this.currentRoom$.next(data.room);
+          const first = data.turnOrder[0];
+          this.turnInfo$.next({
+            playerId: first.playerId,
+            characterIndex: first.characterIndex,
+            timeRemaining: null
+          });
+        });
+      });
+      this.socket.on('turn_started', (data: any) => {
+        this.zone.run(() => this.turnInfo$.next(data));
+      });
+      this.socket.on('game_ended', () => {
+        this.zone.run(() => {
+          this.currentRoomId = null;
+          this.currentRoom$.next(null);
+          this.turnInfo$.next(null);
+          this.router.navigate(['/select']);
         });
       });
     }

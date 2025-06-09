@@ -77,7 +77,7 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
     }
     
     // Actualizar la lista de salas para todos
-    io.emit(ServerEvents.ROOMS_LIST, { 
+    io.emit(ServerEvents.ROOMS_LIST, {
       rooms: Array.from(rooms.values()).map(r => ({
         id: r.id,
         name: r.name,
@@ -86,5 +86,5 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
         status: r.status
       }))
     });
+  });
 }
-  )}

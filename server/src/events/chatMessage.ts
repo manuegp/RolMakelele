@@ -46,7 +46,4 @@ export function registerChatMessage(io: Server, socket: Socket, rooms: Map<strin
       isSpectator
     });
   });
-
-  // Desconexión
-  socket.on('disconnect', () => {
-})}
+}
