@@ -1,0 +1,20 @@
+<div class="container">
+  <h2 class="mb-3">Elige 4 personajes</h2>
+  <div class="mb-3">
+    <label class="form-label">Nombre de usuario</label>
+    <input class="form-control" [(ngModel)]="username" />
+  </div>
+  <div class="row">
+    <div class="col-md-3 mb-3" *ngFor="let char of characters">
+      <div class="card" [class.border-primary]="selected.includes(char.id)">
+        <div class="card-body">
+          <h5 class="card-title">{{ char.name }}</h5>
+          <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
+            {{ selected.includes(char.id) ? 'Quitar' : 'Añadir' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" [disabled]="selected.length !== 4 || !username" (click)="next()">Continuar</button>
+</div>

@@ -1,0 +1,27 @@
+<div class="container">
+  <h2 class="mb-3">Salas disponibles</h2>
+  <div class="mb-3">
+    <input class="form-control" placeholder="Nombre de la sala" [(ngModel)]="newRoomName" />
+    <button class="btn btn-success mt-2" (click)="create()">Crear sala</button>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Jugadores</th>
+        <th>Espectadores</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of rooms">
+        <td>{{ room.name }}</td>
+        <td>{{ room.players }}</td>
+        <td>{{ room.spectators }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="join(room.id)">Unirse</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
