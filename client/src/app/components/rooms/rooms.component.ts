@@ -26,7 +26,6 @@ export class RoomsComponent implements OnInit {
     this.characters = JSON.parse(localStorage.getItem('characters') || '[]');
 
     this.socket = io('http://localhost:3001');
-    this.socket.emit('create_room');
     this.socket.on('rooms_list', (data: any) => {
       this.rooms = data.rooms;
     });
