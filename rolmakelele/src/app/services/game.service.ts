@@ -11,21 +11,27 @@ export class GameService {
   private username = '';
   private selectedCharacters: string[] = [];
 
+  private readonly API_BASE = 'http://localhost:3001';
+
   characters$ = new BehaviorSubject<any[]>([]);
   rooms$ = new BehaviorSubject<any[]>([]);
 
   constructor(private http: HttpClient, private router: Router, private zone: NgZone) {}
 
   fetchCharacters() {
-    this.http.get<{ characters: any[] }>('/api/characters').subscribe(res => {
-      this.characters$.next(res.characters);
-    });
+    this.http
+      .get<{ characters: any[] }>(`${this.API_BASE}/api/characters`)
+      .subscribe(res => {
+        this.characters$.next(res.characters);
+      });
   }
 
   fetchRooms() {
-    this.http.get<{ rooms: any[] }>('/api/rooms').subscribe(res => {
-      this.rooms$.next(res.rooms);
-    });
+    this.http
+      .get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+      .subscribe(res => {
+        this.rooms$.next(res.rooms);
+      });
   }
 
   setUsername(name: string) { this.username = name; }
