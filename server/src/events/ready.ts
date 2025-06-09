@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
 import { ClientEvents, ServerEvents } from '../types/socket.types';
+import { broadcastRoomsList, findPlayerRoom } from '../utils/roomHelpers';
 
 export function registerReady(
   io: Server,
@@ -9,16 +10,9 @@ export function registerReady(
   rooms: Map<string, GameRoom>
 ) {
   socket.on(ClientEvents.READY, () => {
-    let playerRoom: GameRoom | undefined;
-    let player: Player | undefined;
-    for (const [, room] of rooms.entries()) {
-      const idx = room.players.findIndex(p => p.id === socket.id);
-      if (idx !== -1) {
-        playerRoom = room;
-        player = room.players[idx];
-        break;
-      }
-    }
+    const found = findPlayerRoom(rooms, socket.id);
+    let playerRoom: GameRoom | undefined = found?.room;
+    let player: Player | undefined = found?.player;
 
     if (!playerRoom || !player) {
       socket.emit(ServerEvents.ERROR, {
@@ -78,15 +72,7 @@ export function registerReady(
         timeRemaining: config.turnTimeLimit
       });
 
-      io.emit(ServerEvents.ROOMS_LIST, {
-        rooms: Array.from(rooms.values()).map(r => ({
-          id: r.id,
-          name: r.name,
-          players: r.players.length,
-          spectators: r.spectators.length,
-          status: r.status
-        }))
-      });
+      broadcastRoomsList(io, rooms);
     } else {
       io.to(playerRoom.id).emit(ServerEvents.ROOM_UPDATED, { room: playerRoom });
     }

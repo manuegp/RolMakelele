@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ServerEvents } from "../types/socket.types";
+import { broadcastRoomsList } from '../utils/roomHelpers';
 
 export function registerDisconnect(
   io: Server,
@@ -39,15 +40,7 @@ export function registerDisconnect(
               });
               rooms.delete(roomId);
             }
-            io.emit(ServerEvents.ROOMS_LIST, {
-              rooms: Array.from(rooms.values()).map(r => ({
-                id: r.id,
-                name: r.name,
-                players: r.players.length,
-                spectators: r.spectators.length,
-                status: r.status
-              }))
-            });
+            broadcastRoomsList(io, rooms);
           }
         }, 15000);
 
@@ -88,14 +81,6 @@ export function registerDisconnect(
     }
     
     // Actualizar la lista de salas para todos
-    io.emit(ServerEvents.ROOMS_LIST, {
-      rooms: Array.from(rooms.values()).map(r => ({
-        id: r.id,
-        name: r.name,
-        players: r.players.length,
-        spectators: r.spectators.length,
-        status: r.status
-      }))
-    });
+    broadcastRoomsList(io, rooms);
   });
 }

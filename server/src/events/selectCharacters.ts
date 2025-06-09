@@ -3,6 +3,7 @@ import config from '../config/config';
 import characterService from '../models/character.model';
 import { GameRoom, Player, CharacterState } from '../types/game.types';
 import { ClientEvents, ServerEvents, SelectCharactersData } from '../types/socket.types';
+import { findPlayerRoom } from '../utils/roomHelpers';
 
 export function registerSelectCharacters(
   io: Server,
@@ -10,17 +11,9 @@ export function registerSelectCharacters(
   rooms: Map<string, GameRoom>
 ) {
   socket.on(ClientEvents.SELECT_CHARACTERS, (data: SelectCharactersData) => {
-    let playerRoom: GameRoom | undefined;
-    let player: Player | undefined;
-
-    for (const [roomId, room] of rooms.entries()) {
-      const playerIndex = room.players.findIndex(p => p.id === socket.id);
-      if (playerIndex !== -1) {
-        playerRoom = room;
-        player = room.players[playerIndex];
-        break;
-      }
-    }
+    const found = findPlayerRoom(rooms, socket.id);
+    let playerRoom: GameRoom | undefined = found?.room;
+    let player: Player | undefined = found?.player;
 
     if (!playerRoom || !player) {
       socket.emit(ServerEvents.ERROR, {

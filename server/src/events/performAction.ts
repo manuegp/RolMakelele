@@ -2,21 +2,14 @@ import { Server, Socket } from "socket.io";
 import config from "../config/config";
 import { GameRoom, ActionResult } from "../types/game.types";
 import { ClientEvents, ServerEvents, PerformActionData } from "../types/socket.types";
+import { broadcastRoomsList, findPlayerRoom } from '../utils/roomHelpers';
 
 export function registerPerformAction(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
   socket.on(ClientEvents.PERFORM_ACTION, (data: PerformActionData) => {
     // Buscar la sala donde está el jugador
-    let playerRoom: GameRoom | undefined;
-    
-    for (const [roomId, room] of rooms.entries()) {
-      const playerIndex = room.players.findIndex(p => p.id === socket.id);
-      
-      if (playerIndex !== -1) {
-        playerRoom = room;
-        break;
-      }
-    }
+    const found = findPlayerRoom(rooms, socket.id);
+    let playerRoom: GameRoom | undefined = found?.room;
     
     if (!playerRoom) {
       socket.emit(ServerEvents.ERROR, { 
@@ -382,15 +375,7 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
     
     // Si el juego ha terminado, actualizar la lista de salas
     if (gameEnded) {
-      io.emit(ServerEvents.ROOMS_LIST, { 
-        rooms: Array.from(rooms.values()).map(r => ({
-          id: r.id,
-          name: r.name,
-          players: r.players.length,
-          spectators: r.spectators.length,
-          status: r.status
-        }))
-      });
+      broadcastRoomsList(io, rooms);
     }
   });
 

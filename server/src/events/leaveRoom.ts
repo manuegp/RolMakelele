@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ClientEvents, ServerEvents } from "../types/socket.types";
+import { broadcastRoomsList } from '../utils/roomHelpers';
 
 export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
@@ -45,15 +46,7 @@ export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string,
         socket.leave(roomId);
         
         // Actualizar la lista de salas para todos
-        io.emit(ServerEvents.ROOMS_LIST, { 
-          rooms: Array.from(rooms.values()).map(r => ({
-            id: r.id,
-            name: r.name,
-            players: r.players.length,
-            spectators: r.spectators.length,
-            status: r.status
-          }))
-        });
+        broadcastRoomsList(io, rooms);
         
         return;
       }
@@ -77,15 +70,7 @@ export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string,
         socket.leave(roomId);
         
         // Actualizar la lista de salas para todos
-        io.emit(ServerEvents.ROOMS_LIST, { 
-          rooms: Array.from(rooms.values()).map(r => ({
-            id: r.id,
-            name: r.name,
-            players: r.players.length,
-            spectators: r.spectators.length,
-            status: r.status
-          }))
-        });
+        broadcastRoomsList(io, rooms);
         
         return;
       }

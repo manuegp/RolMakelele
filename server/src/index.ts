@@ -24,6 +24,7 @@ import { registerPerformAction } from './events/performAction';
 import { registerLeaveRoom } from './events/leaveRoom';
 import { registerChatMessage } from './events/chatMessage';
 import { registerDisconnect } from './events/disconnect';
+import { getRoomsListData } from './utils/roomHelpers';
 
 const app = express();
 app.use(cors({ origin: config.corsOrigin }));
@@ -63,15 +64,7 @@ io.on('connection', socket => {
   console.log(`Cliente conectado: ${socket.id}`);
 
   socket.emit(ServerEvents.CHARACTERS_LIST, { characters });
-  socket.emit(ServerEvents.ROOMS_LIST, {
-    rooms: Array.from(rooms.values()).map(r => ({
-      id: r.id,
-      name: r.name,
-      players: r.players.length,
-      spectators: r.spectators.length,
-      status: r.status
-    }))
-  });
+  socket.emit(ServerEvents.ROOMS_LIST, getRoomsListData(rooms));
 
   registerCreateRoom(io, socket, rooms);
   registerJoinRoom(io, socket, rooms, disconnectTimers);

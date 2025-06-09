@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
 import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types';
+import { broadcastRoomsList } from '../utils/roomHelpers';
 
 export function registerJoinRoom(
   io: Server,
@@ -85,14 +86,6 @@ export function registerJoinRoom(
 
     io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
 
-    io.emit(ServerEvents.ROOMS_LIST, {
-      rooms: Array.from(rooms.values()).map(r => ({
-        id: r.id,
-        name: r.name,
-        players: r.players.length,
-        spectators: r.spectators.length,
-        status: r.status
-      }))
-    });
+    broadcastRoomsList(io, rooms);
   });
 }
