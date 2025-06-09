@@ -45,7 +45,7 @@ export function registerReady(
     }
 
     const playerIndex = playerRoom.players.findIndex(p => p.id === socket.id);
-    playerRoom.players[playerIndex].isReady = true;
+    playerRoom.players[playerIndex].isReady = !playerRoom.players[playerIndex].isReady;
 
     const allReady = playerRoom.players.length === config.maxPlayersPerRoom &&
                      playerRoom.players.every(p => p.isReady);

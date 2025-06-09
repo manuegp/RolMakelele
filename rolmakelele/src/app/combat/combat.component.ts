@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-combat',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CommonModule],
   templateUrl: './combat.component.html'
 })
 export class CombatComponent implements OnInit {

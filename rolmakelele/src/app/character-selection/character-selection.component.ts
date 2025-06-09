@@ -14,6 +14,7 @@ export class CharacterSelectionComponent implements OnInit {
   selected: string[] = [];
   characters: any[] = [];
   roomId!: string;
+  room: any;
 
   constructor(private game: GameService, private route: ActivatedRoute) {}
 
@@ -21,6 +22,7 @@ export class CharacterSelectionComponent implements OnInit {
     this.roomId = this.route.snapshot.paramMap.get('roomId')!;
     this.game.fetchCharacters();
     this.game.characters$.subscribe(c => (this.characters = c));
+    this.game.currentRoom$.subscribe(c => (this.room = c));
   }
 
   toggle(id: string) {
@@ -37,5 +39,9 @@ export class CharacterSelectionComponent implements OnInit {
       this.game.sendSelectedCharacters();
       this.game.ready();
     }
+  }
+
+  get getPlayersCount () {
+    return this.room?.players ? Object.keys(this.room.players).length : 0;
   }
 }
