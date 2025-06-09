@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ServerEvents } from "../types/socket.types";
+import config from "../config/config";
 
 export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
@@ -13,34 +14,34 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
       const playerIndex = room.players.findIndex(p => p.id === socket.id);
       
       if (playerIndex !== -1) {
-        // Obtener username para el mensaje
-        const username = room.players[playerIndex].username;
-        
-        // Eliminar al jugador
-        room.players.splice(playerIndex, 1);
-        
-        // Si era el último jugador, eliminar la sala
-        if (room.players.length === 0 && room.spectators.length === 0) {
-          rooms.delete(roomId);
-        } else if (room.status === 'in_game') {
-          // Si el juego estaba en curso, el otro jugador gana automáticamente
-          room.status = 'finished';
+        const player = room.players[playerIndex];
+        const username = player.username;
 
-          // Determinar el ganador (el otro jugador)
-          const winner = room.players[0];
-          if (winner) {
-            room.winner = winner.id;
+        // Marcar como desconectado y esperar reconexion
+        player.connected = false;
+        player.reconnectTimer = setTimeout(() => {
+          if (!player.connected) {
+            room.players.splice(playerIndex, 1);
 
-            // Notificar que el juego ha terminado
-            io.to(roomId).emit(ServerEvents.GAME_ENDED, {
-              winnerId: winner.id,
-              winnerUsername: winner.username,
-              reason: 'player_disconnected'
-            });
+            if (room.players.length === 0 && room.spectators.length === 0) {
+              rooms.delete(roomId);
+            } else if (room.status === 'in_game') {
+              room.status = 'finished';
+              const winner = room.players[0];
+              if (winner) {
+                room.winner = winner.id;
+                io.to(roomId).emit(ServerEvents.GAME_ENDED, {
+                  winnerId: winner.id,
+                  winnerUsername: winner.username,
+                  reason: 'player_disconnected'
+                });
+              }
+            }
+
+            io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
           }
-        }
-        
-        // Notificar a todos los clientes en la sala que hubo un cambio
+        }, config.reconnectTimeout * 1000);
+
         io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
         
         // Enviar mensaje de chat

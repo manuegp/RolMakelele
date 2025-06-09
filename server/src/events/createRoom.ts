@@ -26,7 +26,8 @@ export function registerCreateRoom(
       id: socket.id,
       username: data.username,
       selectedCharacters: [],
-      isReady: false
+      isReady: false,
+      connected: true
     };
 
     newRoom.players.push(player);

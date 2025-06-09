@@ -19,6 +19,30 @@ export function registerJoinRoom(
       return;
     }
 
+    const existingPlayer = room.players.find(p => p.username === data.username);
+    if (existingPlayer) {
+      if (!existingPlayer.connected) {
+        // Reconexion a partida en curso
+        existingPlayer.id = socket.id;
+        existingPlayer.connected = true;
+        if (existingPlayer.reconnectTimer) {
+          clearTimeout(existingPlayer.reconnectTimer);
+          existingPlayer.reconnectTimer = undefined;
+        }
+        socket.join(data.roomId);
+        socket.emit(ServerEvents.ROOM_JOINED, { room });
+
+        io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
+        return;
+      } else {
+        socket.emit(ServerEvents.ERROR, {
+          message: 'El nombre de usuario ya está en uso en esta sala',
+          code: 'USERNAME_TAKEN'
+        });
+        return;
+      }
+    }
+
     if (room.status !== 'waiting') {
       socket.emit(ServerEvents.ERROR, {
         message: 'No puedes unirte a una partida en curso',
@@ -39,7 +63,8 @@ export function registerJoinRoom(
       id: socket.id,
       username: data.username,
       selectedCharacters: [],
-      isReady: false
+      isReady: false,
+      connected: true
     };
 
     room.players.push(player);
