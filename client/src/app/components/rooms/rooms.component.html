@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <mat-card>
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Nombre de la sala</mat-label>
+      <input matInput [(ngModel)]="roomName">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="create()">Crear sala</button>
+  </mat-card>
+
+  <h4 class="mt-3">Salas disponibles</h4>
+  <div class="list-group">
+    <a *ngFor="let room of rooms" class="list-group-item list-group-item-action" (click)="join(room.id)">
+      {{room.name}} - {{room.players}} jugadores - {{room.status}}
+    </a>
+  </div>
+</div>
