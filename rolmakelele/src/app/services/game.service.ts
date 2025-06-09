@@ -26,9 +26,13 @@ export class GameService {
     private zone: NgZone,
     private snackBar: MatSnackBar
   ) {
-    const stored = sessionStorage.getItem('username');
-    if (stored) {
-      this.username = stored;
+    const storedUser = sessionStorage.getItem('username');
+    if (storedUser) {
+      this.username = storedUser;
+    }
+    const storedRoom = sessionStorage.getItem('roomId');
+    if (storedRoom) {
+      this.currentRoomId = storedRoom;
     }
   }
 
@@ -66,19 +70,31 @@ export class GameService {
   private ensureSocket() {
     if (!this.socket) {
       this.socket = io('http://localhost:3001');
+      this.socket.on('connect', () => {
+        if (this.currentRoomId) {
+          this.socket.emit('join_room', { roomId: this.currentRoomId, username: this.username });
+        }
+      });
       this.socket.on('rooms_list', (data: any) => {
         this.zone.run(() => this.rooms$.next(data.rooms));
       });
       this.socket.on('room_joined', (data: any) => {
         const roomId = data.room.id;
         this.currentRoomId = roomId;
+        sessionStorage.setItem('roomId', roomId);
         this.zone.run(() => {
           this.currentRoom$.next(data.room);
           this.router.navigate(['/characters', roomId]);
         });
       });
       this.socket.on('room_updated', (data: any) => {
-        this.zone.run(() => this.currentRoom$.next(data.room));
+        this.zone.run(() => {
+          this.currentRoom$.next(data.room);
+          if (data.room.id === this.currentRoomId && data.room.status === 'waiting') {
+            this.turnInfo$.next(null);
+            this.router.navigate(['/characters', data.room.id]);
+          }
+        });
       });
       this.socket.on('game_started', (data: any) => {
         this.zone.run(() => {
@@ -100,6 +116,7 @@ export class GameService {
           this.currentRoomId = null;
           this.currentRoom$.next(null);
           this.turnInfo$.next(null);
+          sessionStorage.removeItem('roomId');
           this.router.navigate(['/rooms']);
         });
       });
@@ -118,6 +135,7 @@ export class GameService {
   joinRoom(roomId: string) {
     this.ensureSocket();
     this.socket.emit('join_room', { roomId, username: this.username });
+    sessionStorage.setItem('roomId', roomId);
   }
 
   createRoom(roomName: string) {
@@ -136,6 +154,11 @@ export class GameService {
   }
 
   leaveGame() {
+    if (this.currentRoomId) {
+      this.ensureSocket();
+      this.socket.emit('leave_room');
+    }
     this.currentRoomId = null;
+    sessionStorage.removeItem('roomId');
   }
 }

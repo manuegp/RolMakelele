@@ -22,20 +22,15 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
         // Si era el último jugador, eliminar la sala
         if (room.players.length === 0 && room.spectators.length === 0) {
           rooms.delete(roomId);
-        } else if (room.status === 'in_game') {
-          // Si el juego estaba en curso, el otro jugador gana automáticamente
-          room.status = 'finished';
-          
-          // Determinar el ganador (el otro jugador)
-          const winner = room.players[0];
-          if (winner) {
-            room.winner = winner.id;
-            
-            // Notificar que el juego ha terminado
-            io.to(roomId).emit(ServerEvents.GAME_ENDED, {
-              winnerId: winner.id,
-              winnerUsername: winner.username
-            });
+        } else {
+          // Reiniciar la sala para una nueva partida
+          room.status = 'waiting';
+          room.turnOrder = undefined;
+          room.currentTurn = undefined;
+          room.winner = undefined;
+          for (const p of room.players) {
+            p.selectedCharacters = [];
+            p.isReady = false;
           }
         }
         

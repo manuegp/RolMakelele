@@ -23,4 +23,10 @@ export class CombatComponent implements OnInit {
     this.room$ = this.game.currentRoom$;
     this.turn$ = this.game.turnInfo$;
   }
+
+  leave() {
+    this.game.leaveGame();
+    this.game.fetchRooms();
+    this.game.connect();
+  }
 }

@@ -6,4 +6,5 @@
     <p *ngIf="room.status === 'character_selection'">Esperando que los jugadores estén listos...</p>
     <p *ngIf="room.status === 'in_game'">Juego iniciado!</p>
   </ng-container>
+  <button class="btn btn-secondary mt-3" (click)="leave()">Salir</button>
 </div>

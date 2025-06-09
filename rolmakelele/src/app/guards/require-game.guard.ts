@@ -7,7 +7,7 @@ export const requireGameGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =
   const router = inject(Router);
   const current = game.getCurrentRoomId();
   if (!current) {
-    return router.createUrlTree(['/select']);
+    return router.createUrlTree(['/rooms']);
   }
   const roomId = route.paramMap.get('roomId');
   if (roomId !== current) {

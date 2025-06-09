@@ -41,6 +41,12 @@ export class CharacterSelectionComponent implements OnInit {
     }
   }
 
+  leave() {
+    this.game.leaveGame();
+    this.game.fetchRooms();
+    this.game.connect();
+  }
+
   get getPlayersCount () {
     return this.room?.players ? Object.keys(this.room.players).length : 0;
   }
