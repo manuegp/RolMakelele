@@ -111,8 +111,17 @@ export class GameService {
       this.socket.on('turn_started', (data: any) => {
         this.zone.run(() => this.turnInfo$.next(data));
       });
-      this.socket.on('game_ended', () => {
+      this.socket.on('game_ended', (data: any) => {
         this.zone.run(() => {
+          let message = `Partida finalizada. Ganador: ${data.winnerUsername}`;
+          if (data.reason === 'player_left' || data.reason === 'player_disconnected') {
+            if (data.winnerId === this.socket.id) {
+              message = 'El rival se ha rendido. ¡Has ganado!';
+            } else {
+              message = 'Has abandonado la partida.';
+            }
+          }
+          this.snackBar.open(message, 'Cerrar', { duration: 3000 });
           this.currentRoomId = null;
           this.currentRoom$.next(null);
           this.turnInfo$.next(null);

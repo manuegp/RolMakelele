@@ -95,6 +95,7 @@ export interface ActionResultData {
 export interface GameEndedData {
   winnerId: string;
   winnerUsername: string;
+  reason?: string;
 }
 
 export interface ErrorData {
