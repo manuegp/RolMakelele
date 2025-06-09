@@ -48,6 +48,9 @@ export class GameService {
         this.zone.run(() => this.rooms$.next(data.rooms));
       });
       this.socket.on('room_joined', (data: any) => {
+        this.currentRoomId = data.room.id;
+      });
+      this.socket.on('game_started', (data: any) => {
         const roomId = data.room.id;
         this.currentRoomId = roomId;
         this.zone.run(() => {
