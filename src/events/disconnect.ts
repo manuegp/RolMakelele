@@ -87,3 +87,4 @@ export function registerDisconnect(io: Server, socket: Socket, rooms: Map<string
       }))
     });
 }
+  )}

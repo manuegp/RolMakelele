@@ -49,4 +49,4 @@ export function registerChatMessage(io: Server, socket: Socket, rooms: Map<strin
 
   // Desconexión
   socket.on('disconnect', () => {
-}
+})}
