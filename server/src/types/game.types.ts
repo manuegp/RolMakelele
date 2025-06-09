@@ -59,6 +59,8 @@ export interface Player {
   username: string;
   selectedCharacters: CharacterState[];
   isReady: boolean;
+  connected: boolean;
+  reconnectTimer?: NodeJS.Timeout;
 }
 
 // Estados posibles de una sala
