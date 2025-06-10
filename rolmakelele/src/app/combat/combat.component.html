@@ -1,16 +1,32 @@
 <div class="container">
   <h2 class="mb-3">Combate - Sala {{ roomId }}</h2>
- 
+
   <div class="row g-2 h-100">
-    <div class="col-12 offset-1 d-flex align-items-center justify-content-center"
-      style="height: 25%;"
+    <div
+      class="col-12 offset-1 d-flex align-items-center justify-content-center"
+      style="height: 25%"
     >
-      <div class="turn-order d-flex position-relative" *ngIf="room$ | async as room">
+      <div
+        class="turn-order d-flex position-relative"
+        *ngIf="room$ | async as room"
+      >
         <ng-container *ngIf="turn$ | async as turn">
-          <div class="turn-item border rounded position-relative" *ngFor="let t of room.turnOrder"
-               [ngClass]="isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'">
+          <div
+            class="turn-item border rounded position-relative"
+            *ngFor="let t of room.turnOrder"
+            [ngClass]="
+              isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'
+            "
+          >
             {{ getCharacterName(room, t.playerId, t.characterIndex) }}
-            <span class="arrow" *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex">&#9660;</span>
+            <span
+              class="arrow"
+              *ngIf="
+                turn.playerId === t.playerId &&
+                turn.characterIndex === t.characterIndex
+              "
+              >&#9660;</span
+            >
           </div>
         </ng-container>
       </div>
@@ -19,7 +35,7 @@
       <ng-container *ngFor="let i of rows">
         <div
           class="col-3 offset-1 d-flex align-items-center justify-content-center"
-          style="height: 25%;"
+          style="height: 25%"
         >
           <app-character-box
             *ngIf="getMyCharacters(room)[i]"
@@ -28,7 +44,7 @@
         </div>
         <div
           class="col-3 offset-4 d-flex align-items-center justify-content-center"
-          style="height: 25%;"
+          style="height: 25%"
         >
           <app-character-box
             *ngIf="getOpponentCharacters(room)[i]"
@@ -37,18 +53,32 @@
         </div>
       </ng-container>
     </ng-container>
-  </div> <!-- /row -->
+  </div>
+  <!-- /row -->
 
+  @if (room$ | async; as room) { @if (isMyTurn(room)) {
+  <div class="row row-cols-2 g-2 mt-3">
+    @for (skill of getSelectedCharacterSkills(room, myPlayerId!); track $index )
+    {
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body d-flex align-items-center justify-content-center">
+          Cuadro 1
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } 
+}
   <ng-container *ngIf="room$ | async as room">
-    <p *ngIf="room.status === 'waiting'">
-      Esperando a otro jugador...
-    </p>
+    <p *ngIf="room.status === 'waiting'">Esperando a otro jugador...</p>
     <p *ngIf="room.status === 'character_selection'">
       Esperando que los jugadores estén listos...
     </p>
   </ng-container>
 
-  <button class="btn btn-secondary mt-3" (click)="leave()">
-    Salir
+  <button class="btn btn-outline-danger mt-3 w-100" (click)="leave()">
+    Rendirse
   </button>
 </div>
