@@ -33,7 +33,7 @@ export class CombatComponent implements OnInit {
     return this.myPlayerId === playerId;
   }
 
-  getCharacterName(
+    return player?.selectedCharacters?.[characterIndex]?.name || '...';
     room: any,
     playerId: string,
     characterIndex: number
