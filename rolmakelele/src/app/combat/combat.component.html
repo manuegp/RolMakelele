@@ -5,7 +5,15 @@
     <div class="col-12 offset-1 d-flex align-items-center justify-content-center"
       style="height: 25%;"
     >
-      turn_ord
+      <div class="turn-order d-flex position-relative" *ngIf="room$ | async as room">
+        <ng-container *ngIf="turn$ | async as turn">
+          <div class="turn-item border rounded position-relative" *ngFor="let t of room.turnOrder"
+               [ngClass]="isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'">
+            {{ getCharacterName(room, t.playerId, t.characterIndex) }}
+            <span class="arrow" *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex">&#9650;</span>
+          </div>
+        </ng-container>
+      </div>
     </div>
     <!-- Fila 1: .div1 y .div5 -->
     <div

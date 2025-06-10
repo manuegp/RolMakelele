@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
   selector: 'app-combat',
   standalone: true,
   imports: [CommonModule, CommonModule],
-  templateUrl: './combat.component.html'
+  templateUrl: './combat.component.html',
+  styleUrl: './combat.component.scss'
 })
 export class CombatComponent implements OnInit {
   roomId: string | null = null;
@@ -22,6 +23,19 @@ export class CombatComponent implements OnInit {
   ngOnInit() {
     this.room$ = this.game.currentRoom$;
     this.turn$ = this.game.turnInfo$;
+  }
+
+  get myPlayerId(): string | null {
+    return this.game.userInfo?.id || null;
+  }
+
+  isMyPlayer(playerId: string): boolean {
+    return this.myPlayerId === playerId;
+  }
+
+  getCharacterName(room: any, playerId: string, characterIndex: number): string {
+    const player = room?.players.find((p: any) => p.id === playerId);
+    return player?.selectedCharacters?.[characterIndex]?.name || '';
   }
 
   

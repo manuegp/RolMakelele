@@ -1,0 +1,15 @@
+.turn-order {
+  gap: 0.5rem;
+}
+
+.turn-item {
+  padding: 0.25rem 0.5rem;
+}
+
+.arrow {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+}
