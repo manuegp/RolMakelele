@@ -56,21 +56,21 @@
   </div>
   <!-- /row -->
 
-  @if (room$ | async; as room) { @if (isMyTurn(room)) {
-  <div class="row row-cols-2 g-2 mt-3">
-    @for (skill of getSelectedCharacterSkills(room, myPlayerId!); track $index )
-    {
-    <div class="col">
-      <div class="card h-100">
-        <div class="card-body d-flex align-items-center justify-content-center">
-          Cuadro 1
-        </div>
+  @if (room$ | async; as room) {
+    @if (isMyTurn(room)) {
+      <div class="row row-cols-2 g-2 mt-3">
+        @for (ability of getCurrentCharacterAbilities(room); track $index) {
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body d-flex align-items-center justify-content-center">
+                {{ ability.name }}
+              </div>
+            </div>
+          </div>
+        }
       </div>
-    </div>
     }
-  </div>
-  } 
-}
+  }
   <ng-container *ngIf="room$ | async as room">
     <p *ngIf="room.status === 'waiting'">Esperando a otro jugador...</p>
     <p *ngIf="room.status === 'character_selection'">

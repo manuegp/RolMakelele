@@ -55,10 +55,12 @@ export class CombatComponent implements OnInit {
   isMyTurn(room: any): boolean {
     return room.currentTurn.playerId === this.myPlayerId;
   }
-  
-  getSelectedCharacterSkills(room: any, playerId: string): any[] {
-    const player = room?.players.find((p: any) => p.id === playerId);
-    return player?.selectedCharacters || [];
+
+  getCurrentCharacterAbilities(room: any): any[] {
+    const turn = room.currentTurn;
+    if (!turn) return [];
+    const player = room.players.find((p: any) => p.id === turn.playerId);
+    return player?.selectedCharacters?.[turn.characterIndex]?.abilities || [];
   }
 
   leave() {
