@@ -13,3 +13,8 @@
   transform: translateX(-50%);
   font-size: 0.8rem;
 }
+
+.skill:hover {
+  border: solid 2px rgb(245, 204, 71);
+  cursor: pointer;
+}
