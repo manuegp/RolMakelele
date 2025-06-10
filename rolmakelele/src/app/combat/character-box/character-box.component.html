@@ -1,1 +1,14 @@
-<p>character-box works!</p>
+<div class="character-box" *ngIf="character">
+  <div class="fw-bold">{{ character.name }}</div>
+  <div class="progress mt-1" style="height: 8px;">
+    <div
+      class="progress-bar"
+      role="progressbar"
+      [style.width.%]="healthPercent"
+      [attr.aria-valuenow]="character.currentHealth"
+      [attr.aria-valuemin]="0"
+      [attr.aria-valuemax]="character.stats.health"
+    ></div>
+  </div>
+  <small>{{ character.currentHealth }} / {{ character.stats.health }}</small>
+</div>
