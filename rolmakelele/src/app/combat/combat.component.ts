@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { Observable } from 'rxjs';
+import { GameRoom, CharacterState, Player } from '../models/game.models';
+import { TurnStartedData } from '../models/socket.models';
 import { CharacterBoxComponent } from './character-box/character-box.component';
 
 @Component({
@@ -14,8 +16,8 @@ import { CharacterBoxComponent } from './character-box/character-box.component';
 })
 export class CombatComponent implements OnInit {
   roomId: string | null = null;
-  room$!: Observable<any | null>;
-  turn$!: Observable<any | null>;
+  room$!: Observable<GameRoom | null>;
+  turn$!: Observable<TurnStartedData | null>;
   rows = [0, 1, 2, 3];
 
   constructor(route: ActivatedRoute, private game: GameService) {
@@ -35,29 +37,29 @@ export class CombatComponent implements OnInit {
     return this.myPlayerId === playerId;
   }
 
-  getCharacterName(room: any, playerId: string, characterIndex: number): string {
-    const player = room?.players.find((p: any) => p.id === playerId);
+  getCharacterName(room: GameRoom | null, playerId: string, characterIndex: number): string {
+    const player = room?.players.find((p: Player) => p.id === playerId);
     return player?.selectedCharacters?.[characterIndex]?.name || '';
   }
 
-  getMyCharacters(room: any): any[] {
+  getMyCharacters(room: GameRoom | null): CharacterState[] {
     return (
-      room?.players.find((p: any) => p.id === this.myPlayerId)?.selectedCharacters || []
+      room?.players.find((p: Player) => p.id === this.myPlayerId)?.selectedCharacters || []
     );
   }
 
-  getOpponentCharacters(room: any): any[] {
+  getOpponentCharacters(room: GameRoom | null): CharacterState[] {
     return (
-      room?.players.find((p: any) => p.id !== this.myPlayerId)?.selectedCharacters || []
+      room?.players.find((p: Player) => p.id !== this.myPlayerId)?.selectedCharacters || []
     );
   }
 
-  isMyTurn(room: any): boolean {
+  isMyTurn(room: GameRoom): boolean {
     return room.currentTurn.playerId === this.myPlayerId;
   }
-  
-  getSelectedCharacterSkills(room: any, playerId: string): any[] {
-    const player = room?.players.find((p: any) => p.id === playerId);
+
+  getSelectedCharacterSkills(room: GameRoom, playerId: string): CharacterState[] {
+    const player = room?.players.find((p: Player) => p.id === playerId);
     return player?.selectedCharacters || [];
   }
 

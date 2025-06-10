@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
+import { Character, GameRoom } from '../models/game.models';
 
 @Component({
   selector: 'app-character-selection',
@@ -12,9 +13,9 @@ import { GameService } from '../services/game.service';
 })
 export class CharacterSelectionComponent implements OnInit {
   selected: string[] = [];
-  characters: any[] = [];
+  characters: Character[] = [];
   roomId!: string;
-  room: any;
+  room: GameRoom | null = null;
 
   constructor(private game: GameService, private route: ActivatedRoute) {}
 
