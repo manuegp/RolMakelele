@@ -26,9 +26,20 @@ export function registerJoinRoom(
     if (existingIndex !== -1) {
       const existing = room.players[existingIndex];
       if (existing.isDisconnected) {
+        const oldId = existing.id;
         existing.id = socket.id;
         existing.isDisconnected = false;
         existing.disconnectedAt = undefined;
+         if (room.turnOrder) {
+          for (const turn of room.turnOrder) {
+            if (turn.playerId === oldId) {
+              turn.playerId = socket.id;
+            }
+          }
+        }
+        if (room.currentTurn && room.currentTurn.playerId === oldId) {
+          room.currentTurn.playerId = socket.id;
+        }
         const key = `${room.id}:${data.username}`;
         const timer = disconnectTimers.get(key);
         if (timer) {

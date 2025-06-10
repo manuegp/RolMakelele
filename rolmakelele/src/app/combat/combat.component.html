@@ -10,7 +10,7 @@
           <div class="turn-item border rounded position-relative" *ngFor="let t of room.turnOrder"
                [ngClass]="isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'">
             {{ getCharacterName(room, t.playerId, t.characterIndex) }}
-            <span class="arrow" *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex">&#9650;</span>
+            <span class="arrow" *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex">&#9660;</span>
           </div>
         </ng-container>
       </div>
@@ -20,7 +20,7 @@
       class="col-3 offset-1 d-flex align-items-center justify-content-center"
       style="height: 25%;"
     >
-      1
+      <!-- {{ getCharacterName() }} -->
     </div>
     <div
       class="col-3 offset-4 d-flex align-items-center justify-content-center"
@@ -78,9 +78,6 @@
     </p>
     <p *ngIf="room.status === 'character_selection'">
       Esperando que los jugadores estén listos...
-    </p>
-    <p *ngIf="room.status === 'in_game'">
-      ¡Juego iniciado!
     </p>
   </ng-container>
 
