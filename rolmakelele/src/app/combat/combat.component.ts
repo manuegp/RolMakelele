@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [CommonModule, CommonModule],
   templateUrl: './combat.component.html',
-  styleUrl: './combat.component.scss'
+  styleUrls: ['./combat.component.scss']
 })
 export class CombatComponent implements OnInit {
   roomId: string | null = null;
@@ -33,12 +33,14 @@ export class CombatComponent implements OnInit {
     return this.myPlayerId === playerId;
   }
 
-  getCharacterName(room: any, playerId: string, characterIndex: number): string {
+    return player?.selectedCharacters?.[characterIndex]?.name || '...';
+    room: any,
+    playerId: string,
+    characterIndex: number
+  ): string {
     const player = room?.players.find((p: any) => p.id === playerId);
     return player?.selectedCharacters?.[characterIndex]?.name || '';
   }
-
-  
 
   leave() {
     this.game.leaveGame();

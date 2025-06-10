@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-character-box',
   imports: [],
   templateUrl: './character-box.component.html',
-  styleUrl: './character-box.component.scss'
+  styleUrls: ['./character-box.component.scss']
 })
 export class CharacterBoxComponent {
 

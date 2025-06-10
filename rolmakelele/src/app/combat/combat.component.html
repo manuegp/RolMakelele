@@ -2,13 +2,20 @@
   <h2 class="mb-3">Combate - Sala {{ roomId }}</h2>
  
   <div class="row g-2 h-100">
-    <div class="col-12 offset-1 d-flex align-items-center justify-content-center"
-      style="height: 25%;"
-    >
-      <div class="turn-order d-flex position-relative" *ngIf="room$ | async as room">
-        <ng-container *ngIf="turn$ | async as turn">
-          <div class="turn-item border rounded position-relative" *ngFor="let t of room.turnOrder"
-               [ngClass]="isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'">
+        <div
+          class="turn-item border rounded position-relative"
+          *ngFor="let t of room.turnOrder"
+          [ngClass]="isMyPlayer(t.playerId) ? 'border-primary' : 'border-danger'"
+        >
+          {{ getCharacterName(room, t.playerId, t.characterIndex) || '...' }}
+          <ng-container *ngIf="turn$ | async as turn">
+            <span
+              class="arrow"
+              *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex"
+              >&#9650;</span
+            >
+          </ng-container>
+        </div>
             {{ getCharacterName(room, t.playerId, t.characterIndex) }}
             <span class="arrow" *ngIf="turn.playerId === t.playerId && turn.characterIndex === t.characterIndex">&#9660;</span>
           </div>
