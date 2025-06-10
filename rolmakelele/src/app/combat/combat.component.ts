@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [CommonModule, CommonModule],
   templateUrl: './combat.component.html',
-  styleUrl: './combat.component.scss',
+  styleUrls: ['./combat.component.scss']
 })
 export class CombatComponent implements OnInit {
   roomId: string | null = null;
