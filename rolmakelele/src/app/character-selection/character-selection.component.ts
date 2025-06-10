@@ -25,6 +25,10 @@ export class CharacterSelectionComponent implements OnInit {
     this.game.currentRoom$.subscribe(c => (this.room = c));
   }
 
+  get isReady() {
+    return this.game.userInfo?.isReady || false;
+  }
+
   toggle(id: string) {
     if (this.selected.includes(id)) {
       this.selected = this.selected.filter(c => c !== id);

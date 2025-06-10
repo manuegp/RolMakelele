@@ -52,6 +52,10 @@ export class GameService {
       });
   }
 
+  get userInfo() {
+    return this.currentRoom$.value?.players.find((p: any) => p.id === this.socket?.id) || null;
+  }
+
   setUsername(name: string) {
     this.username = name;
     sessionStorage.setItem('username', name);
