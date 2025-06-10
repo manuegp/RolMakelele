@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CharacterState } from '../../models/game.types';
 
 @Component({
   selector: 'app-character-box',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './character-box.component.scss'
 })
 export class CharacterBoxComponent {
-  @Input() character: any;
+  @Input() character: CharacterState | null = null;
 
   get healthPercent(): number {
     if (!this.character) {

@@ -3,6 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import {
+  GameRoom,
+  Character,
+  Player
+} from '../models/game.types';
+import {
+  ClientEvents,
+  ServerEvents,
+  RoomsListData,
+  TurnStartedData,
+  GameStartedData,
+  GameEndedData,
+  ErrorData
+} from '../models/socket.types';
 
 declare const io: any;
 
@@ -12,13 +26,13 @@ export class GameService {
   private username = '';
   private selectedCharacters: string[] = [];
   private currentRoomId: string | null = null;
-  currentRoom$ = new BehaviorSubject<any | null>(null);
-  turnInfo$ = new BehaviorSubject<any | null>(null);
+  currentRoom$ = new BehaviorSubject<GameRoom | null>(null);
+  turnInfo$ = new BehaviorSubject<TurnStartedData | null>(null);
 
   private readonly API_BASE = 'http://localhost:3001';
 
-  characters$ = new BehaviorSubject<any[]>([]);
-  rooms$ = new BehaviorSubject<any[]>([]);
+  characters$ = new BehaviorSubject<Character[]>([]);
+  rooms$ = new BehaviorSubject<RoomsListData['rooms']>([]);
 
   constructor(
     private http: HttpClient,
@@ -38,7 +52,7 @@ export class GameService {
 
   fetchCharacters() {
     this.http
-      .get<{ characters: any[] }>(`${this.API_BASE}/api/characters`)
+      .get<{ characters: Character[] }>(`${this.API_BASE}/api/characters`)
       .subscribe(res => {
         this.characters$.next(res.characters);
       });
@@ -46,14 +60,17 @@ export class GameService {
 
   fetchRooms() {
     this.http
-      .get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+      .get<RoomsListData>(`${this.API_BASE}/api/rooms`)
       .subscribe(res => {
         this.rooms$.next(res.rooms);
       });
   }
 
-  get userInfo() {
-    return this.currentRoom$.value?.players.find((p: any) => p.id === this.socket?.id) || null;
+  get userInfo(): Player | null {
+    return (
+      this.currentRoom$.value?.players.find(p => p.id === this.socket?.id) ||
+      null
+    );
   }
 
   setUsername(name: string) {
@@ -74,7 +91,7 @@ export class GameService {
   async roomExists(roomId: string): Promise<boolean> {
     try {
       const res = await firstValueFrom(
-        this.http.get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+        this.http.get<RoomsListData>(`${this.API_BASE}/api/rooms`)
       );
       this.rooms$.next(res.rooms);
       return res.rooms.some(r => r.id === roomId);
@@ -95,13 +112,16 @@ export class GameService {
       this.socket = io('http://localhost:3001');
       this.socket.on('connect', () => {
         if (this.currentRoomId) {
-          this.socket.emit('join_room', { roomId: this.currentRoomId, username: this.username });
+          this.socket.emit(ClientEvents.JOIN_ROOM, {
+            roomId: this.currentRoomId,
+            username: this.username
+          });
         }
       });
-      this.socket.on('rooms_list', (data: any) => {
+      this.socket.on(ServerEvents.ROOMS_LIST, (data: RoomsListData) => {
         this.zone.run(() => this.rooms$.next(data.rooms));
       });
-      this.socket.on('room_joined', (data: any) => {
+      this.socket.on(ServerEvents.ROOM_JOINED, (data: { room: GameRoom }) => {
         const roomId = data.room.id;
         this.currentRoomId = roomId;
         sessionStorage.setItem('roomId', roomId);
@@ -114,13 +134,16 @@ export class GameService {
             this.router.navigate(['/characters', roomId]);
           } else {
             if (data.room.currentTurn) {
-              this.turnInfo$.next(data.room.currentTurn);
+              this.turnInfo$.next({
+                ...data.room.currentTurn,
+                timeRemaining: null
+              });
             }
             this.router.navigate(['/combat', roomId]);
           }
         });
       });
-      this.socket.on('room_updated', (data: any) => {
+      this.socket.on(ServerEvents.ROOM_UPDATED, (data: { room: GameRoom }) => {
         this.zone.run(() => {
           const previous = this.currentRoom$.value;
           this.currentRoom$.next(data.room);
@@ -130,8 +153,8 @@ export class GameService {
           }
           if (previous && data.room.id === this.currentRoomId) {
             const myId = this.socket.id;
-            const prevOpp = previous.players.find((p: any) => p.id !== myId);
-            const opp = data.room.players.find((p: any) => p.id !== myId);
+            const prevOpp = previous.players.find(p => p.id !== myId);
+            const opp = data.room.players.find(p => p.id !== myId);
             if (opp && opp.isDisconnected && !(prevOpp && prevOpp.isDisconnected)) {
               this.snackBar.open('Tu rival se ha desconectado. Esperando reconexión...', 'Cerrar', { duration: 3000 });
             } else if (opp && !opp.isDisconnected && prevOpp && prevOpp.isDisconnected) {
@@ -140,7 +163,7 @@ export class GameService {
           }
         });
       });
-      this.socket.on('game_started', (data: any) => {
+      this.socket.on(ServerEvents.GAME_STARTED, (data: GameStartedData) => {
         this.zone.run(() => {
           this.currentRoom$.next(data.room);
           const first = data.turnOrder[0];
@@ -152,10 +175,10 @@ export class GameService {
           this.router.navigate(['/combat', data.room.id]);
         });
       });
-      this.socket.on('turn_started', (data: any) => {
+      this.socket.on(ServerEvents.TURN_STARTED, (data: TurnStartedData) => {
         this.zone.run(() => this.turnInfo$.next(data));
       });
-      this.socket.on('game_ended', (data: any) => {
+      this.socket.on(ServerEvents.GAME_ENDED, (data: GameEndedData) => {
         this.zone.run(() => {
           let message = `Partida finalizada. Ganador: ${data.winnerUsername}`;
           if (data.reason === 'player_left' || data.reason === 'player_disconnected') {
@@ -179,7 +202,7 @@ export class GameService {
           this.router.navigate(['/rooms']);
         });
       });
-      this.socket.on('game_error', (err: any) => {
+      this.socket.on(ServerEvents.ERROR, (err: ErrorData) => {
         this.zone.run(() => {
           this.snackBar.open(err.message, 'Cerrar', { duration: 3000 });
           if (err.code === 'ROOM_NOT_FOUND') {
@@ -197,29 +220,37 @@ export class GameService {
 
   joinRoom(roomId: string) {
     this.ensureSocket();
-    this.socket.emit('join_room', { roomId, username: this.username });
+    this.socket.emit(ClientEvents.JOIN_ROOM, {
+      roomId,
+      username: this.username
+    });
     sessionStorage.setItem('roomId', roomId);
   }
 
   createRoom(roomName: string) {
     this.ensureSocket();
-    this.socket.emit('create_room', { roomName, username: this.username });
+    this.socket.emit(ClientEvents.CREATE_ROOM, {
+      roomName,
+      username: this.username
+    });
   }
 
   sendSelectedCharacters() {
     this.ensureSocket();
-    this.socket.emit('select_characters', { characterIds: this.selectedCharacters });
+    this.socket.emit(ClientEvents.SELECT_CHARACTERS, {
+      characterIds: this.selectedCharacters
+    });
   }
 
   ready() {
     this.ensureSocket();
-    this.socket.emit('ready');
+    this.socket.emit(ClientEvents.READY);
   }
 
   leaveGame() {
     if (this.currentRoomId) {
       this.ensureSocket();
-      this.socket.emit('leave_room');
+      this.socket.emit(ClientEvents.LEAVE_ROOM);
       this.router.navigate(['/rooms']);
     }
     this.currentRoomId = null;

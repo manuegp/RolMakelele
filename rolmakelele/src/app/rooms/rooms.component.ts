@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../services/game.service';
+import { RoomsListData } from '../models/socket.types';
 
 @Component({
   selector: 'app-rooms',
@@ -10,7 +11,7 @@ import { GameService } from '../services/game.service';
   templateUrl: './rooms.component.html'
 })
 export class RoomsComponent implements OnInit {
-  rooms: any[] = [];
+  rooms: RoomsListData['rooms'] = [];
   newRoomName = '';
 
   constructor(public game: GameService) {}
