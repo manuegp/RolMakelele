@@ -27,6 +27,10 @@ Servidor para un juego de rol por turnos usando Socket.IO, Node.js, Express y Ty
 
 Se incluye una colección de Postman en `data/rolmakelele_postman_collection.json` para probar todos los eventos del servidor.
 
+## Admin UI
+
+El servidor está instrumentado con [Socket.IO Admin UI](https://github.com/socketio/socket.io-admin-ui). Puedes supervisar las conexiones visitando `https://admin.socket.io` e indicando la URL de tu servidor (`http://localhost:3001` por defecto). La autenticación está deshabilitada para facilitar el desarrollo.
+
 ## Estructura del Proyecto
 
 ```

@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
+import { instrument } from '@socket.io/admin-ui';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -31,12 +32,20 @@ app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 
 const server = http.createServer(app);
+const corsOrigins = Array.isArray(config.corsOrigin)
+  ? [...config.corsOrigin]
+  : [config.corsOrigin];
+corsOrigins.push('https://admin.socket.io');
+
 const io = new Server(server, {
   cors: {
-    origin: config.corsOrigin,
-    methods: ['GET', 'POST']
+    origin: corsOrigins,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
+
+instrument(io, { auth: false });
 
 const rooms: Map<string, GameRoom> = new Map();
 const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
