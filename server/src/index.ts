@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
+import monitor from 'socket.io-monitor';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -36,6 +37,16 @@ const io = new Server(server, {
     origin: config.corsOrigin,
     methods: ['GET', 'POST']
   }
+});
+
+// Expose socket.io-monitor server for realtime debugging
+const { server: monitorServer } = monitor.bind(io, {
+  port: config.monitorPort,
+  host: 'localhost'
+});
+
+monitorServer.then(() => {
+  console.log(`Socket.IO monitor disponible en http://localhost:${config.monitorPort}`);
 });
 
 const rooms: Map<string, GameRoom> = new Map();
