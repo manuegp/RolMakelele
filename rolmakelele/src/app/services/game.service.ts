@@ -3,6 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import {
+  Character,
+  GameRoom,
+  Player
+} from '../models/game.models';
+import {
+  RoomsListData,
+  RoomJoinedData,
+  RoomUpdatedData,
+  GameStartedData,
+  TurnStartedData,
+  GameEndedData,
+  ErrorData,
+  CharactersListData
+} from '../models/socket.models';
 
 declare const io: any;
 
@@ -12,13 +27,13 @@ export class GameService {
   private username = '';
   private selectedCharacters: string[] = [];
   private currentRoomId: string | null = null;
-  currentRoom$ = new BehaviorSubject<any | null>(null);
-  turnInfo$ = new BehaviorSubject<any | null>(null);
+  currentRoom$ = new BehaviorSubject<GameRoom | null>(null);
+  turnInfo$ = new BehaviorSubject<TurnStartedData | null>(null);
 
   private readonly API_BASE = 'http://localhost:3001';
 
-  characters$ = new BehaviorSubject<any[]>([]);
-  rooms$ = new BehaviorSubject<any[]>([]);
+  characters$ = new BehaviorSubject<Character[]>([]);
+  rooms$ = new BehaviorSubject<RoomsListData['rooms']>([]);
 
   constructor(
     private http: HttpClient,
@@ -38,7 +53,7 @@ export class GameService {
 
   fetchCharacters() {
     this.http
-      .get<{ characters: any[] }>(`${this.API_BASE}/api/characters`)
+      .get<CharactersListData>(`${this.API_BASE}/api/characters`)
       .subscribe(res => {
         this.characters$.next(res.characters);
       });
@@ -46,14 +61,17 @@ export class GameService {
 
   fetchRooms() {
     this.http
-      .get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+      .get<RoomsListData>(`${this.API_BASE}/api/rooms`)
       .subscribe(res => {
         this.rooms$.next(res.rooms);
       });
   }
 
   get userInfo() {
-    return this.currentRoom$.value?.players.find((p: any) => p.id === this.socket?.id) || null;
+    return (
+      this.currentRoom$.value?.players.find((p: Player) => p.id === this.socket?.id) ||
+      null
+    );
   }
 
   setUsername(name: string) {
@@ -74,7 +92,7 @@ export class GameService {
   async roomExists(roomId: string): Promise<boolean> {
     try {
       const res = await firstValueFrom(
-        this.http.get<{ rooms: any[] }>(`${this.API_BASE}/api/rooms`)
+        this.http.get<RoomsListData>(`${this.API_BASE}/api/rooms`)
       );
       this.rooms$.next(res.rooms);
       return res.rooms.some(r => r.id === roomId);
@@ -98,10 +116,10 @@ export class GameService {
           this.socket.emit('join_room', { roomId: this.currentRoomId, username: this.username });
         }
       });
-      this.socket.on('rooms_list', (data: any) => {
+      this.socket.on('rooms_list', (data: RoomsListData) => {
         this.zone.run(() => this.rooms$.next(data.rooms));
       });
-      this.socket.on('room_joined', (data: any) => {
+      this.socket.on('room_joined', (data: RoomJoinedData) => {
         const roomId = data.room.id;
         this.currentRoomId = roomId;
         sessionStorage.setItem('roomId', roomId);
@@ -120,7 +138,7 @@ export class GameService {
           }
         });
       });
-      this.socket.on('room_updated', (data: any) => {
+      this.socket.on('room_updated', (data: RoomUpdatedData) => {
         this.zone.run(() => {
           const previous = this.currentRoom$.value;
           this.currentRoom$.next(data.room);
@@ -130,8 +148,8 @@ export class GameService {
           }
           if (previous && data.room.id === this.currentRoomId) {
             const myId = this.socket.id;
-            const prevOpp = previous.players.find((p: any) => p.id !== myId);
-            const opp = data.room.players.find((p: any) => p.id !== myId);
+            const prevOpp = previous.players.find((p: Player) => p.id !== myId);
+            const opp = data.room.players.find((p: Player) => p.id !== myId);
             if (opp && opp.isDisconnected && !(prevOpp && prevOpp.isDisconnected)) {
               this.snackBar.open('Tu rival se ha desconectado. Esperando reconexión...', 'Cerrar', { duration: 3000 });
             } else if (opp && !opp.isDisconnected && prevOpp && prevOpp.isDisconnected) {
@@ -140,7 +158,7 @@ export class GameService {
           }
         });
       });
-      this.socket.on('game_started', (data: any) => {
+      this.socket.on('game_started', (data: GameStartedData) => {
         this.zone.run(() => {
           this.currentRoom$.next(data.room);
           const first = data.turnOrder[0];
@@ -152,10 +170,10 @@ export class GameService {
           this.router.navigate(['/combat', data.room.id]);
         });
       });
-      this.socket.on('turn_started', (data: any) => {
+      this.socket.on('turn_started', (data: TurnStartedData) => {
         this.zone.run(() => this.turnInfo$.next(data));
       });
-      this.socket.on('game_ended', (data: any) => {
+      this.socket.on('game_ended', (data: GameEndedData) => {
         this.zone.run(() => {
           let message = `Partida finalizada. Ganador: ${data.winnerUsername}`;
           if (data.reason === 'player_left' || data.reason === 'player_disconnected') {
@@ -179,7 +197,7 @@ export class GameService {
           this.router.navigate(['/rooms']);
         });
       });
-      this.socket.on('game_error', (err: any) => {
+      this.socket.on('game_error', (err: ErrorData) => {
         this.zone.run(() => {
           this.snackBar.open(err.message, 'Cerrar', { duration: 3000 });
           if (err.code === 'ROOM_NOT_FOUND') {
