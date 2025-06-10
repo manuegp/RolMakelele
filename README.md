@@ -23,6 +23,20 @@ Servidor para un juego de rol por turnos usando Socket.IO, Node.js, Express y Ty
 3. Inicia el servidor en modo desarrollo con `npm run dev`
 4. Para producción, compila con `npm run build` y luego inicia con `npm start`
 
+## Monitorizar el servidor
+
+El proyecto incluye soporte para [socket.io-monitor-cli](https://github.com/byteclubfr/socket.io-monitor-cli). Tras iniciar el servidor podrás ejecutar:
+
+```bash
+npx socket.io-monitor-cli --host localhost --port 9042
+```
+
+El puerto por defecto es `9042`, pero puedes cambiarlo con la variable de entorno `MONITOR_PORT`.
+
+Como no existe un paquete `@types/socket.io-monitor`, este repositorio incluye una declaración mínima en `src/types/socket.io-monitor.d.ts` para evitar errores de TypeScript.
+
+Esto abrirá un panel en la terminal con los sockets, eventos y salas en tiempo real.
+
 ## Conexión con Postman
 
 Se incluye una colección de Postman en `data/rolmakelele_postman_collection.json` para probar todos los eventos del servidor.
