@@ -32,14 +32,16 @@ app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
 
 const server = http.createServer(app);
-const corsOrigins = Array.isArray(config.corsOrigin)
-  ? [...config.corsOrigin]
-  : [config.corsOrigin];
-corsOrigins.push('https://admin.socket.io');
+const socketOrigins =
+  config.corsOrigin === '*'
+    ? '*'
+    : Array.isArray(config.corsOrigin)
+    ? [...config.corsOrigin, 'https://admin.socket.io']
+    : [config.corsOrigin, 'https://admin.socket.io'];
 
 const io = new Server(server, {
   cors: {
-    origin: corsOrigins,
+    origin: socketOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }

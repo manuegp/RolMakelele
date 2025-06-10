@@ -1,10 +1,77 @@
 <div class="container">
   <h2 class="mb-3">Combate - Sala {{ roomId }}</h2>
 
+  <div class="row g-2 h-100">
+    <!-- Fila 1: .div1 y .div5 -->
+    <div
+      class="col-3 offset-1 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      1
+    </div>
+    <div
+      class="col-3 offset-4 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      5
+    </div>
+
+    <!-- Fila 2: .div2 y .div6 -->
+    <div
+      class="col-3 offset-1 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      2
+    </div>
+    <div
+      class="col-3 offset-4 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      6
+    </div>
+
+    <!-- Fila 3: .div3 y .div7 -->
+    <div
+      class="col-3 offset-1 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      3
+    </div>
+    <div
+      class="col-3 offset-4 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      7
+    </div>
+
+    <!-- Fila 4: .div4 y .div8 -->
+    <div
+      class="col-3 offset-1 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      4
+    </div>
+    <div
+      class="col-3 offset-4 d-flex align-items-center justify-content-center"
+      style="height: 25%;"
+    >
+      8
+    </div>
+  </div> <!-- /row -->
+
   <ng-container *ngIf="room$ | async as room">
-    <p *ngIf="room.status === 'waiting'">Esperando a otro jugador...</p>
-    <p *ngIf="room.status === 'character_selection'">Esperando que los jugadores estén listos...</p>
-    <p *ngIf="room.status === 'in_game'">Juego iniciado!</p>
+    <p *ngIf="room.status === 'waiting'">
+      Esperando a otro jugador...
+    </p>
+    <p *ngIf="room.status === 'character_selection'">
+      Esperando que los jugadores estén listos...
+    </p>
+    <p *ngIf="room.status === 'in_game'">
+      ¡Juego iniciado!
+    </p>
   </ng-container>
-  <button class="btn btn-secondary mt-3" (click)="leave()">Salir</button>
+
+  <button class="btn btn-secondary mt-3" (click)="leave()">
+    Salir
+  </button>
 </div>
