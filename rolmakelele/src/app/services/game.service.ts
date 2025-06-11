@@ -17,7 +17,8 @@ import {
   GameStartedData,
   GameEndedData,
   ErrorData,
-  ChatMessageReceivedData
+  ChatMessageReceivedData,
+  ActionResultData
 } from '../models/socket.types';
 
 declare const io: any;
@@ -180,7 +181,56 @@ export class GameService {
         });
       });
       this.socket.on(ServerEvents.TURN_STARTED, (data: TurnStartedData) => {
-        this.zone.run(() => this.turnInfo$.next(data));
+        this.zone.run(() => {
+          this.turnInfo$.next(data);
+          const room = this.currentRoom$.value;
+          if (room) {
+            room.currentTurn = {
+              playerId: data.playerId,
+              characterIndex: data.characterIndex
+            };
+            this.currentRoom$.next({ ...room });
+          }
+        });
+      });
+      this.socket.on(ServerEvents.ACTION_RESULT, (data: ActionResultData) => {
+        this.zone.run(() => {
+          const room = this.currentRoom$.value;
+          if (!room) return;
+          const sourcePlayer = room.players.find(p => p.id === data.result.playerId);
+          const targetPlayer = room.players.find(p => p.id === data.result.targetPlayerId);
+          if (sourcePlayer && targetPlayer) {
+            const sourceChar = sourcePlayer.selectedCharacters[data.result.sourceCharacterIndex];
+            const targetChar = targetPlayer.selectedCharacters[data.result.targetCharacterIndex];
+            for (const eff of data.result.effects) {
+              const char = eff.target === 'source' ? sourceChar : targetChar;
+              if (eff.type === 'damage') {
+                char.currentHealth = Math.max(0, char.currentHealth - eff.value);
+                if (char.currentHealth === 0) char.isAlive = false;
+              } else if (eff.type === 'heal') {
+                char.currentHealth = Math.min(char.stats.health, char.currentHealth + eff.value);
+              } else if ((eff.type === 'buff' || eff.type === 'debuff') && eff.stat) {
+                if (!char.currentStats) {
+                  char.currentStats = { ...char.stats };
+                }
+                char.currentStats[eff.stat] += eff.value;
+              }
+            }
+            const ability = sourceChar.abilities.find(
+              a => a.name === data.result.ability.name
+            );
+            if (ability) {
+              ability.currentCooldown = ability.cooldown;
+            }
+          }
+          if (data.nextTurn) {
+            room.currentTurn = {
+              playerId: data.nextTurn.playerId,
+              characterIndex: data.nextTurn.characterIndex
+            };
+          }
+          this.currentRoom$.next({ ...room });
+        });
       });
       this.socket.on(ServerEvents.GAME_ENDED, (data: GameEndedData) => {
         this.zone.run(() => {
