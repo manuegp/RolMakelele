@@ -58,10 +58,13 @@ export class CharacterSelectionComponent implements OnInit {
   }
 
   onAbilitySelectionChange(charId: string, abilityIds: string[]) {
-    const entry = this.selected.find(c => c.id === charId);
-    if (entry) {
-      entry.abilityIds = abilityIds;
+    let entry = this.selected.find(c => c.id === charId);
+    if (!entry) {
+      if (this.selected.length >= 4) return;
+      entry = { id: charId, abilityIds: [] };
+      this.selected.push(entry);
     }
+    entry.abilityIds = abilityIds;
   }
 
   ready() {
