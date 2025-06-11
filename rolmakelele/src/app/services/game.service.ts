@@ -6,7 +6,8 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import {
   GameRoom,
   Character,
-  Player
+  Player,
+  GameAction
 } from '../models/game.types';
 import {
   ClientEvents,
@@ -259,6 +260,11 @@ export class GameService {
   sendChatMessage(message: string) {
     this.ensureSocket();
     this.socket.emit(ClientEvents.CHAT_MESSAGE, { message });
+  }
+
+  performAction(action: GameAction) {
+    this.ensureSocket();
+    this.socket.emit(ClientEvents.PERFORM_ACTION, action);
   }
 
   leaveGame() {

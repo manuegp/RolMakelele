@@ -2,3 +2,9 @@
   text-align: center;
   min-width: 6rem;
 }
+
+.character-box.selectable {
+  cursor: pointer;
+  border: 2px dashed #ccc;
+  padding: 0.25rem;
+}

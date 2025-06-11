@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CharacterState } from '../../models/game.types';
 
@@ -11,11 +11,19 @@ import { CharacterState } from '../../models/game.types';
 })
 export class CharacterBoxComponent {
   @Input() character: CharacterState | null = null;
+  @Input() selectable = false;
+  @Output() selected = new EventEmitter<void>();
 
   get healthPercent(): number {
     if (!this.character) {
       return 0;
     }
     return (this.character.currentHealth / this.character.stats.health) * 100;
+  }
+
+  onClick() {
+    if (this.selectable) {
+      this.selected.emit();
+    }
   }
 }

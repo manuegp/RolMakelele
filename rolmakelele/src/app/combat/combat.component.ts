@@ -21,6 +21,10 @@ export class CombatComponent implements OnInit {
   turn$!: Observable<TurnStartedData | null>;
   rows = [0, 1, 2, 3];
 
+  selectingTarget = false;
+  selectedAbilityIndex: number | null = null;
+  targetOpponent = true;
+
   constructor(route: ActivatedRoute, private game: GameService) {
     this.roomId = route.snapshot.paramMap.get('roomId');
   }
@@ -63,11 +67,45 @@ export class CombatComponent implements OnInit {
     return room.currentTurn?.playerId === this.myPlayerId;
   }
 
+  getOpponentPlayerId(room: GameRoom): string {
+    return room.players.find(p => p.id !== this.myPlayerId)?.id || '';
+  }
+
   getCurrentCharacterAbilities(room: GameRoom): Ability[] {
     const turn = room.currentTurn;
     if (!turn) return [];
     const player = room.players.find(p => p.id === turn.playerId);
     return player?.selectedCharacters?.[turn.characterIndex]?.abilities || [];
+  }
+
+  startTargetSelection(index: number, ability: Ability) {
+    this.selectedAbilityIndex = index;
+    this.selectingTarget = true;
+    this.targetOpponent = ability.effects.some(e => e.target === 'opponent');
+  }
+
+  cancelTargetSelection() {
+    this.selectingTarget = false;
+    this.selectedAbilityIndex = null;
+  }
+
+  isSelectableTarget(playerId: string): boolean {
+    if (!this.selectingTarget) return false;
+    return this.targetOpponent ? playerId !== this.myPlayerId : playerId === this.myPlayerId;
+  }
+
+  selectTarget(room: GameRoom, playerId: string, characterIndex: number) {
+    if (!this.selectingTarget || this.selectedAbilityIndex === null) return;
+    const turn = room.currentTurn;
+    if (!turn || !this.myPlayerId) return;
+    this.game.performAction({
+      playerId: this.myPlayerId,
+      sourceCharacterIndex: turn.characterIndex,
+      targetPlayerId: playerId,
+      targetCharacterIndex: characterIndex,
+      abilityIndex: this.selectedAbilityIndex
+    });
+    this.cancelTargetSelection();
   }
 
   leave() {
