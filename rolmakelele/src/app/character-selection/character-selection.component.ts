@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { Character, GameRoom } from '../models/game.types';
-import { AbilitySelectorComponent } from './ability-selector.component';
+import { AbilitySelectorComponent } from '../ability-selector/ability-selector.component';
+
 
 @Component({
   selector: 'app-character-selection',

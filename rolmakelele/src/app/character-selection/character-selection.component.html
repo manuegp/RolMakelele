@@ -5,17 +5,17 @@
       <div class="col-md-3 mb-3" *ngFor="let char of characters">
         <div class="card" [class.border-primary]="isSelected(char.id)">
           <div class="card-body">
-            <h5 class="card-title">{{ char.name }}</h5>
-            <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
+            <!-- <h5 class="card-title">{{ char.name }}</h5> -->
+            <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
               {{ isSelected(char.id) ? 'Quitar' : 'Añadir' }}
-            </button>
-            <div class="mt-2" *ngIf="isSelected(char.id)">
+            </button> -->
+            
               <app-ability-selector
-                [characterId]="char.id"
+                [character]="char"
                 [selectedIds]="getSelectedAbilities(char.id)"
                 (selectionChange)="onAbilitySelectionChange(char.id, $event)"
               ></app-ability-selector>
-            </div>
+           
           </div>
         </div>
       </div>

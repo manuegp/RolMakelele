@@ -1,0 +1,22 @@
+<!-- <div *ngFor="let ab of abilities">
+  <label class="form-check-label">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [checked]="selectedIds.includes(ab.id)"
+      (change)="toggleAbility(ab.id)"
+    />
+    {{ ab.name }}
+  </label>
+</div> -->
+<mat-accordion>
+  <mat-expansion-panel hideToggle disabled="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{character.name}} </mat-panel-title>
+      <mat-panel-description> 
+      <button class="btn btn-outline-primary">Añadir</button>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>This is the primary content of the panel.</p>
+  </mat-expansion-panel>
+</mat-accordion>

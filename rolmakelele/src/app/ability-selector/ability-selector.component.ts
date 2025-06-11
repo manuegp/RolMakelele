@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Ability } from '../models/game.types';
+import { Ability, Character } from '../models/game.types';
 import { GameService } from '../services/game.service';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-ability-selector',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatExpansionModule],
   templateUrl: './ability-selector.component.html'
 })
 export class AbilitySelectorComponent implements OnInit {
-  @Input() characterId!: string;
+  @Input() character!: Character;
   @Input() selectedIds: string[] = [];
   @Output() selectionChange = new EventEmitter<string[]>();
 
@@ -20,7 +21,7 @@ export class AbilitySelectorComponent implements OnInit {
 
   ngOnInit() {
     this.game
-      .fetchCharacterAbilities(this.characterId)
+      .fetchCharacterAbilities(this.character.id)
       .subscribe(res => (this.abilities = res.abilities));
   }
 
