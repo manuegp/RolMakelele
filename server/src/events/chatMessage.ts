@@ -43,7 +43,8 @@ export function registerChatMessage(io: Server, socket: Socket, rooms: Map<strin
       username,
       message: data.message,
       timestamp: new Date(),
-      isSpectator
+      isSpectator,
+      isSystem: false
     });
   });
 }

@@ -1,8 +1,13 @@
 <div class="chat">
   <div class="messages" #messagesContainer>
     <div *ngFor="let msg of messages" class="message">
-      <span class="tag" [ngClass]="msg.isSpectator ? 'spectator' : 'player'">
-        {{ msg.isSpectator ? 'Espectador' : 'Jugador' }}
+      <span
+        class="tag"
+        [ngClass]="msg.isSystem ? 'system' : (msg.isSpectator ? 'spectator' : 'player')"
+      >
+        {{
+          msg.isSystem ? 'Sistema' : msg.isSpectator ? 'Espectador' : 'Jugador'
+        }}
       </span>
       <strong>{{ msg.username }}:</strong>
       <span>{{ msg.message }}</span>

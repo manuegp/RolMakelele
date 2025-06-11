@@ -51,7 +51,8 @@ export function registerDisconnect(
           username: 'Sistema',
           message: `${player.username} se ha desconectado`,
           timestamp: new Date(),
-          isSpectator: false
+          isSpectator: false,
+          isSystem: true
         });
       }
       
@@ -74,7 +75,8 @@ export function registerDisconnect(
             username: 'Sistema',
             message: `Un espectador se ha desconectado`,
             timestamp: new Date(),
-            isSpectator: true
+            isSpectator: true,
+            isSystem: true
           });
         }
       }

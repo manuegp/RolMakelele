@@ -112,5 +112,6 @@ export interface ChatMessageReceivedData {
   message: string;
   timestamp: Date;
   isSpectator: boolean;
+  isSystem: boolean;
 }
 

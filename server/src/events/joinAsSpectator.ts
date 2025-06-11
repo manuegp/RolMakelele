@@ -36,7 +36,8 @@ export function registerJoinAsSpectator(
       username: 'Sistema',
       message: `${data.username} se ha unido como espectador`,
       timestamp: new Date(),
-      isSpectator: true
+      isSpectator: true,
+      isSystem: true
     });
   });
 }

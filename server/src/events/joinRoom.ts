@@ -53,7 +53,8 @@ export function registerJoinRoom(
           username: 'Sistema',
           message: `${data.username} se ha reconectado`,
           timestamp: new Date(),
-          isSpectator: false
+          isSpectator: false,
+          isSystem: true
         });
         return;
       } else {
