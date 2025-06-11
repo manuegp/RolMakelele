@@ -1,6 +1,7 @@
 <div class="container">
-  <h2 class="mb-3">Combate - Sala {{ roomId }}</h2>
-
+  @if(room$ |async; as room){
+  <h2 class="mb-3">Combate - Sala {{ room.name }} - {{room.players[0].username}} vs {{room.players[1].username}}</h2>
+ 
   <div class="row g-2 h-100">
     <div
       class="col-12 offset-1 d-flex align-items-center justify-content-center"
@@ -8,7 +9,7 @@
     >
       <div
         class="turn-order d-flex position-relative"
-        *ngIf="room$ | async as room"
+        
       >
         <ng-container *ngIf="turn$ | async as turn">
           <div
@@ -101,4 +102,5 @@
   <button class="btn btn-outline-danger mt-3 w-100" (click)="leave()">
     Rendirse
   </button>
+   }
 </div>
