@@ -52,8 +52,16 @@ instrument(io, { auth: false });
 const rooms: Map<string, GameRoom> = new Map();
 const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
 let characters: Character[] = [];
+let moves: Map<string, any> = new Map();
 
 try {
+  const movesRaw = fs.readFileSync(
+    path.resolve(process.cwd(), config.movesDataPath),
+    'utf-8'
+  );
+  const parsedMoves = JSON.parse(movesRaw).moves;
+  moves = new Map(parsedMoves.map((m: any) => [m.id, m]));
+
   const data = fs.readFileSync(
     path.resolve(process.cwd(), config.charactersDataPath),
     'utf-8'
@@ -61,8 +69,10 @@ try {
   const parsed = JSON.parse(data);
   characters = parsed.characters.map((c: any) => ({
     ...c,
-    availableAbilities: c.availableAbilities || c.abilities || [],
-    abilities: c.abilities && !c.availableAbilities ? c.abilities : undefined
+    availableAbilities: (c.availableAbilities || []).map((id: string) => moves.get(id)).filter(Boolean),
+    abilities: c.abilities
+      ? c.abilities.map((id: string) => moves.get(id)).filter(Boolean)
+      : undefined
   }));
   console.log(`Cargados ${characters.length} personajes`);
 } catch (error) {

@@ -27,6 +27,7 @@ export interface Effect {
 
 // Definición de una habilidad
 export interface Ability {
+  id: string;
   name: string;
   description: string;
   effects: Effect[];

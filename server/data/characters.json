@@ -10,51 +10,9 @@
         "defense": 6
       },
       "availableAbilities": [
-        {
-          "name": "Golpe Brutal",
-          "description": "Un potente ataque que ignora parte de la defensa enemiga",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 15,
-              "ignoreDefense": 0.3
-            }
-          ]
-        },
-        {
-          "name": "Postura Defensiva",
-          "description": "Aumenta temporalmente la defensa del guerrero",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "defense",
-              "value": 3,
-              "duration": 2
-            }
-          ]
-        },
-        {
-          "name": "Grito de Guerra",
-          "description": "Aumenta el ataque pero reduce ligeramente la defensa",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "attack",
-              "value": 4,
-              "duration": 3
-            },
-            {
-              "type": "debuff",
-              "target": "self",
-              "stat": "defense",
-              "value": -1,
-              "duration": 3
-            }
-          ]
-        }
+        "m001",
+        "m002",
+        "m003"
       ]
     },
     {
@@ -67,51 +25,9 @@
         "defense": 3
       },
       "availableAbilities": [
-        {
-          "name": "Proyectil Mágico",
-          "description": "Lanza un potente proyectil de energía arcana",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 20,
-              "ignoreDefense": 0.2
-            }
-          ]
-        },
-        {
-          "name": "Barrera Arcana",
-          "description": "Crea una barrera mágica que aumenta significativamente la defensa",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "defense",
-              "value": 5,
-              "duration": 2
-            }
-          ]
-        },
-        {
-          "name": "Drenaje de Maná",
-          "description": "Debilita al oponente, reduciendo su ataque y velocidad",
-          "effects": [
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "attack",
-              "value": -3,
-              "duration": 2
-            },
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "speed",
-              "value": -2,
-              "duration": 2
-            }
-          ]
-        }
+        "m004",
+        "m005",
+        "m006"
       ]
     },
     {
@@ -124,55 +40,9 @@
         "defense": 5
       },
       "availableAbilities": [
-        {
-          "name": "Látigo de Espinas",
-          "description": "Ataca con un látigo hecho de espinas venenosas",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 12
-            },
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "health",
-              "value": -3,
-              "duration": 2
-            }
-          ]
-        },
-        {
-          "name": "Comunión Natural",
-          "description": "Se cura a sí mismo y aumenta su velocidad",
-          "effects": [
-            {
-              "type": "heal",
-              "target": "self",
-              "value": 15
-            },
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "speed",
-              "value": 2,
-              "duration": 3
-            }
-          ]
-        },
-        {
-          "name": "Enredaderas Constrictoras",
-          "description": "Raíces que inmovilizan al enemigo, reduciendo drásticamente su velocidad",
-          "effects": [
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "speed",
-              "value": -4,
-              "duration": 2
-            }
-          ]
-        }
+        "m007",
+        "m008",
+        "m009"
       ]
     },
     {
@@ -185,57 +55,9 @@
         "defense": 4
       },
       "availableAbilities": [
-        {
-          "name": "Ataque Sombrío",
-          "description": "Un ataque rápido y letal desde las sombras",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 18
-            }
-          ]
-        },
-        {
-          "name": "Veneno Paralizante",
-          "description": "Aplica un veneno que reduce la velocidad y defensa del oponente",
-          "effects": [
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "speed",
-              "value": -3,
-              "duration": 2
-            },
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "defense",
-              "value": -2,
-              "duration": 2
-            }
-          ]
-        },
-        {
-          "name": "Evasión",
-          "description": "Aumenta temporalmente su velocidad y evade ataques",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "speed",
-              "value": 4,
-              "duration": 2
-            },
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "defense",
-              "value": 2,
-              "duration": 2
-            }
-          ]
-        }
+        "m010",
+        "m011",
+        "m012"
       ]
     },
     {
@@ -248,48 +70,9 @@
         "defense": 8
       },
       "availableAbilities": [
-        {
-          "name": "Justicia Divina",
-          "description": "Un poderoso golpe bendecido por la luz",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 16
-            }
-          ]
-        },
-        {
-          "name": "Escudo Celestial",
-          "description": "Invoca un escudo de luz que aumenta drásticamente la defensa",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "defense",
-              "value": 6,
-              "duration": 3
-            }
-          ]
-        },
-        {
-          "name": "Luz Curativa",
-          "description": "Restaura su salud y aumenta ligeramente su ataque",
-          "effects": [
-            {
-              "type": "heal",
-              "target": "self",
-              "value": 25
-            },
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "attack",
-              "value": 2,
-              "duration": 2
-            }
-          ]
-        }
+        "m013",
+        "m014",
+        "m015"
       ]
     },
     {
@@ -302,57 +85,9 @@
         "defense": 4
       },
       "availableAbilities": [
-        {
-          "name": "Bola de Fuego",
-          "description": "Lanza una bola de fuego que quema al oponente",
-          "effects": [
-            {
-              "type": "damage",
-              "target": "opponent",
-              "value": 15
-            },
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "health",
-              "value": -2,
-              "duration": 3
-            }
-          ]
-        },
-        {
-          "name": "Armadura de Tierra",
-          "description": "Crea una armadura de roca que aumenta la defensa",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "defense",
-              "value": 4,
-              "duration": 3
-            }
-          ]
-        },
-        {
-          "name": "Ráfaga de Viento",
-          "description": "Invoca vientos que aumentan la velocidad propia y disminuyen la del oponente",
-          "effects": [
-            {
-              "type": "buff",
-              "target": "self",
-              "stat": "speed",
-              "value": 3,
-              "duration": 2
-            },
-            {
-              "type": "debuff",
-              "target": "opponent",
-              "stat": "speed",
-              "value": -2,
-              "duration": 2
-            }
-          ]
-        }
+        "m016",
+        "m017",
+        "m018"
       ]
     }
   ]

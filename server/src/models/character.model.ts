@@ -5,6 +5,7 @@ import config from '../config/config';
 
 export class CharacterService {
   private characters: Character[] = [];
+  private moves: Map<string, any> = new Map();
 
   constructor() {
     this.loadCharacters();
@@ -12,6 +13,13 @@ export class CharacterService {
 
   private loadCharacters(): void {
     try {
+      const movesRaw = fs.readFileSync(
+        path.resolve(process.cwd(), config.movesDataPath),
+        'utf-8'
+      );
+      const parsedMoves = JSON.parse(movesRaw).moves;
+      this.moves = new Map(parsedMoves.map((m: any) => [m.id, m]));
+
       const charactersData = fs.readFileSync(
         path.resolve(process.cwd(), config.charactersDataPath),
         'utf-8'
@@ -19,8 +27,10 @@ export class CharacterService {
       const parsedData = JSON.parse(charactersData);
       this.characters = parsedData.characters.map((c: any) => ({
         ...c,
-        availableAbilities: c.availableAbilities || c.abilities || [],
-        abilities: c.abilities && !c.availableAbilities ? c.abilities : undefined
+        availableAbilities: (c.availableAbilities || []).map((id: string) => this.moves.get(id)).filter(Boolean),
+        abilities: c.abilities
+          ? c.abilities.map((id: string) => this.moves.get(id)).filter(Boolean)
+          : undefined
       }));
       console.log(`Cargados ${this.characters.length} personajes`);
     } catch (error) {
