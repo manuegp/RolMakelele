@@ -38,6 +38,13 @@ export function registerDisconnect(
                 winnerUsername: winner.username,
                 reason: 'player_disconnected_timeout'
               });
+              io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
+                username: 'Sistema',
+                message: `El juego ha terminado. Ganador: ${winner.username}`,
+                timestamp: new Date(),
+                isSpectator: false,
+                isSystem: true
+              });
               rooms.delete(roomId);
             }
             broadcastRoomsList(io, rooms);

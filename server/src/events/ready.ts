@@ -65,6 +65,13 @@ export function registerReady(
         room: playerRoom,
         turnOrder
       });
+      io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+        username: 'Sistema',
+        message: 'El juego ha comenzado',
+        timestamp: new Date(),
+        isSpectator: false,
+        isSystem: true
+      });
 
       io.to(playerRoom.id).emit(ServerEvents.TURN_STARTED, {
         playerId: turnOrder[0].playerId,

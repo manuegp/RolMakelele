@@ -244,6 +244,15 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
     
     // Establecer el cooldown de la habilidad
     ability.currentCooldown = ability.cooldown;
+
+    // Registrar la acción en el chat
+    io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+      username: 'Sistema',
+      message: `${sourcePlayer.username} - ${sourceCharacter.name} usó ${ability.name} sobre ${targetPlayer.username} - ${targetCharacter.name}`,
+      timestamp: new Date(),
+      isSpectator: false,
+      isSystem: true
+    });
     
     // Comprobar si el juego ha terminado
     let gameEnded = false;
@@ -263,6 +272,13 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
           io.to(playerRoom.id).emit(ServerEvents.GAME_ENDED, {
             winnerId: winner.id,
             winnerUsername: winner.username
+          });
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `El juego ha terminado. Ganador: ${winner.username}`,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
           });
         }
         
