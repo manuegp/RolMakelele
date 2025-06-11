@@ -2,7 +2,7 @@
   <ng-container *ngIf="getPlayersCount === 2; else waiting">
     <h2 class="mb-3">Elige 4 personajes</h2>
     <div class="row">
-      <div class="col-md-3 mb-3" *ngFor="let char of characters">
+      <div class="col-md-6 mb-3" *ngFor="let char of characters">
         <div class="card" [class.border-primary]="isSelected(char.id)">
           <div class="card-body">
             <!-- <h5 class="card-title">{{ char.name }}</h5> -->
