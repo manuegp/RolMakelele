@@ -1,0 +1,11 @@
+<div *ngFor="let ab of abilities">
+  <label class="form-check-label">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      [checked]="selectedIds.includes(ab.id)"
+      (change)="toggleAbility(ab.id)"
+    />
+    {{ ab.name }}
+  </label>
+</div>

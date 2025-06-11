@@ -10,6 +10,7 @@ Servidor para un juego de rol por turnos usando Socket.IO, Node.js, Express y Ty
 - Durante la selección de personajes se eligen las 4 habilidades a utilizar
 - Todas las habilidades disponibles se definen en `moves_data.json` y los personajes las
   referencian por identificador
+- Nuevo endpoint `/api/characters/:id/abilities` para consultar las habilidades de un personaje
 - Estadísticas de personajes (velocidad, vida, ataque, defensa)
 - Sistema de turnos basado en la velocidad
 - Habilidades con efectos variados (daño, curación, buffs, debuffs)

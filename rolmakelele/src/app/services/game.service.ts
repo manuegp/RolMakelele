@@ -7,7 +7,8 @@ import {
   GameRoom,
   Character,
   Player,
-  GameAction
+  GameAction,
+  Ability
 } from '../models/game.types';
 import {
   ClientEvents,
@@ -60,6 +61,12 @@ export class GameService {
       .subscribe(res => {
         this.characters$.next(res.characters);
       });
+  }
+
+  fetchCharacterAbilities(id: string) {
+    return this.http.get<{ abilities: Ability[] }>(
+      `${this.API_BASE}/api/characters/${id}/abilities`
+    );
   }
 
   fetchRooms() {

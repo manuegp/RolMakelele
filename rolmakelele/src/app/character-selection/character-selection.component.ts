@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { Character, GameRoom } from '../models/game.types';
+import { AbilitySelectorComponent } from './ability-selector.component';
 
 @Component({
   selector: 'app-character-selection',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AbilitySelectorComponent],
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {
@@ -39,13 +40,10 @@ export class CharacterSelectionComponent implements OnInit {
     }
   }
 
-  toggleAbility(charId: string, abilityId: string) {
+  onAbilitySelectionChange(charId: string, abilityIds: string[]) {
     const entry = this.selected.find(c => c.id === charId);
-    if (!entry) return;
-    if (entry.abilities.includes(abilityId)) {
-      entry.abilities = entry.abilities.filter(a => a !== abilityId);
-    } else if (entry.abilities.length < 4) {
-      entry.abilities.push(abilityId);
+    if (entry) {
+      entry.abilities = abilityIds;
     }
   }
 
