@@ -52,7 +52,7 @@ export class CharacterSelectionComponent implements OnInit {
   isSelectionValid(): boolean {
     return (
       this.selected.length === 4 &&
-      this.selected.every(c => c.abilityIds.length === 4)
+      this.selected.every(c => c.abilityIds.length >= 1)
     );
   }
 
@@ -64,10 +64,8 @@ export class CharacterSelectionComponent implements OnInit {
   }
 
   ready() {
-    const valid =
-      this.selected.length === 4 &&
-      this.selected.every(c => c.abilityIds.length === 4);
-    if (valid) {
+    
+    if (this.isSelectionValid()) {
       this.game.setSelectedCharacters(this.selected);
       this.game.sendSelectedCharacters();
       this.game.ready();
