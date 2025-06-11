@@ -3,17 +3,27 @@
   {<h2 class="mb-3">Elige 4 personajes</h2>
   <div class="row">
     <div class="col-md-3 mb-3" *ngFor="let char of characters">
-      <div class="card" [class.border-primary]="selected.includes(char.id)">
+      <div class="card" [class.border-primary]="selected.find(c => c.id === char.id)">
         <div class="card-body">
           <h5 class="card-title">{{ char.name }}</h5>
           <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
-            {{ selected.includes(char.id) ? 'Quitar' : 'Añadir' }}
+            {{ selected.find(c => c.id === char.id) ? 'Quitar' : 'Añadir' }}
           </button>
+          <div *ngIf="selected.find(c => c.id === char.id)" class="mt-2">
+            <div *ngFor="let ab of char.availableAbilities">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input"
+                       [checked]="selected.find(c => c.id === char.id)?.abilities.includes(ab.id)"
+                       (change)="toggleAbility(char.id, ab.id)">
+                {{ ab.name }}
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" [disabled]="selected.length !== 4" (click)="ready()">{{isReady ? 'Volver a seleccionar' : 'Estoy listo'}}</button>
+  <button class="btn btn-primary" [disabled]="!(selected.length === 4 && selected.every(c => c.abilities.length === 4))" (click)="ready()">{{isReady ? 'Volver a seleccionar' : 'Estoy listo'}}</button>
   <button class="btn btn-secondary ms-2" (click)="leave()">Salir</button>
 }@else {
   Esperando a que se unan más jugadores...

@@ -12,7 +12,7 @@ import { Character, GameRoom } from '../models/game.types';
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {
-  selected: string[] = [];
+  selected: { id: string; abilities: string[] }[] = [];
   characters: Character[] = [];
   roomId!: string;
   room: GameRoom | null = null;
@@ -31,15 +31,28 @@ export class CharacterSelectionComponent implements OnInit {
   }
 
   toggle(id: string) {
-    if (this.selected.includes(id)) {
-      this.selected = this.selected.filter(c => c !== id);
+    const index = this.selected.findIndex(c => c.id === id);
+    if (index >= 0) {
+      this.selected.splice(index, 1);
     } else if (this.selected.length < 4) {
-      this.selected.push(id);
+      this.selected.push({ id, abilities: [] });
+    }
+  }
+
+  toggleAbility(charId: string, abilityId: string) {
+    const entry = this.selected.find(c => c.id === charId);
+    if (!entry) return;
+    if (entry.abilities.includes(abilityId)) {
+      entry.abilities = entry.abilities.filter(a => a !== abilityId);
+    } else if (entry.abilities.length < 4) {
+      entry.abilities.push(abilityId);
     }
   }
 
   ready() {
-    if (this.selected.length === 4) {
+    const valid = this.selected.length === 4 &&
+      this.selected.every(c => c.abilities.length === 4);
+    if (valid) {
       this.game.setSelectedCharacters(this.selected);
       this.game.sendSelectedCharacters();
       this.game.ready();

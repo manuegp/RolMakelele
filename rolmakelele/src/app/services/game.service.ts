@@ -27,7 +27,7 @@ declare const io: any;
 export class GameService {
   private socket: any;
   private username = '';
-  private selectedCharacters: string[] = [];
+  private selectedCharacters: { id: string; abilities: string[] }[] = [];
   private currentRoomId: string | null = null;
   currentRoom$ = new BehaviorSubject<GameRoom | null>(null);
   turnInfo$ = new BehaviorSubject<TurnStartedData | null>(null);
@@ -87,7 +87,9 @@ export class GameService {
   hasUsername() {
     return this.username.trim().length > 0;
   }
-  setSelectedCharacters(ids: string[]) { this.selectedCharacters = ids; }
+  setSelectedCharacters(chars: { id: string; abilities: string[] }[]) {
+    this.selectedCharacters = chars;
+  }
 
   getCurrentRoomId() { return this.currentRoomId; }
   isInGame() { return this.currentRoomId !== null; }
@@ -292,7 +294,7 @@ export class GameService {
   sendSelectedCharacters() {
     this.ensureSocket();
     this.socket.emit(ClientEvents.SELECT_CHARACTERS, {
-      characterIds: this.selectedCharacters
+      characters: this.selectedCharacters
     });
   }
 

@@ -27,10 +27,12 @@ export class CharacterService {
       const parsedData = JSON.parse(charactersData);
       this.characters = parsedData.characters.map((c: any) => ({
         ...c,
-        availableAbilities: (c.availableAbilities || []).map((id: string) => this.moves.get(id)).filter(Boolean),
+        availableAbilities: (c.availableAbilities || [])
+          .map((id: string) => this.moves.get(id))
+          .filter(Boolean),
         abilities: c.abilities
           ? c.abilities.map((id: string) => this.moves.get(id)).filter(Boolean)
-          : undefined
+          : []
       }));
       console.log(`Cargados ${this.characters.length} personajes`);
     } catch (error) {
@@ -47,10 +49,15 @@ export class CharacterService {
     return this.characters.find(character => character.id === id);
   }
 
+  getMoveById(id: string): any | undefined {
+    return this.moves.get(id);
+  }
+
   characterToCharacterState(character: Character): CharacterState {
-    const baseAbilities = character.abilities && character.abilities.length > 0
-      ? character.abilities
-      : character.availableAbilities;
+    const baseAbilities =
+      character.abilities.length > 0
+        ? character.abilities
+        : character.availableAbilities;
     return {
       ...character,
       abilities: baseAbilities

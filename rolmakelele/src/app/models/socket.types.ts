@@ -42,8 +42,13 @@ export interface CreateRoomData {
   username: string;
 }
 
+export interface CharacterSelection {
+  id: string;
+  abilityIds: string[];
+}
+
 export interface SelectCharactersData {
-  characterIds: string[];
+  characters: CharacterSelection[];
 }
 
 export interface PerformActionData extends GameAction {}

@@ -72,7 +72,7 @@ try {
     availableAbilities: (c.availableAbilities || []).map((id: string) => moves.get(id)).filter(Boolean),
     abilities: c.abilities
       ? c.abilities.map((id: string) => moves.get(id)).filter(Boolean)
-      : undefined
+      : []
   }));
   console.log(`Cargados ${characters.length} personajes`);
 } catch (error) {

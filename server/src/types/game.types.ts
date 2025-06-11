@@ -39,7 +39,7 @@ export interface Character {
   name: string;
   stats: Stats;
   availableAbilities: Ability[];
-  abilities?: Ability[];
+  abilities: Ability[];
   currentStats?: Stats;
   activeEffects?: {
     effect: Effect;
