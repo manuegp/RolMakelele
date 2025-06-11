@@ -17,7 +17,11 @@ export class CharacterService {
         'utf-8'
       );
       const parsedData = JSON.parse(charactersData);
-      this.characters = parsedData.characters;
+      this.characters = parsedData.characters.map((c: any) => ({
+        ...c,
+        availableAbilities: c.availableAbilities || c.abilities || [],
+        abilities: c.abilities && !c.availableAbilities ? c.abilities : undefined
+      }));
       console.log(`Cargados ${this.characters.length} personajes`);
     } catch (error) {
       console.error('Error al cargar los personajes:', error);
@@ -34,17 +38,18 @@ export class CharacterService {
   }
 
   characterToCharacterState(character: Character): CharacterState {
+    const baseAbilities = character.abilities && character.abilities.length > 0
+      ? character.abilities
+      : character.availableAbilities;
     return {
       ...character,
+      abilities: baseAbilities
+        .slice(0, config.maxAbilitiesPerCharacter)
+        .map(a => ({ ...a })),
       currentHealth: character.stats.health,
       isAlive: true,
       currentStats: { ...character.stats },
-      activeEffects: [],
-      abilities: character.abilities
-        .slice(0, config.maxAbilitiesPerCharacter)
-        .map(ability => ({
-          ...ability
-        }))
+      activeEffects: []
     };
   }
 }

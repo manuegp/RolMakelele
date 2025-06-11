@@ -9,7 +9,7 @@
         "attack": 8,
         "defense": 6
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Golpe Brutal",
           "description": "Un potente ataque que ignora parte de la defensa enemiga",
@@ -66,7 +66,7 @@
         "attack": 10,
         "defense": 3
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Proyectil Mágico",
           "description": "Lanza un potente proyectil de energía arcana",
@@ -123,7 +123,7 @@
         "attack": 6,
         "defense": 5
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Látigo de Espinas",
           "description": "Ataca con un látigo hecho de espinas venenosas",
@@ -184,7 +184,7 @@
         "attack": 9,
         "defense": 4
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Ataque Sombrío",
           "description": "Un ataque rápido y letal desde las sombras",
@@ -247,7 +247,7 @@
         "attack": 7,
         "defense": 8
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Justicia Divina",
           "description": "Un poderoso golpe bendecido por la luz",
@@ -301,7 +301,7 @@
         "attack": 9,
         "defense": 4
       },
-      "abilities": [
+      "availableAbilities": [
         {
           "name": "Bola de Fuego",
           "description": "Lanza una bola de fuego que quema al oponente",

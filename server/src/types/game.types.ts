@@ -37,7 +37,8 @@ export interface Character {
   id: string;
   name: string;
   stats: Stats;
-  abilities: Ability[];
+  availableAbilities: Ability[];
+  abilities?: Ability[];
   currentStats?: Stats;
   activeEffects?: {
     effect: Effect;

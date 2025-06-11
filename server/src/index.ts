@@ -59,7 +59,11 @@ try {
     'utf-8'
   );
   const parsed = JSON.parse(data);
-  characters = parsed.characters;
+  characters = parsed.characters.map((c: any) => ({
+    ...c,
+    availableAbilities: c.availableAbilities || c.abilities || [],
+    abilities: c.abilities && !c.availableAbilities ? c.abilities : undefined
+  }));
   console.log(`Cargados ${characters.length} personajes`);
 } catch (error) {
   console.error('Error al cargar los personajes:', error);
