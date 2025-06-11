@@ -28,7 +28,7 @@ declare const io: any;
 export class GameService {
   private socket: any;
   private username = '';
-  private selectedCharacters: { id: string; abilities: string[] }[] = [];
+  private selectedCharacters: { id: string; abilityIds: string[] }[] = [];
   private currentRoomId: string | null = null;
   currentRoom$ = new BehaviorSubject<GameRoom | null>(null);
   turnInfo$ = new BehaviorSubject<TurnStartedData | null>(null);
@@ -94,7 +94,7 @@ export class GameService {
   hasUsername() {
     return this.username.trim().length > 0;
   }
-  setSelectedCharacters(chars: { id: string; abilities: string[] }[]) {
+  setSelectedCharacters(chars: { id: string; abilityIds: string[] }[]) {
     this.selectedCharacters = chars;
   }
 

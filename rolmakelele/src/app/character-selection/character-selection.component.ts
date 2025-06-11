@@ -13,7 +13,7 @@ import { AbilitySelectorComponent } from './ability-selector.component';
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {
-  selected: { id: string; abilities: string[] }[] = [];
+  selected: { id: string; abilityIds: string[] }[] = [];
   characters: Character[] = [];
   roomId!: string;
   room: GameRoom | null = null;
@@ -36,7 +36,7 @@ export class CharacterSelectionComponent implements OnInit {
     if (index >= 0) {
       this.selected.splice(index, 1);
     } else if (this.selected.length < 4) {
-      this.selected.push({ id, abilities: [] });
+      this.selected.push({ id, abilityIds: [] });
     }
   }
 
@@ -46,26 +46,27 @@ export class CharacterSelectionComponent implements OnInit {
 
   getSelectedAbilities(id: string): string[] {
     const entry = this.selected.find(c => c.id === id);
-    return entry ? entry.abilities : [];
+    return entry ? entry.abilityIds : [];
   }
 
   isSelectionValid(): boolean {
     return (
       this.selected.length === 4 &&
-      this.selected.every(c => c.abilities.length === 4)
+      this.selected.every(c => c.abilityIds.length === 4)
     );
   }
 
   onAbilitySelectionChange(charId: string, abilityIds: string[]) {
     const entry = this.selected.find(c => c.id === charId);
     if (entry) {
-      entry.abilities = abilityIds;
+      entry.abilityIds = abilityIds;
     }
   }
 
   ready() {
-    const valid = this.selected.length === 4 &&
-      this.selected.every(c => c.abilities.length === 4);
+    const valid =
+      this.selected.length === 4 &&
+      this.selected.every(c => c.abilityIds.length === 4);
     if (valid) {
       this.game.setSelectedCharacters(this.selected);
       this.game.sendSelectedCharacters();
