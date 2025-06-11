@@ -41,8 +41,7 @@ export class CharacterService {
       currentStats: { ...character.stats },
       activeEffects: [],
       abilities: character.abilities.map(ability => ({
-        ...ability,
-        currentCooldown: 0
+        ...ability
       }))
     };
   }

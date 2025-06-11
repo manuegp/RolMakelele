@@ -91,17 +91,8 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
       return;
     }
     
-    // Verificar que la habilidad no está en cooldown
     const sourceCharacter = sourcePlayer.selectedCharacters[data.sourceCharacterIndex];
     const ability = sourceCharacter.abilities[data.abilityIndex];
-    
-    if (ability.currentCooldown && ability.currentCooldown > 0) {
-      socket.emit(ServerEvents.ERROR, { 
-        message: 'La habilidad está en enfriamiento', 
-        code: 'ABILITY_ON_COOLDOWN' 
-      });
-      return;
-    }
     
     // Aplicar la habilidad y calcular los efectos
     const targetCharacter = targetPlayer.selectedCharacters[data.targetCharacterIndex];
@@ -242,9 +233,6 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
       }
     }
     
-    // Establecer el cooldown de la habilidad
-    ability.currentCooldown = ability.cooldown;
-
     // Registrar la acción en el chat
     io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
       username: 'Sistema',
@@ -333,12 +321,7 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
       // Actualizar el turno actual
       playerRoom.currentTurn = nextTurn;
       
-      // Actualizar cooldowns de las habilidades del personaje que acaba de jugar
-      for (const ability of sourceCharacter.abilities) {
-        if (ability.currentCooldown && ability.currentCooldown > 0) {
-          ability.currentCooldown--;
-        }
-      }
+
       
       // Actualizar la duración de los efectos activos para todos los personajes
       for (const player of playerRoom.players) {

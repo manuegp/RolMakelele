@@ -216,12 +216,6 @@ export class GameService {
                 char.currentStats[eff.stat] += eff.value;
               }
             }
-            const ability = sourceChar.abilities.find(
-              a => a.name === data.result.ability.name
-            );
-            if (ability) {
-              ability.currentCooldown = ability.cooldown;
-            }
           }
           if (data.nextTurn) {
             room.currentTurn = {

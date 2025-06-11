@@ -30,8 +30,6 @@ export interface Ability {
   name: string;
   description: string;
   effects: Effect[];
-  cooldown: number;
-  currentCooldown?: number;
 }
 
 // Definición de un personaje
