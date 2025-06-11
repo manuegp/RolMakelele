@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import { GameRoom, CharacterState, Ability } from '../models/game.types';
 import { TurnStartedData } from '../models/socket.types';
 import { CharacterBoxComponent } from './character-box/character-box.component';
+import { ChatComponent } from '../chat/chat.component';
 
 @Component({
   selector: 'app-combat',
   standalone: true,
-  imports: [CommonModule, CharacterBoxComponent],
+  imports: [CommonModule, CharacterBoxComponent, ChatComponent],
   templateUrl: './combat.component.html',
   styleUrl: './combat.component.scss'
 })

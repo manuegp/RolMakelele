@@ -1,0 +1,21 @@
+<div class="chat">
+  <div class="messages" #messagesContainer>
+    <div *ngFor="let msg of messages" class="message">
+      <span class="tag" [ngClass]="msg.isSpectator ? 'spectator' : 'player'">
+        {{ msg.isSpectator ? 'Espectador' : 'Jugador' }}
+      </span>
+      <strong>{{ msg.username }}:</strong>
+      <span>{{ msg.message }}</span>
+    </div>
+  </div>
+  <form class="input-group mt-2" (ngSubmit)="send()">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Escribe un mensaje..."
+      [(ngModel)]="newMessage"
+      name="message"
+    />
+    <button class="btn btn-primary" type="submit">Enviar</button>
+  </form>
+</div>

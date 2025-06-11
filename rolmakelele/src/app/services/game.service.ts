@@ -15,7 +15,8 @@ import {
   TurnStartedData,
   GameStartedData,
   GameEndedData,
-  ErrorData
+  ErrorData,
+  ChatMessageReceivedData
 } from '../models/socket.types';
 
 declare const io: any;
@@ -33,6 +34,7 @@ export class GameService {
 
   characters$ = new BehaviorSubject<Character[]>([]);
   rooms$ = new BehaviorSubject<RoomsListData['rooms']>([]);
+  chatMessages$ = new BehaviorSubject<ChatMessageReceivedData[]>([]);
 
   constructor(
     private http: HttpClient,
@@ -105,6 +107,7 @@ export class GameService {
     this.currentRoom$.next(null);
     this.turnInfo$.next(null);
     sessionStorage.removeItem('roomId');
+    this.chatMessages$.next([]);
   }
 
   private ensureSocket() {
@@ -211,6 +214,12 @@ export class GameService {
           }
         });
       });
+      this.socket.on(ServerEvents.CHAT_MESSAGE, (msg: ChatMessageReceivedData) => {
+        this.zone.run(() => {
+          const current = this.chatMessages$.value;
+          this.chatMessages$.next([...current, msg]);
+        });
+      });
     }
   }
 
@@ -247,6 +256,11 @@ export class GameService {
     this.socket.emit(ClientEvents.READY);
   }
 
+  sendChatMessage(message: string) {
+    this.ensureSocket();
+    this.socket.emit(ClientEvents.CHAT_MESSAGE, { message });
+  }
+
   leaveGame() {
     if (this.currentRoomId) {
       this.ensureSocket();
@@ -255,5 +269,6 @@ export class GameService {
     }
     this.currentRoomId = null;
     sessionStorage.removeItem('roomId');
+    this.chatMessages$.next([]);
   }
 }

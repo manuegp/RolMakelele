@@ -1,0 +1,30 @@
+.chat {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 0.25rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+.tag.player {
+  color: #0d6efd;
+}
+
+.tag.spectator {
+  color: #6c757d;
+}
