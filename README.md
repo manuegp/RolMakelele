@@ -6,6 +6,7 @@ Servidor para un juego de rol por turnos usando Socket.IO, Node.js, Express y Ty
 
 - Sistema de salas con máximo 2 jugadores y 5 espectadores
 - Selección de 4 personajes por jugador
+- Cada personaje puede usar hasta 4 habilidades en combate
 - Estadísticas de personajes (velocidad, vida, ataque, defensa)
 - Sistema de turnos basado en la velocidad
 - Habilidades con efectos variados (daño, curación, buffs, debuffs)
@@ -37,6 +38,7 @@ El servidor está instrumentado con [Socket.IO Admin UI](https://github.com/sock
 RolMakelele/
 ├── data/
 │   ├── characters.json          # Datos de los personajes
+│   ├── moves_data.json          # Datos de las habilidades
 │   └── rolmakelele_postman_collection.json # Colección de Postman
 ├── src/
 │   ├── config/

@@ -8,8 +8,10 @@ interface ServerConfig {
   maxPlayersPerRoom: number;
   maxSpectatorsPerRoom: number;
   maxCharactersPerPlayer: number;
+  maxAbilitiesPerCharacter: number;
   turnTimeLimit: number; // en segundos
   charactersDataPath: string;
+  movesDataPath: string;
   postmanCollectionPath: string;
 }
 
@@ -19,8 +21,10 @@ const config: ServerConfig = {
   maxPlayersPerRoom: 2,
   maxSpectatorsPerRoom: 5,
   maxCharactersPerPlayer: 4,
+  maxAbilitiesPerCharacter: 4,
   turnTimeLimit: 30,
   charactersDataPath: './data/characters.json',
+  movesDataPath: './data/moves_data.json',
   postmanCollectionPath: './data/rolmakelele_postman_collection.json'
 };
 

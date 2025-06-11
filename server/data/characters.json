@@ -20,8 +20,7 @@
               "value": 15,
               "ignoreDefense": 0.3
             }
-          ],
-          "cooldown": 2
+          ]
         },
         {
           "name": "Postura Defensiva",
@@ -34,8 +33,7 @@
               "value": 3,
               "duration": 2
             }
-          ],
-          "cooldown": 3
+          ]
         },
         {
           "name": "Grito de Guerra",
@@ -55,8 +53,7 @@
               "value": -1,
               "duration": 3
             }
-          ],
-          "cooldown": 4
+          ]
         }
       ]
     },
@@ -80,8 +77,7 @@
               "value": 20,
               "ignoreDefense": 0.2
             }
-          ],
-          "cooldown": 1
+          ]
         },
         {
           "name": "Barrera Arcana",
@@ -94,8 +90,7 @@
               "value": 5,
               "duration": 2
             }
-          ],
-          "cooldown": 4
+          ]
         },
         {
           "name": "Drenaje de Maná",
@@ -115,8 +110,7 @@
               "value": -2,
               "duration": 2
             }
-          ],
-          "cooldown": 3
+          ]
         }
       ]
     },
@@ -146,8 +140,7 @@
               "value": -3,
               "duration": 2
             }
-          ],
-          "cooldown": 2
+          ]
         },
         {
           "name": "Comunión Natural",
@@ -165,8 +158,7 @@
               "value": 2,
               "duration": 3
             }
-          ],
-          "cooldown": 3
+          ]
         },
         {
           "name": "Enredaderas Constrictoras",
@@ -179,8 +171,7 @@
               "value": -4,
               "duration": 2
             }
-          ],
-          "cooldown": 4
+          ]
         }
       ]
     },
@@ -203,8 +194,7 @@
               "target": "opponent",
               "value": 18
             }
-          ],
-          "cooldown": 1
+          ]
         },
         {
           "name": "Veneno Paralizante",
@@ -224,8 +214,7 @@
               "value": -2,
               "duration": 2
             }
-          ],
-          "cooldown": 3
+          ]
         },
         {
           "name": "Evasión",
@@ -245,8 +234,7 @@
               "value": 2,
               "duration": 2
             }
-          ],
-          "cooldown": 4
+          ]
         }
       ]
     },
@@ -269,8 +257,7 @@
               "target": "opponent",
               "value": 16
             }
-          ],
-          "cooldown": 2
+          ]
         },
         {
           "name": "Escudo Celestial",
@@ -283,8 +270,7 @@
               "value": 6,
               "duration": 3
             }
-          ],
-          "cooldown": 4
+          ]
         },
         {
           "name": "Luz Curativa",
@@ -302,8 +288,7 @@
               "value": 2,
               "duration": 2
             }
-          ],
-          "cooldown": 5
+          ]
         }
       ]
     },
@@ -333,8 +318,7 @@
               "value": -2,
               "duration": 3
             }
-          ],
-          "cooldown": 2
+          ]
         },
         {
           "name": "Armadura de Tierra",
@@ -347,8 +331,7 @@
               "value": 4,
               "duration": 3
             }
-          ],
-          "cooldown": 3
+          ]
         },
         {
           "name": "Ráfaga de Viento",
@@ -368,11 +351,9 @@
               "value": -2,
               "duration": 2
             }
-          ],
-          "cooldown": 4
+          ]
         }
       ]
     }
   ]
 }
-

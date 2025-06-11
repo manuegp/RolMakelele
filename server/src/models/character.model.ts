@@ -40,9 +40,11 @@ export class CharacterService {
       isAlive: true,
       currentStats: { ...character.stats },
       activeEffects: [],
-      abilities: character.abilities.map(ability => ({
-        ...ability
-      }))
+      abilities: character.abilities
+        .slice(0, config.maxAbilitiesPerCharacter)
+        .map(ability => ({
+          ...ability
+        }))
     };
   }
 }
