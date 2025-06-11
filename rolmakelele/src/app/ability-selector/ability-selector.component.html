@@ -1,26 +1,13 @@
-<!-- <div *ngFor="let ab of abilities">
-  <label class="form-check-label">
-    <input
-      type="checkbox"
-      class="form-check-input"
-      [checked]="selectedIds.includes(ab.id)"
-      (change)="toggleAbility(ab.id)"
-    />
-    {{ ab.name }}
-  </label>
-</div> -->
 <mat-accordion>
   <mat-expansion-panel *ngFor="let ab of abilities" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <img
-          src="https://placehold.co/40x40/png"
-          alt="icon"
-          width="40"
-          height="40"
-          class="me-2"
-        />
-        
+    <mat-expansion-panel-header class="align-items-center gap-2">
+      <img
+        src="https://placehold.co/40x40/png"
+        alt="icon"
+        width="40"
+        height="40"
+      />
+      <mat-panel-title class="flex-grow-1 text-nowrap">
         {{ ab.name }}
       </mat-panel-title>
       <mat-panel-description>
