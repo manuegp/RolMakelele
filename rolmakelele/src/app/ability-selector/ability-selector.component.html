@@ -10,13 +10,38 @@
   </label>
 </div> -->
 <mat-accordion>
-  <mat-expansion-panel hideToggle disabled="true">
+  <mat-expansion-panel *ngFor="let ab of abilities" hideToggle>
     <mat-expansion-panel-header>
-      <mat-panel-title> {{character.name}} </mat-panel-title>
-      <mat-panel-description> 
-      <button class="btn btn-outline-primary">Añadir</button>
+      <mat-panel-title>
+        <img
+          src="https://via.placeholder.com/40"
+          alt="icon"
+          width="40"
+          height="40"
+          class="me-2"
+        />
+        {{ ab.name }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <button
+          class="btn btn-outline-primary btn-sm"
+          (click)="toggleAbility(ab.id)"
+        >
+          {{ selectedIds.includes(ab.id) ? 'Quitar' : 'Añadir' }}
+        </button>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>This is the primary content of the panel.</p>
+    <p>{{ ab.description }}</p>
+    <ul>
+      <li *ngFor="let effect of ab.effects">
+        <span>{{ effect.type }} sobre {{ effect.target }}</span>
+        <span *ngIf="effect.stat"> ({{ effect.stat }})</span>
+        <span> : {{ effect.value }}</span>
+        <span *ngIf="effect.duration"> ({{ effect.duration }} turnos)</span>
+        <span *ngIf="effect.ignoreDefense">
+          (ignora defensa {{ effect.ignoreDefense * 100 }}%)
+        </span>
+      </li>
+    </ul>
   </mat-expansion-panel>
 </mat-accordion>
