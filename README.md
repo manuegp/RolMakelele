@@ -19,9 +19,11 @@ Servidor para un juego de rol por turnos usando Socket.IO, Node.js, Express y Ty
 ## Instalación
 
 1. Clona este repositorio
-2. Instala las dependencias con `npm install`
-3. Inicia el servidor en modo desarrollo con `npm run dev`
-4. Para producción, compila con `npm run build` y luego inicia con `npm start`
+2. Instala las dependencias del servidor con `npm install`
+3. Instala las dependencias del cliente con `cd client && npm install`
+4. Inicia el servidor en modo desarrollo con `npm run dev`
+5. Levanta la aplicación Angular con `npm start` dentro de `client`
+6. Para producción, compila el servidor con `npm run build` y luego inicia con `npm start`
 
 ## Conexión con Postman
 
@@ -47,6 +49,9 @@ RolMakelele/
 │   │   ├── game.types.ts        # Tipos de datos del juego
 │   │   └── socket.types.ts      # Tipos para eventos de Socket.IO
 │   └── index.ts                 # Punto de entrada de la aplicación
+├── client/                    # Aplicación Angular
+│   ├── angular.json
+│   └── src/ ...
 ├── package.json
 ├── tsconfig.json
 └── README.md

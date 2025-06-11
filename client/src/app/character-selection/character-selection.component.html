@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <h2>Selecciona tus personajes</h2>
+  <mat-form-field class="w-100">
+    <mat-label>Nombre de jugador</mat-label>
+    <input matInput [(ngModel)]="username" />
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <mat-label>Personajes</mat-label>
+    <mat-select multiple [(ngModel)]="selected">
+      <mat-option *ngFor="let c of characters" [value]="c.id">{{c.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="continue()" [disabled]="!username || selected.length === 0">
+    Continuar
+  </button>
+</div>

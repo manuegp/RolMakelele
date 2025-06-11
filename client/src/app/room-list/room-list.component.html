@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h2>Salas disponibles</h2>
+  <mat-form-field class="w-100">
+    <mat-label>Nueva sala</mat-label>
+    <input matInput [(ngModel)]="newRoomName" />
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="createRoom()" [disabled]="!newRoomName">
+    Crear sala
+  </button>
+
+  <mat-nav-list class="mt-4">
+    <mat-list-item *ngFor="let r of rooms">
+      {{r.name}} ({{r.players}}/{{r.maxPlayers || 2}})
+      <button mat-button color="accent" (click)="joinRoom(r.id)">Unirse</button>
+    </mat-list-item>
+  </mat-nav-list>
+</div>
