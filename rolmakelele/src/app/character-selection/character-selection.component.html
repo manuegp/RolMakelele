@@ -3,16 +3,16 @@
     <h2 class="mb-3">Elige 4 personajes</h2>
     <div class="row">
       <div class="col-md-3 mb-3" *ngFor="let char of characters">
-        <div class="card" [class.border-primary]="selected.find(c => c.id === char.id)">
+        <div class="card" [class.border-primary]="isSelected(char.id)">
           <div class="card-body">
             <h5 class="card-title">{{ char.name }}</h5>
             <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
-              {{ selected.find(c => c.id === char.id) ? 'Quitar' : 'Añadir' }}
+              {{ isSelected(char.id) ? 'Quitar' : 'Añadir' }}
             </button>
-            <div class="mt-2" *ngIf="selected.find(c => c.id === char.id)">
+            <div class="mt-2" *ngIf="isSelected(char.id)">
               <app-ability-selector
                 [characterId]="char.id"
-                [selectedIds]="selected.find(c => c.id === char.id)?.abilities || []"
+                [selectedIds]="getSelectedAbilities(char.id)"
                 (selectionChange)="onAbilitySelectionChange(char.id, $event)"
               ></app-ability-selector>
             </div>
@@ -22,7 +22,7 @@
     </div>
     <button
       class="btn btn-primary"
-      [disabled]="!(selected.length === 4 && selected.every(c => c.abilities.length === 4))"
+      [disabled]="!isSelectionValid()"
       (click)="ready()"
     >
       {{ isReady ? 'Volver a seleccionar' : 'Estoy listo' }}

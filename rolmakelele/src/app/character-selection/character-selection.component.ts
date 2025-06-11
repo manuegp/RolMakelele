@@ -40,6 +40,22 @@ export class CharacterSelectionComponent implements OnInit {
     }
   }
 
+  isSelected(id: string): boolean {
+    return this.selected.some(c => c.id === id);
+  }
+
+  getSelectedAbilities(id: string): string[] {
+    const entry = this.selected.find(c => c.id === id);
+    return entry ? entry.abilities : [];
+  }
+
+  isSelectionValid(): boolean {
+    return (
+      this.selected.length === 4 &&
+      this.selected.every(c => c.abilities.length === 4)
+    );
+  }
+
   onAbilitySelectionChange(charId: string, abilityIds: string[]) {
     const entry = this.selected.find(c => c.id === charId);
     if (entry) {
