@@ -12,6 +12,19 @@
         }
       ],
       "id": "m001"
+    },
+    {
+      "name": "Puñetazo",
+      "description": "Golpea al oponente con un puñetazo fuerte",
+      "category": "physical",
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 30
+        }
+      ],
+      "id": "m002"
     }
   ]
 }

@@ -14,8 +14,11 @@
         "evasion": 38.25
       },
       "availableAbilities": [
-        "m001"
+        "m001",
+        "m002",
+        "m003"
       ]
     }
+
   ]
 }
