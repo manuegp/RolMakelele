@@ -117,6 +117,8 @@ export interface CharactersListData {
 export interface ChatMessageReceivedData {
   username: string;
   message: string;
+  /** Texto mostrado como tooltip al pasar el cursor */
+  tooltip?: string;
   timestamp: Date;
   isSpectator: boolean;
   isSystem: boolean;

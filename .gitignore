@@ -1,1 +1,5 @@
 node_modules
+rolmakelele/node_modules
+server/node_modules
+server/src/**/*.js
+rolmakelele/dist

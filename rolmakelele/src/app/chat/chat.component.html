@@ -10,7 +10,7 @@
         }}
       </span>
       <strong>{{ msg.username }}: </strong>
-      <span>{{ msg.message }}</span>
+      <span [attr.title]="msg.tooltip || null">{{ msg.message }}</span>
     </div>
   </div>
   <form class="input-group mt-2" (ngSubmit)="send()">

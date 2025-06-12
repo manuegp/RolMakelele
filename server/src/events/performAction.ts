@@ -183,10 +183,19 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
               target: 'target',
               value: 0
             });
+            io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+              username: 'Sistema',
+              message: `${targetPlayer.username} - ${targetCharacter.name} esquivó el ataque`,
+              timestamp: new Date(),
+              isSpectator: false,
+              isSystem: true
+            });
             continue;
           }
 
-          let damageAmount = effect.value;
+          const baseDamage = effect.value;
+          let damageAmount = baseDamage;
+          let attackBonus = 0;
 
           // Escalar el daño base usando el ataque o ataque especial del atacante
           if (sourceCharacter.currentStats) {
@@ -194,13 +203,16 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
             const attackStat = isSpecial
               ? sourceCharacter.currentStats.specialAttack
               : sourceCharacter.currentStats.attack;
-            damageAmount += (attackStat * effect.value) / 255;
+            attackBonus = (attackStat * baseDamage) / 255;
+            damageAmount += attackBonus;
           }
 
           // Calcular defensa según el tipo de habilidad
+          let defense = 0;
+          let reduction = 0;
           if (targetCharacter.currentStats) {
             const isSpecial = ability.category === 'special';
-            let defense = isSpecial
+            defense = isSpecial
               ? targetCharacter.currentStats.specialDefense
               : targetCharacter.currentStats.defense;
 
@@ -208,29 +220,45 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
               defense *= 1 - effect.ignoreDefense;
             }
 
-            const reduction = damageAmount * (defense / 255);
+            reduction = damageAmount * (defense / 255);
             damageAmount = Math.max(1, damageAmount - reduction);
           }
 
           // Comprobar crítico
           const critChance = sourceCharacter.currentStats?.critical || 0;
-          if (Math.random() < critChance / 100) {
+          const isCrit = Math.random() < critChance / 100;
+          if (isCrit) {
             damageAmount *= 2;
           }
 
           targetCharacter.currentHealth -= damageAmount;
-          
+
           // Comprobar si el personaje ha sido derrotado
           if (targetCharacter.currentHealth <= 0) {
             targetCharacter.currentHealth = 0;
             targetCharacter.isAlive = false;
             actionResult.isDead = true;
           }
-          
+
           actionResult.effects.push({
             type: 'damage',
             target: 'target',
             value: damageAmount
+          });
+
+          const calcParts = [`Base ${baseDamage}`];
+          if (attackBonus) calcParts.push(`+ Atk ${attackBonus.toFixed(2)}`);
+          if (reduction) calcParts.push(`- Def ${reduction.toFixed(2)}`);
+          if (isCrit) calcParts.push('x2 Crit');
+          const calcString = calcParts.join(' ');
+
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `${sourcePlayer.username} - ${sourceCharacter.name} causó ${damageAmount.toFixed(2)} de daño a ${targetPlayer.username} - ${targetCharacter.name}`,
+            tooltip: calcString,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
           });
         } else if (effect.type === 'debuff') {
           if (effect.stat && targetCharacter.currentStats) {
