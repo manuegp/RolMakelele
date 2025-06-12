@@ -31,7 +31,7 @@ export class CharacterBoxComponent implements AfterViewInit, OnChanges {
 
   readonly statLabels = LABELS_MAP;
 
-  tooltip?: Tooltip;
+  tooltip?: any;
 
   get healthPercent(): number {
     if (!this.character) {
