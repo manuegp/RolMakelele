@@ -45,6 +45,8 @@ export interface Ability {
   /** Tipo de habilidad: fisico, especial o de estado */
   category: 'physical' | 'special' | 'status';
   effects: Effect[];
+  /** Ruta a la imagen que representa la habilidad */
+  img?: string;
 }
 
 // Definición de un personaje

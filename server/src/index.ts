@@ -30,6 +30,9 @@ import { getRoomsListData } from './utils/roomHelpers';
 const app = express();
 app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json());
+// Servir archivos estáticos desde la carpeta "public"
+const publicDir = path.resolve(process.cwd(), 'public');
+app.use('/public', express.static(publicDir));
 
 const server = http.createServer(app);
 const socketOrigins =
