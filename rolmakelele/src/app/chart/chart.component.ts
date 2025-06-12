@@ -26,17 +26,18 @@ export class ChartComponent implements OnInit {
         // Oculta las etiquetas alrededor del radar
         pointLabels: {
           display: false
-        },                                    // :contentReference[oaicite:0]{index=0}
+        },
         // Oculta los números (ticks) en el centro
         ticks: {
           display: false
-        }                                     // :contentReference[oaicite:1]{index=1}
+        },
+        max: 255
       }
     },
     plugins: {
       // Si también quisieras quitar la leyenda (nombre del dataset):
       legend: {
-        display: false                      // :contentReference[oaicite:2]{index=2}
+        display: false
       }
     }
   };
