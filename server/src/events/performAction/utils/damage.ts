@@ -2,27 +2,27 @@ import { Ability, CharacterState } from '../../../types/game.types';
 
 export interface DamageCalculation {
   amount: number;
-  attackBonus: number;
+  attackPortion: number;
   reduction: number;
   isCrit: boolean;
 }
 
 export function calculateDamage(
   ability: Ability,
-  baseDamage: number,
+  basePercentage: number,
   ignoreDefense: number | undefined,
   source: CharacterState,
   target: CharacterState
 ): DamageCalculation {
-  let damage = baseDamage;
-  let attackBonus = 0;
+  let damage = basePercentage;
+  let attackPortion = 0;
   let reduction = 0;
 
   if (source.currentStats) {
     const isSpecial = ability.category === 'special';
     const attackStat = isSpecial ? source.currentStats.specialAttack : source.currentStats.attack;
-    attackBonus = (attackStat * baseDamage) / 255;
-    damage += attackBonus;
+    attackPortion = (attackStat * basePercentage) / 100;
+    damage = attackPortion;
   }
 
   if (target.currentStats) {
@@ -41,5 +41,5 @@ export function calculateDamage(
     damage *= 2;
   }
 
-  return { amount: damage, attackBonus, reduction, isCrit };
+  return { amount: damage, attackPortion, reduction, isCrit };
 }

@@ -48,7 +48,7 @@ export function applyAbilityEffects(
           continue;
         }
 
-        const { amount, attackBonus, reduction, isCrit } = calculateDamage(
+        const { amount, attackPortion, reduction, isCrit } = calculateDamage(
           ability,
           effect.value,
           effect.ignoreDefense,
@@ -65,8 +65,8 @@ export function applyAbilityEffects(
 
         actionResult.effects.push({ type: 'damage', target: 'target', value: amount });
 
-        const calcParts = [`Base ${effect.value}`];
-        if (attackBonus) calcParts.push(`+ Atk ${attackBonus.toFixed(2)}`);
+        const calcParts = [`Base ${effect.value}%`];
+        if (attackPortion) calcParts.push(`Atk ${attackPortion.toFixed(2)}`);
         if (reduction) calcParts.push(`- Def ${reduction.toFixed(2)}`);
         if (isCrit) calcParts.push('x2 Crit');
         const calcString = calcParts.join(' ');
