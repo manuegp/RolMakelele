@@ -188,6 +188,15 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
 
           let damageAmount = effect.value;
 
+          // Escalar el daño base usando el ataque o ataque especial del atacante
+          if (sourceCharacter.currentStats) {
+            const isSpecial = ability.category === 'special';
+            const attackStat = isSpecial
+              ? sourceCharacter.currentStats.specialAttack
+              : sourceCharacter.currentStats.attack;
+            damageAmount += (attackStat * effect.value) / 255;
+          }
+
           // Calcular defensa según el tipo de habilidad
           if (targetCharacter.currentStats) {
             const isSpecial = ability.category === 'special';
