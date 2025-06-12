@@ -7,7 +7,11 @@
         "speed": 173,
         "health": 196,
         "attack": 196,
-        "defense": 127
+        "defense": 127,
+        "specialAttack": 196,
+        "specialDefense": 127,
+        "critical": 10,
+        "evasion": 5
       },
       "availableAbilities": [
         "m001",
@@ -22,7 +26,11 @@
         "speed": 165,
         "health": 200,
         "attack": 200,
-        "defense": 141
+        "defense": 141,
+        "specialAttack": 210,
+        "specialDefense": 151,
+        "critical": 12,
+        "evasion": 6
       },
       "availableAbilities": [
         "m004",
@@ -37,7 +45,11 @@
         "speed": 190,
         "health": 190,
         "attack": 190,
-        "defense": 143
+        "defense": 143,
+        "specialAttack": 195,
+        "specialDefense": 150,
+        "critical": 8,
+        "evasion": 7
       },
       "availableAbilities": [
         "m007",
@@ -52,7 +64,11 @@
         "speed": 185,
         "health": 185,
         "attack": 185,
-        "defense": 103
+        "defense": 103,
+        "specialAttack": 180,
+        "specialDefense": 100,
+        "critical": 15,
+        "evasion": 12
       },
       "availableAbilities": [
         "m010",
@@ -67,7 +83,11 @@
         "speed": 171,
         "health": 210,
         "attack": 210,
-        "defense": 184
+        "defense": 184,
+        "specialAttack": 220,
+        "specialDefense": 190,
+        "critical": 9,
+        "evasion": 4
       },
       "availableAbilities": [
         "m013",
@@ -82,7 +102,11 @@
         "speed": 163,
         "health": 195,
         "attack": 195,
-        "defense": 119
+        "defense": 119,
+        "specialAttack": 200,
+        "specialDefense": 125,
+        "critical": 11,
+        "evasion": 9
       },
       "availableAbilities": [
         "m016",

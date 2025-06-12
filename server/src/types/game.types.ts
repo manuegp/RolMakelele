@@ -8,12 +8,24 @@ export interface Stats {
   health: number;
   attack: number;
   defense: number;
+  specialAttack: number;
+  specialDefense: number;
+  critical: number;
+  evasion: number;
 }
 
 // Tipos de efectos para las habilidades
 export type EffectType = 'damage' | 'heal' | 'buff' | 'debuff';
 export type EffectTarget = 'self' | 'opponent';
-export type StatType = 'speed' | 'health' | 'attack' | 'defense';
+export type StatType =
+  | 'speed'
+  | 'health'
+  | 'attack'
+  | 'defense'
+  | 'specialAttack'
+  | 'specialDefense'
+  | 'critical'
+  | 'evasion';
 
 // Definición de un efecto
 export interface Effect {
