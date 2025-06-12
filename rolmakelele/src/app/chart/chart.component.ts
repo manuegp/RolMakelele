@@ -13,6 +13,7 @@ import { LABELS_MAP } from '../constants/stats.map';
 
 export class ChartComponent implements OnInit {
   @Input({ required: true }) public data!: Stats;
+  @Input() public maxValue?: number;
 
   public chartData!: {
     labels: string[];
@@ -23,6 +24,7 @@ export class ChartComponent implements OnInit {
     responsive: true,
     scales: {
       r: {
+        max: 0,
         // Oculta las etiquetas alrededor del radar
         pointLabels: {
           display: false
@@ -43,8 +45,11 @@ export class ChartComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    const rawKeys = Object.keys(this.data);
-    const values = Object.values(this.data) as number[];
+    const rawKeys = Object.keys(this.data) as (keyof Stats)[];
+    const values = rawKeys.map(key => this.data[key]);
+
+    const computedMax = Math.max(...values);
+    this.chartOptions.scales!['r']!.max = this.maxValue ?? computedMax;
 
     const displayLabels = rawKeys.map(key => LABELS_MAP[key] ?? key);
     
