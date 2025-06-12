@@ -3,6 +3,10 @@
   *ngIf="character"
   [class.selectable]="selectable"
   (click)="onClick()"
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  data-bs-html="true"
+  [attr.data-bs-title]="tooltipContent"
 >
   <div class="fw-bold">{{ character.name }}</div>
   <div class="progress mt-1" style="height: 8px;">
