@@ -175,21 +175,40 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
       } else if (effect.target === 'opponent') {
         // Efecto sobre el oponente
         if (effect.type === 'damage') {
-          let damageAmount = effect.value;
-          
-          // Calcular defensa
-          if (targetCharacter.currentStats) {
-            const defense = targetCharacter.currentStats.defense;
-            let damageReduction = defense * 0.1; // 10% de reducción por punto de defensa
-            
-            // Si hay ignoreDefense, reducir la cantidad de defensa efectiva
-            if (effect.ignoreDefense) {
-              damageReduction *= (1 - effect.ignoreDefense);
-            }
-            
-            damageAmount = Math.max(1, damageAmount - damageReduction);
+          // Comprobar evasión
+          const evasionChance = targetCharacter.currentStats?.evasion || 0;
+          if (Math.random() < evasionChance / 100) {
+            actionResult.effects.push({
+              type: 'damage',
+              target: 'target',
+              value: 0
+            });
+            continue;
           }
-          
+
+          let damageAmount = effect.value;
+
+          // Calcular defensa según el tipo de habilidad
+          if (targetCharacter.currentStats) {
+            const isSpecial = ability.category === 'special';
+            let defense = isSpecial
+              ? targetCharacter.currentStats.specialDefense
+              : targetCharacter.currentStats.defense;
+
+            if (effect.ignoreDefense) {
+              defense *= 1 - effect.ignoreDefense;
+            }
+
+            const reduction = damageAmount * (defense / 255);
+            damageAmount = Math.max(1, damageAmount - reduction);
+          }
+
+          // Comprobar crítico
+          const critChance = sourceCharacter.currentStats?.critical || 0;
+          if (Math.random() < critChance / 100) {
+            damageAmount *= 2;
+          }
+
           targetCharacter.currentHealth -= damageAmount;
           
           // Comprobar si el personaje ha sido derrotado

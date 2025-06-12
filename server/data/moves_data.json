@@ -3,6 +3,7 @@
     {
       "name": "Golpe Brutal",
       "description": "Un potente ataque que ignora parte de la defensa enemiga",
+      "category": "physical",
       "effects": [
         {
           "type": "damage",
@@ -16,6 +17,7 @@
     {
       "name": "Postura Defensiva",
       "description": "Aumenta temporalmente la defensa del guerrero",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -30,6 +32,7 @@
     {
       "name": "Grito de Guerra",
       "description": "Aumenta el ataque pero reduce ligeramente la defensa",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -51,6 +54,7 @@
     {
       "name": "Proyectil Mágico",
       "description": "Lanza un potente proyectil de energía arcana",
+      "category": "special",
       "effects": [
         {
           "type": "damage",
@@ -64,6 +68,7 @@
     {
       "name": "Barrera Arcana",
       "description": "Crea una barrera mágica que aumenta significativamente la defensa",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -78,6 +83,7 @@
     {
       "name": "Drenaje de Maná",
       "description": "Debilita al oponente, reduciendo su ataque y velocidad",
+      "category": "status",
       "effects": [
         {
           "type": "debuff",
@@ -99,6 +105,7 @@
     {
       "name": "Látigo de Espinas",
       "description": "Ataca con un látigo hecho de espinas venenosas",
+      "category": "physical",
       "effects": [
         {
           "type": "damage",
@@ -118,6 +125,7 @@
     {
       "name": "Comunión Natural",
       "description": "Se cura a sí mismo y aumenta su velocidad",
+      "category": "status",
       "effects": [
         {
           "type": "heal",
@@ -137,6 +145,7 @@
     {
       "name": "Enredaderas Constrictoras",
       "description": "Raíces que inmovilizan al enemigo, reduciendo drásticamente su velocidad",
+      "category": "status",
       "effects": [
         {
           "type": "debuff",
@@ -151,6 +160,7 @@
     {
       "name": "Ataque Sombrío",
       "description": "Un ataque rápido y letal desde las sombras",
+      "category": "physical",
       "effects": [
         {
           "type": "damage",
@@ -163,6 +173,7 @@
     {
       "name": "Veneno Paralizante",
       "description": "Aplica un veneno que reduce la velocidad y defensa del oponente",
+      "category": "status",
       "effects": [
         {
           "type": "debuff",
@@ -184,6 +195,7 @@
     {
       "name": "Evasión",
       "description": "Aumenta temporalmente su velocidad y evade ataques",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -205,6 +217,7 @@
     {
       "name": "Justicia Divina",
       "description": "Un poderoso golpe bendecido por la luz",
+      "category": "special",
       "effects": [
         {
           "type": "damage",
@@ -217,6 +230,7 @@
     {
       "name": "Escudo Celestial",
       "description": "Invoca un escudo de luz que aumenta drásticamente la defensa",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -231,6 +245,7 @@
     {
       "name": "Luz Curativa",
       "description": "Restaura su salud y aumenta ligeramente su ataque",
+      "category": "status",
       "effects": [
         {
           "type": "heal",
@@ -250,6 +265,7 @@
     {
       "name": "Bola de Fuego",
       "description": "Lanza una bola de fuego que quema al oponente",
+      "category": "special",
       "effects": [
         {
           "type": "damage",
@@ -269,6 +285,7 @@
     {
       "name": "Armadura de Tierra",
       "description": "Crea una armadura de roca que aumenta la defensa",
+      "category": "status",
       "effects": [
         {
           "type": "buff",
@@ -283,6 +300,7 @@
     {
       "name": "Ráfaga de Viento",
       "description": "Invoca vientos que aumentan la velocidad propia y disminuyen la del oponente",
+      "category": "status",
       "effects": [
         {
           "type": "buff",

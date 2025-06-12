@@ -19,7 +19,7 @@
         </button>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>{{ ab.description }}</p>
+    <p>{{ ab.description }} <small class="text-muted">({{ ab.category }})</small></p>
     <ul>
       <li *ngFor="let effect of ab.effects">
         <span>{{ effect.type }} sobre {{ effect.target }}</span>
