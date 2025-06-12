@@ -25,6 +25,22 @@
         }
       ],
       "id": "m002"
+    },
+    {
+      "name": "Trago de cerveza",
+      "description": "Se toma una cerveza para aumentar su defensa especial",
+      "category": "status",
+      "effects": [
+        {
+          "type": "buff",
+          "target": "self",
+          "value": 30,
+          "duration": 5,
+          "stat": "specialDefense"
+        }
+      ],
+      "id": "m003"
     }
+
   ]
 }
