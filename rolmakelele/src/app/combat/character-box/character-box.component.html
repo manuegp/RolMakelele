@@ -3,8 +3,10 @@
   *ngIf="character"
   [class.selectable]="selectable"
   (click)="onClick()"
-  [matTooltip]="statsTpl"
-  matTooltipPosition="above"
+  data-bs-toggle="tooltip"
+  data-bs-placement="top"
+  data-bs-html="true"
+  [attr.data-bs-title]="tooltipContent"
 >
   <div class="fw-bold">{{ character.name }}</div>
   <div class="progress mt-1" style="height: 8px;">
@@ -19,13 +21,3 @@
   </div>
   <small>{{ character.currentHealth }} / {{ character.stats.health }}</small>
 </div>
-
-<ng-template #statsTpl>
-  <div class="text-start">
-    <div *ngFor="let key of statKeys">
-      <span [style.color]="getStatColor(key)">
-        {{ statLabels[key] }}: {{ getCurrentStat(key) }}
-      </span>
-    </div>
-  </div>
-</ng-template>
