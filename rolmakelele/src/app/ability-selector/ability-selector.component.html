@@ -13,7 +13,7 @@
       <mat-panel-description>
         <button
           class="btn btn-outline-primary btn-sm"
-          (click)="toggleAbility(ab.id)"
+          (click)="toggleAbility(ab.id); $event.stopPropagation()"
         >
           {{ selectedIds.includes(ab.id) ? 'Quitar' : 'Añadir' }}
         </button>

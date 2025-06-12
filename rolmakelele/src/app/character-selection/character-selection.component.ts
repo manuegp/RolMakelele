@@ -5,12 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { Character, GameRoom } from '../models/game.types';
 import { AbilitySelectorComponent } from '../ability-selector/ability-selector.component';
+import { ChartComponent } from "../chart/chart.component";
 
 
 @Component({
   selector: 'app-character-selection',
   standalone: true,
-  imports: [CommonModule, FormsModule, AbilitySelectorComponent],
+  imports: [CommonModule, FormsModule, AbilitySelectorComponent, ChartComponent],
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {

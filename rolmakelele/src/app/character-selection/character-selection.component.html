@@ -4,21 +4,26 @@
     <div class="row">
       <div class="col-md-4 mb-3" *ngFor="let char of characters">
         <div class="card" [class.border-primary]="isSelected(char.id)">
-          <img src="https://placehold.co/600x200/png" class="card-img-top" alt="placeholder" />
+          <img
+            src="https://placehold.co/600x200/png"
+            class="card-img-top"
+            alt="placeholder"
+          />
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h1 class="card-title mb-0">{{ char.name }}</h1>
-              <button class="btn btn-sm btn-outline-primary" (click)="toggle(char.id)">
-                {{ isSelected(char.id) ? 'Quitar' : 'Seleccionar' }}
+              <button
+                class="btn btn-sm btn-outline-primary"
+                (click)="toggle(char.id)"
+              >
+                {{ isSelected(char.id) ? "Quitar" : "Seleccionar" }}
               </button>
             </div>
-            <ul class="list-unstyled small mb-3">
-              <li>Velocidad: {{ char.stats.speed }}</li>
-              <li>Vida: {{ char.stats.health }}</li>
-              <li>Ataque: {{ char.stats.attack }}</li>
-              <li>Defensa: {{ char.stats.defense }}</li>
-            </ul>
+
             <ng-container *ngIf="isSelected(char.id)">
+              <ul class="list-unstyled small mb-3">
+                <app-chart [data]="char.stats"></app-chart>
+              </ul>
               <app-ability-selector
                 [character]="char"
                 [selectedIds]="getSelectedAbilities(char.id)"
@@ -34,11 +39,9 @@
       [disabled]="!isSelectionValid()"
       (click)="ready()"
     >
-      {{ isReady ? 'Volver a seleccionar' : 'Estoy listo' }}
+      {{ isReady ? "Volver a seleccionar" : "Estoy listo" }}
     </button>
     <button class="btn btn-secondary ms-2" (click)="leave()">Salir</button>
   </ng-container>
-  <ng-template #waiting>
-    Esperando a que se unan más jugadores...
-  </ng-template>
+  <ng-template #waiting> Esperando a que se unan más jugadores... </ng-template>
 </div>
