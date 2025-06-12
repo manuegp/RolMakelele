@@ -8,3 +8,11 @@
   border: 2px dashed #ccc;
   padding: 0.25rem;
 }
+
+.stats-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}

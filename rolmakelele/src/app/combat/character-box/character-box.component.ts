@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CharacterState } from '../../models/game.types';
+import { CharacterState, Stats } from '../../models/game.types';
+import { NgxTooltip } from '@ngx-popovers/tooltip';
+import { LABELS_MAP } from '../../constants/stats.map';
 
 @Component({
   selector: 'app-character-box',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgxTooltip],
   templateUrl: './character-box.component.html',
   styleUrl: './character-box.component.scss'
 })
@@ -13,6 +15,18 @@ export class CharacterBoxComponent {
   @Input() character: CharacterState | null = null;
   @Input() selectable = false;
   @Output() selected = new EventEmitter<void>();
+
+  readonly statKeys: (keyof Stats)[] = [
+    'speed',
+    'health',
+    'attack',
+    'defense',
+    'specialAttack',
+    'specialDefense',
+    'critical',
+    'evasion'
+  ];
+  readonly labels = LABELS_MAP;
 
   get healthPercent(): number {
     if (!this.character) {
@@ -25,5 +39,19 @@ export class CharacterBoxComponent {
     if (this.selectable) {
       this.selected.emit();
     }
+  }
+
+  getStatValue(stat: keyof Stats): number {
+    if (!this.character) return 0;
+    return this.character.currentStats?.[stat] ?? this.character.stats[stat];
+  }
+
+  getStatColor(stat: keyof Stats): string {
+    if (!this.character) return 'black';
+    const base = this.character.stats[stat];
+    const current = this.character.currentStats?.[stat] ?? base;
+    if (current < base) return 'red';
+    if (current > base) return 'blue';
+    return 'black';
   }
 }
