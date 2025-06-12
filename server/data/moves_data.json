@@ -25,7 +25,9 @@
           "value": 30
         }
       ],
-      "id": "m002"
+      "id": "m002",
+      "img": "/public/assets/abilities/fist.png"
+
     },
     {
       "name": "Trago de cerveza",
@@ -40,7 +42,8 @@
           "stat": "specialDefense"
         }
       ],
-      "id": "m003"
+      "id": "m003",
+      "img": "/public/assets/abilities/drink.png"
     }
 
   ]
