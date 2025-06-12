@@ -2,13 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Ability, Character } from '../models/game.types';
 import { GameService } from '../services/game.service';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-ability-selector',
   standalone: true,
   imports: [CommonModule, MatExpansionModule],
-  templateUrl: './ability-selector.component.html'
+  templateUrl: './ability-selector.component.html',
 })
 export class AbilitySelectorComponent implements OnInit {
   @Input() character!: Character;
@@ -16,13 +17,14 @@ export class AbilitySelectorComponent implements OnInit {
   @Output() selectionChange = new EventEmitter<string[]>();
 
   abilities: Ability[] = [];
+  readonly serverUrl = environment.apiBase;
 
   constructor(private game: GameService) {}
 
   ngOnInit() {
     this.game
       .fetchCharacterAbilities(this.character.id)
-      .subscribe(res => (this.abilities = res.abilities));
+      .subscribe((res) => (this.abilities = res.abilities));
   }
 
   toggleAbility(id: string) {

@@ -8,8 +8,9 @@ import {
   Character,
   Player,
   GameAction,
-  Ability
+  Ability,
 } from '../models/game.types';
+import { environment } from '../../environments/environment';
 import {
   ClientEvents,
   ServerEvents,
@@ -19,7 +20,7 @@ import {
   GameEndedData,
   ErrorData,
   ChatMessageReceivedData,
-  ActionResultData
+  ActionResultData,
 } from '../models/socket.types';
 
 declare const io: any;
@@ -33,7 +34,7 @@ export class GameService {
   currentRoom$ = new BehaviorSubject<GameRoom | null>(null);
   turnInfo$ = new BehaviorSubject<TurnStartedData | null>(null);
 
-  private readonly API_BASE = 'http://localhost:3001';
+  private readonly API_BASE = environment.apiBase;
 
   characters$ = new BehaviorSubject<Character[]>([]);
   rooms$ = new BehaviorSubject<RoomsListData['rooms']>([]);
@@ -43,7 +44,7 @@ export class GameService {
     private http: HttpClient,
     private router: Router,
     private zone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     const storedUser = sessionStorage.getItem('username');
     if (storedUser) {
@@ -58,28 +59,28 @@ export class GameService {
   fetchCharacters() {
     this.http
       .get<{ characters: Character[] }>(`${this.API_BASE}/api/characters`)
-      .subscribe(res => {
+      .subscribe((res) => {
         this.characters$.next(res.characters);
       });
   }
 
   fetchCharacterAbilities(id: string) {
     return this.http.get<{ abilities: Ability[] }>(
-      `${this.API_BASE}/api/characters/${id}/abilities`
+      `${this.API_BASE}/api/characters/${id}/abilities`,
     );
   }
 
   fetchRooms() {
     this.http
       .get<RoomsListData>(`${this.API_BASE}/api/rooms`)
-      .subscribe(res => {
+      .subscribe((res) => {
         this.rooms$.next(res.rooms);
       });
   }
 
   get userInfo(): Player | null {
     return (
-      this.currentRoom$.value?.players.find(p => p.id === this.socket?.id) ||
+      this.currentRoom$.value?.players.find((p) => p.id === this.socket?.id) ||
       null
     );
   }
@@ -98,16 +99,20 @@ export class GameService {
     this.selectedCharacters = chars;
   }
 
-  getCurrentRoomId() { return this.currentRoomId; }
-  isInGame() { return this.currentRoomId !== null; }
+  getCurrentRoomId() {
+    return this.currentRoomId;
+  }
+  isInGame() {
+    return this.currentRoomId !== null;
+  }
 
   async roomExists(roomId: string): Promise<boolean> {
     try {
       const res = await firstValueFrom(
-        this.http.get<RoomsListData>(`${this.API_BASE}/api/rooms`)
+        this.http.get<RoomsListData>(`${this.API_BASE}/api/rooms`),
       );
       this.rooms$.next(res.rooms);
-      return res.rooms.some(r => r.id === roomId);
+      return res.rooms.some((r) => r.id === roomId);
     } catch {
       return false;
     }
@@ -123,12 +128,12 @@ export class GameService {
 
   private ensureSocket() {
     if (!this.socket) {
-      this.socket = io('http://localhost:3001');
+      this.socket = io(environment.socketUrl);
       this.socket.on('connect', () => {
         if (this.currentRoomId) {
           this.socket.emit(ClientEvents.JOIN_ROOM, {
             roomId: this.currentRoomId,
-            username: this.username
+            username: this.username,
           });
         }
       });
@@ -150,7 +155,7 @@ export class GameService {
             if (data.room.currentTurn) {
               this.turnInfo$.next({
                 ...data.room.currentTurn,
-                timeRemaining: null
+                timeRemaining: null,
               });
             }
             this.router.navigate(['/combat', roomId]);
@@ -161,18 +166,36 @@ export class GameService {
         this.zone.run(() => {
           const previous = this.currentRoom$.value;
           this.currentRoom$.next(data.room);
-          if (data.room.id === this.currentRoomId && data.room.status === 'waiting') {
+          if (
+            data.room.id === this.currentRoomId &&
+            data.room.status === 'waiting'
+          ) {
             this.turnInfo$.next(null);
             this.router.navigate(['/characters', data.room.id]);
           }
           if (previous && data.room.id === this.currentRoomId) {
             const myId = this.socket.id;
-            const prevOpp = previous.players.find(p => p.id !== myId);
-            const opp = data.room.players.find(p => p.id !== myId);
-            if (opp && opp.isDisconnected && !(prevOpp && prevOpp.isDisconnected)) {
-              this.snackBar.open('Tu rival se ha desconectado. Esperando reconexión...', 'Cerrar', { duration: 3000 });
-            } else if (opp && !opp.isDisconnected && prevOpp && prevOpp.isDisconnected) {
-              this.snackBar.open('Tu rival se ha reconectado.', 'Cerrar', { duration: 3000 });
+            const prevOpp = previous.players.find((p) => p.id !== myId);
+            const opp = data.room.players.find((p) => p.id !== myId);
+            if (
+              opp &&
+              opp.isDisconnected &&
+              !(prevOpp && prevOpp.isDisconnected)
+            ) {
+              this.snackBar.open(
+                'Tu rival se ha desconectado. Esperando reconexión...',
+                'Cerrar',
+                { duration: 3000 },
+              );
+            } else if (
+              opp &&
+              !opp.isDisconnected &&
+              prevOpp &&
+              prevOpp.isDisconnected
+            ) {
+              this.snackBar.open('Tu rival se ha reconectado.', 'Cerrar', {
+                duration: 3000,
+              });
             }
           }
         });
@@ -184,7 +207,7 @@ export class GameService {
           this.turnInfo$.next({
             playerId: first.playerId,
             characterIndex: first.characterIndex,
-            timeRemaining: null
+            timeRemaining: null,
           });
           this.router.navigate(['/combat', data.room.id]);
         });
@@ -196,7 +219,7 @@ export class GameService {
           if (room) {
             room.currentTurn = {
               playerId: data.playerId,
-              characterIndex: data.characterIndex
+              characterIndex: data.characterIndex,
             };
             this.currentRoom$.next({ ...room });
           }
@@ -206,19 +229,34 @@ export class GameService {
         this.zone.run(() => {
           const room = this.currentRoom$.value;
           if (!room) return;
-          const sourcePlayer = room.players.find(p => p.id === data.result.playerId);
-          const targetPlayer = room.players.find(p => p.id === data.result.targetPlayerId);
+          const sourcePlayer = room.players.find(
+            (p) => p.id === data.result.playerId,
+          );
+          const targetPlayer = room.players.find(
+            (p) => p.id === data.result.targetPlayerId,
+          );
           if (sourcePlayer && targetPlayer) {
-            const sourceChar = sourcePlayer.selectedCharacters[data.result.sourceCharacterIndex];
-            const targetChar = targetPlayer.selectedCharacters[data.result.targetCharacterIndex];
+            const sourceChar =
+              sourcePlayer.selectedCharacters[data.result.sourceCharacterIndex];
+            const targetChar =
+              targetPlayer.selectedCharacters[data.result.targetCharacterIndex];
             for (const eff of data.result.effects) {
               const char = eff.target === 'source' ? sourceChar : targetChar;
               if (eff.type === 'damage') {
-                char.currentHealth = Math.max(0, char.currentHealth - eff.value);
+                char.currentHealth = Math.max(
+                  0,
+                  char.currentHealth - eff.value,
+                );
                 if (char.currentHealth === 0) char.isAlive = false;
               } else if (eff.type === 'heal') {
-                char.currentHealth = Math.min(char.stats.health, char.currentHealth + eff.value);
-              } else if ((eff.type === 'buff' || eff.type === 'debuff') && eff.stat) {
+                char.currentHealth = Math.min(
+                  char.stats.health,
+                  char.currentHealth + eff.value,
+                );
+              } else if (
+                (eff.type === 'buff' || eff.type === 'debuff') &&
+                eff.stat
+              ) {
                 if (!char.currentStats) {
                   char.currentStats = { ...char.stats };
                 }
@@ -229,7 +267,7 @@ export class GameService {
           if (data.nextTurn) {
             room.currentTurn = {
               playerId: data.nextTurn.playerId,
-              characterIndex: data.nextTurn.characterIndex
+              characterIndex: data.nextTurn.characterIndex,
             };
           }
           this.currentRoom$.next({ ...room });
@@ -238,7 +276,10 @@ export class GameService {
       this.socket.on(ServerEvents.GAME_ENDED, (data: GameEndedData) => {
         this.zone.run(() => {
           let message = `Partida finalizada. Ganador: ${data.winnerUsername}`;
-          if (data.reason === 'player_left' || data.reason === 'player_disconnected') {
+          if (
+            data.reason === 'player_left' ||
+            data.reason === 'player_disconnected'
+          ) {
             if (data.winnerId === this.socket.id) {
               message = 'El rival se ha rendido. ¡Has ganado!';
             } else {
@@ -268,12 +309,15 @@ export class GameService {
           }
         });
       });
-      this.socket.on(ServerEvents.CHAT_MESSAGE, (msg: ChatMessageReceivedData) => {
-        this.zone.run(() => {
-          const current = this.chatMessages$.value;
-          this.chatMessages$.next([...current, msg]);
-        });
-      });
+      this.socket.on(
+        ServerEvents.CHAT_MESSAGE,
+        (msg: ChatMessageReceivedData) => {
+          this.zone.run(() => {
+            const current = this.chatMessages$.value;
+            this.chatMessages$.next([...current, msg]);
+          });
+        },
+      );
     }
   }
 
@@ -285,7 +329,7 @@ export class GameService {
     this.ensureSocket();
     this.socket.emit(ClientEvents.JOIN_ROOM, {
       roomId,
-      username: this.username
+      username: this.username,
     });
     sessionStorage.setItem('roomId', roomId);
   }
@@ -294,14 +338,14 @@ export class GameService {
     this.ensureSocket();
     this.socket.emit(ClientEvents.CREATE_ROOM, {
       roomName,
-      username: this.username
+      username: this.username,
     });
   }
 
   sendSelectedCharacters() {
     this.ensureSocket();
     this.socket.emit(ClientEvents.SELECT_CHARACTERS, {
-      characters: this.selectedCharacters
+      characters: this.selectedCharacters,
     });
   }
 

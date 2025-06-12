@@ -2,7 +2,7 @@
   <mat-expansion-panel *ngFor="let ab of abilities" hideToggle>
     <mat-expansion-panel-header class="align-items-center gap-2">
       <img
-        [src]="ab.img || 'https://placehold.co/40x40/png'"
+        [src]="ab.img ? serverUrl + ab.img : 'https://placehold.co/40x40/png'"
         alt="icon"
         width="40"
         height="40"
@@ -15,11 +15,13 @@
           class="btn btn-outline-primary btn-sm"
           (click)="toggleAbility(ab.id); $event.stopPropagation()"
         >
-          {{ selectedIds.includes(ab.id) ? 'Quitar' : 'Añadir' }}
+          {{ selectedIds.includes(ab.id) ? "Quitar" : "Añadir" }}
         </button>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <p>{{ ab.description }} <small class="text-muted">({{ ab.category }})</small></p>
+    <p>
+      {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
+    </p>
     <ul>
       <li *ngFor="let effect of ab.effects">
         <span>{{ effect.type }} sobre {{ effect.target }}</span>
