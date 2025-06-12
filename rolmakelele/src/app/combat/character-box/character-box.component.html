@@ -1,15 +1,32 @@
+<ng-template #statsTpl>
+  <div class="stats-tooltip p-2 bg-white rounded shadow">
+    <div *ngFor="let key of statKeys" class="mb-1">
+      <span [style.color]="getStatColor(key)">
+        {{ labels[key] }}: {{ getStatValue(key) }}
+      </span>
+    </div>
+  </div>
+</ng-template>
+
 <div
-  class="character-box"
   *ngIf="character"
+  class="character-box p-3 border rounded position-relative"
   [class.selectable]="selectable"
   (click)="onClick()"
-  [ngxTooltip]="statsTpl"
+
+
+  ngxTooltip
+
+
+  [template]="statsTpl"
+
   placement="top"
   arrow
   [autoUpdate]="true"
 >
   <div class="fw-bold">{{ character.name }}</div>
-  <div class="progress mt-1" style="height: 8px;">
+
+  <div class="progress mt-2" style="height: 8px;">
     <div
       class="progress-bar"
       role="progressbar"
@@ -19,15 +36,8 @@
       [attr.aria-valuemax]="character.stats.health"
     ></div>
   </div>
-  <small>{{ character.currentHealth }} / {{ character.stats.health }}</small>
-</div>
 
-<ng-template #statsTpl>
-  <div class="stats-tooltip">
-    <div *ngFor="let key of statKeys">
-      <span [style.color]="getStatColor(key)">
-        {{ labels[key] }}: {{ getStatValue(key) }}
-      </span>
-    </div>
-  </div>
-</ng-template>
+  <small class="text-muted">
+    {{ character.currentHealth }} / {{ character.stats.health }}
+  </small>
+</div>
