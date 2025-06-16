@@ -26,14 +26,13 @@
 >
   <div class="fw-bold">{{ character.name }}</div>
   <div class="mb-1">
-    <span
+    <mat-chip
       *ngFor="let t of character.types"
-      class="me-1"
-      matBadge="{{ t.name }}"
-      matBadgeOverlap="false"
-      matBadgeSize="small"
-      [style.--mat-badge-background-color]="t.color"
-    ></span>
+      class="me-1 text-white"
+      [style.backgroundColor]="t.color"
+    >
+      {{ t.name }}
+    </mat-chip>
   </div>
 
   <div class="progress mt-2" style="height: 8px;">

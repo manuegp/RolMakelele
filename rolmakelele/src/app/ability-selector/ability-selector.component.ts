@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Ability, Character } from '../models/game.types';
 import { GameService } from '../services/game.service';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
 import { environment } from '../../environments/environment';
 import { TypeService } from '../services/type.service';
 
 @Component({
   selector: 'app-ability-selector',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatBadgeModule],
+  imports: [CommonModule, MatExpansionModule, MatChipsModule],
   templateUrl: './ability-selector.component.html',
 })
 export class AbilitySelectorComponent implements OnInit {

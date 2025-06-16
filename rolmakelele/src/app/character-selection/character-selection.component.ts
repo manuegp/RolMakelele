@@ -6,14 +6,14 @@ import { GameService } from '../services/game.service';
 import { Character, GameRoom } from '../models/game.types';
 import { AbilitySelectorComponent } from '../ability-selector/ability-selector.component';
 import { ChartComponent } from "../chart/chart.component";
-import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
 import { TypeService } from '../services/type.service';
 
 
 @Component({
   selector: 'app-character-selection',
   standalone: true,
-  imports: [CommonModule, FormsModule, AbilitySelectorComponent, ChartComponent, MatBadgeModule],
+  imports: [CommonModule, FormsModule, AbilitySelectorComponent, ChartComponent, MatChipsModule],
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {

@@ -22,14 +22,13 @@
     <p>
       {{ ab.description }}
       <small class="text-muted">({{ ab.category }})</small>
-      <span
+      <mat-chip
         *ngIf="ab.type"
-        class="me-2"
-        matBadge="{{ ab.type }}"
-        matBadgeOverlap="false"
-        matBadgeSize="small"
-        [style.--mat-badge-background-color]="types.getColor(ab.type)"
-      ></span>
+        class="me-2 text-white"
+        [style.backgroundColor]="types.getColor(ab.type)"
+      >
+        {{ ab.type }}
+      </mat-chip>
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">
