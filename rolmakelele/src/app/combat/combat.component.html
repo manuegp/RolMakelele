@@ -69,8 +69,9 @@
           class="card-body d-flex flex-column align-items-center justify-content-center text-center"
         >
           <!-- Nombre arriba -->
-          <div class="fw-bold">
+          <div class="fw-bold d-flex align-items-center gap-1">
             {{ ability.name }}
+            <mat-chip color="warn" selected *ngIf="ability.unique">Única</mat-chip>
           </div>
           <!-- Descripción abajo con un pequeño margen -->
           <small class="mt-1"> {{ ability.description }} de energía </small>

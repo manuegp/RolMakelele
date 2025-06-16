@@ -7,8 +7,9 @@
         width="40"
         height="40"
       />
-      <mat-panel-title class="flex-grow-1 text-nowrap">
+      <mat-panel-title class="flex-grow-1 text-nowrap d-flex align-items-center gap-1">
         {{ ab.name }}
+        <mat-chip color="warn" selected *ngIf="ab.unique">Única</mat-chip>
       </mat-panel-title>
       <mat-panel-description>
         <button

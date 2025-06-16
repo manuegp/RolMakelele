@@ -7,11 +7,12 @@ import { GameRoom, CharacterState, Ability } from '../models/game.types';
 import { TurnStartedData } from '../models/socket.types';
 import { CharacterBoxComponent } from './character-box/character-box.component';
 import { ChatComponent } from '../chat/chat.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-combat',
   standalone: true,
-  imports: [CommonModule, CharacterBoxComponent, ChatComponent],
+  imports: [CommonModule, CharacterBoxComponent, ChatComponent, MatChipsModule],
   templateUrl: './combat.component.html',
   styleUrl: './combat.component.scss'
 })
