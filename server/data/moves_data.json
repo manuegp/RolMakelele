@@ -12,9 +12,8 @@
         }
       ],
       "id": "m001",
-      "img": "/public/assets/abilities/insult.png",
-      "type": "Friki",
-      "extraEffects": [{"type":"debuff","target":"opponent","stat":"specialDefense","value":-10,"duration":3}]
+      "img": "/public/assets/abilities/insult.png"
+
     },
     {
       "name": "Puñetazo",
@@ -46,9 +45,7 @@
         }
       ],
       "id": "m003",
-      "img": "/public/assets/abilities/drink.png",
-      "type": "Musico",
-      "extraEffects": [{"type":"heal","target":"self","value":10}]
+      "img": "/public/assets/abilities/drink.png"
     }
 
   ]

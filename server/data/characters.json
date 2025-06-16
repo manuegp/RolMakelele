@@ -3,7 +3,7 @@
     {
       "id": "c001",
       "name": "Tewi",
-      "types": ["Progamador"],
+      "types": ["Programador", "Friki"],
       "stats": {
         "speed": 135,
         "health": 100,
@@ -23,7 +23,7 @@
     {
       "id": "c002",
       "name": "Wanolo",
-      "types": ["Musico"],
+      "types": ["Programador"],
       "stats": {
         "speed": 135,
         "health": 100,
@@ -43,7 +43,7 @@
     {
       "id": "c003",
       "name": "Visente",
-      "types": ["Friki"],
+      "types": ["Friki","Musico"],
       "stats": {
         "speed": 135,
         "health": 100,
