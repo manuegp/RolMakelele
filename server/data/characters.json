@@ -3,6 +3,64 @@
     {
       "id": "c001",
       "name": "Tewi",
+      "types": ["Programador", "Bebedor"],
+      "stats": {
+        "speed": 135,
+        "health": 100,
+        "attack": 75,
+        "defense": 127,
+        "specialAttack": 170,
+        "specialDefense": 200,
+        "critical": 25.5,
+        "evasion": 38.25
+      },
+      "availableAbilities": [
+        "m001",
+        "m002",
+        "m003"
+      ]
+    },
+    {
+      "id": "c002",
+      "name": "Wanolo",
+      "stats": {
+        "speed": 135,
+        "health": 100,
+        "attack": 75,
+        "defense": 127,
+        "specialAttack": 170,
+        "specialDefense": 200,
+        "critical": 25.5,
+        "evasion": 38.25
+      },
+      "availableAbilities": [
+        "m001",
+        "m002",
+        "m003"
+      ]
+    },
+    {
+      "id": "c003",
+      "name": "Visente",
+      "stats": {
+        "speed": 135,
+        "health": 100,
+        "attack": 75,
+        "defense": 127,
+        "specialAttack": 170,
+        "specialDefense": 200,
+        "critical": 25.5,
+        "evasion": 38.25
+      },
+      "availableAbilities": [
+        "m001",
+        "m002",
+        "m003"
+      ]
+    },
+    {
+      "id": "c004",
+      "name": "Jaime",
       "stats": {
         "speed": 135,
         "health": 100,

@@ -2,6 +2,8 @@
  * Interfaces y tipos para el juego de rol por turnos
  */
 
+import { types } from "util";
+
 // Estadísticas básicas de un personaje
 export interface Stats {
   speed: number;
@@ -54,6 +56,7 @@ export interface Character {
   id: string;
   name: string;
   stats: Stats;
+  types: CharacterType[];
   availableAbilities: Ability[];
   abilities: Ability[];
   currentStats?: Stats;
@@ -63,6 +66,12 @@ export interface Character {
   }[];
 }
 
+
+export interface CharacterType {
+  id:string;
+  name: string;
+  color: string;
+}
 // Estado de un personaje en juego
 export interface CharacterState extends Character {
   currentHealth: number;
