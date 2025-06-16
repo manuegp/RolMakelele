@@ -11,6 +11,7 @@ interface ServerConfig {
   maxAbilitiesPerCharacter: number;
   turnTimeLimit: number; // en segundos
   charactersDataPath: string;
+  characterTypesDataPath: string;
   movesDataPath: string;
   postmanCollectionPath: string;
 }
@@ -24,6 +25,7 @@ const config: ServerConfig = {
   maxAbilitiesPerCharacter: 4,
   turnTimeLimit: 30,
   charactersDataPath: './data/characters.json',
+  characterTypesDataPath: './data/character.types.json',
   movesDataPath: './data/moves_data.json',
   postmanCollectionPath: './data/rolmakelele_postman_collection.json'
 };

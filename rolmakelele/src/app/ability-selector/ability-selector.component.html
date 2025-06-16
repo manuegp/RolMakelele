@@ -20,7 +20,18 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-      {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
+      {{ ab.description }}
+      <small class="text-muted">({{ ab.category }})</small>
+      <mat-chip
+        *ngIf="ab.type"
+        class="me-2 text-white"
+        [style.backgroundColor]="types.getColor(ab.type)"
+      >
+        {{ ab.type }}
+      </mat-chip>
+      <mat-chip *ngIf="ab.unique" color="warn" class="me-2" title="Movimiento exclusivo">
+        Único
+      </mat-chip>
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">
@@ -33,5 +44,19 @@
         </span>
       </li>
     </ul>
+    <div *ngIf="ab.extraEffects?.length">
+      <strong>Efectos extra:</strong>
+      <ul>
+        <li *ngFor="let effect of ab.extraEffects">
+          <span>{{ effect.type }} sobre {{ effect.target }}</span>
+          <span *ngIf="effect.stat"> ({{ effect.stat }})</span>
+          <span> : {{ effect.value }}</span>
+          <span *ngIf="effect.duration"> ({{ effect.duration }} turnos)</span>
+          <span *ngIf="effect.ignoreDefense">
+            (ignora defensa {{ effect.ignoreDefense * 100 }}%)
+          </span>
+        </li>
+      </ul>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>

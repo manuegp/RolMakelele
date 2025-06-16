@@ -19,6 +19,15 @@
                 {{ isSelected(char.id) ? "Quitar" : "Seleccionar" }}
               </button>
             </div>
+            <div class="mb-2">
+              <mat-chip
+                *ngFor="let t of char.types"
+                class="me-1 text-white"
+                [style.backgroundColor]="t.color"
+              >
+                {{ t.name }}
+              </mat-chip>
+            </div>
 
             <ng-container *ngIf="isSelected(char.id)">
               <ul class="list-unstyled small mb-3">

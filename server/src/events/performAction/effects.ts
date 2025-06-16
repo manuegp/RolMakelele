@@ -4,6 +4,7 @@ import {
   Player,
   CharacterState,
   Ability,
+  Effect,
   ActionResult
 } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
@@ -24,14 +25,21 @@ export function applyAbilityEffects(
   ability: Ability,
   actionResult: ActionResult
 ) {
-  for (const effect of ability.effects) {
+  const sameType =
+    ability.type && sourceCharacter.types?.some(t => t.name === ability.type);
+
+  function processEffect(effect: Effect) {
+    const modifiedEffect = {
+      ...effect,
+      value: effect.value * (sameType ? 1.2 : 1)
+    };
     if (effect.target === 'self') {
       if (effect.type === 'buff') {
-        applyBuff(sourceCharacter, effect, actionResult, 'source');
+        applyBuff(sourceCharacter, modifiedEffect, actionResult, 'source');
       } else if (effect.type === 'heal') {
-        applyHeal(sourceCharacter, effect, actionResult, 'source');
+        applyHeal(sourceCharacter, modifiedEffect, actionResult, 'source');
       } else if (effect.type === 'debuff') {
-        applyDebuff(sourceCharacter, effect, actionResult, 'source');
+        applyDebuff(sourceCharacter, modifiedEffect, actionResult, 'source');
       }
     } else if (effect.target === 'opponent') {
       if (effect.type === 'damage') {
@@ -45,12 +53,12 @@ export function applyAbilityEffects(
             isSpectator: false,
             isSystem: true
           });
-          continue;
+          return;
         }
 
         const { amount, attackPortion, reduction, isCrit } = calculateDamage(
           ability,
-          effect.value,
+          modifiedEffect.value,
           effect.ignoreDefense,
           sourceCharacter,
           targetCharacter
@@ -65,7 +73,7 @@ export function applyAbilityEffects(
 
         actionResult.effects.push({ type: 'damage', target: 'target', value: amount });
 
-        const calcParts = [`Base ${effect.value}%`];
+        const calcParts = [`Base ${modifiedEffect.value}%`];
         if (attackPortion) calcParts.push(`Atk ${attackPortion.toFixed(2)}`);
         if (reduction) calcParts.push(`- Def ${reduction.toFixed(2)}`);
         if (isCrit) calcParts.push('x2 Crit');
@@ -80,13 +88,16 @@ export function applyAbilityEffects(
           isSystem: true
         });
       } else if (effect.type === 'debuff') {
-        applyDebuff(targetCharacter, effect, actionResult, 'target');
+        applyDebuff(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'heal') {
-        applyHeal(targetCharacter, effect, actionResult, 'target');
+        applyHeal(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'buff') {
-        applyBuff(targetCharacter, effect, actionResult, 'target');
+        applyBuff(targetCharacter, modifiedEffect, actionResult, 'target');
       }
     }
   }
+
+  ability.effects.forEach(processEffect);
+  ability.extraEffects?.forEach(processEffect);
 }
 

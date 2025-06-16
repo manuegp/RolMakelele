@@ -9,7 +9,8 @@ import path from 'path';
 import config from './config/config';
 import {
   GameRoom,
-  Character
+  Character,
+  CharacterType
 } from './types/game.types';
 import { ServerEvents } from './types/socket.types';
 
@@ -56,6 +57,7 @@ const rooms: Map<string, GameRoom> = new Map();
 const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
 let characters: Character[] = [];
 let moves: Map<string, any> = new Map();
+let characterTypes: CharacterType[] = [];
 
 try {
   const movesRaw = fs.readFileSync(
@@ -65,6 +67,12 @@ try {
   const parsedMoves = JSON.parse(movesRaw).moves;
   moves = new Map(parsedMoves.map((m: any) => [m.id, m]));
 
+  const typesRaw = fs.readFileSync(
+    path.resolve(process.cwd(), config.characterTypesDataPath),
+    'utf-8'
+  );
+  characterTypes = JSON.parse(typesRaw);
+
   const data = fs.readFileSync(
     path.resolve(process.cwd(), config.charactersDataPath),
     'utf-8'
@@ -72,6 +80,9 @@ try {
   const parsed = JSON.parse(data);
   characters = parsed.characters.map((c: any) => ({
     ...c,
+    types: (c.types || [])
+      .map((name: string) => characterTypes.find(t => t.name === name))
+      .filter(Boolean),
     availableAbilities: (c.availableAbilities || []).map((id: string) => moves.get(id)).filter(Boolean),
     abilities: c.abilities
       ? c.abilities.map((id: string) => moves.get(id)).filter(Boolean)

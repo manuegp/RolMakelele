@@ -13,6 +13,7 @@
       ],
       "id": "m001",
       "img": "/public/assets/abilities/insult.png"
+
     },
     {
       "name": "Puñetazo",
@@ -26,7 +27,8 @@
         }
       ],
       "id": "m002",
-      "img": "/public/assets/abilities/fist.png"
+      "img": "/public/assets/abilities/fist.png",
+      "extraEffects": [{"type":"buff","target":"self","stat":"attack","value":10,"duration":2}]
 
     },
     {
@@ -44,6 +46,21 @@
       ],
       "id": "m003",
       "img": "/public/assets/abilities/drink.png"
+    },
+    {
+      "name": "Proeza Legendaria",
+      "description": "Una técnica secreta que solo domina Tewi",
+      "category": "physical",
+      "unique": true,
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 40
+        }
+      ],
+      "id": "m004",
+      "img": "/public/assets/abilities/fist.png"
     }
 
   ]

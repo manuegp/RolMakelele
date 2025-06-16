@@ -3,7 +3,7 @@
     {
       "id": "c001",
       "name": "Tewi",
-      "types": ["Programador", "Bebedor"],
+      "types": ["Programador", "Friki"],
       "stats": {
         "speed": 135,
         "health": 100,
@@ -17,12 +17,14 @@
       "availableAbilities": [
         "m001",
         "m002",
-        "m003"
+        "m003",
+        "m004"
       ]
     },
     {
       "id": "c002",
       "name": "Wanolo",
+      "types": ["Programador"],
       "stats": {
         "speed": 135,
         "health": 100,
@@ -42,6 +44,7 @@
     {
       "id": "c003",
       "name": "Visente",
+      "types": ["Friki","Musico"],
       "stats": {
         "speed": 135,
         "health": 100,
@@ -61,6 +64,7 @@
     {
       "id": "c004",
       "name": "Jaime",
+      "types": ["Techno"],
       "stats": {
         "speed": 135,
         "health": 100,

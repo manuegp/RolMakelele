@@ -1,4 +1,4 @@
-import { Character, CharacterState } from '../types/game.types';
+import { Character, CharacterState, CharacterType } from '../types/game.types';
 import fs from 'fs';
 import path from 'path';
 import config from '../config/config';
@@ -6,6 +6,7 @@ import config from '../config/config';
 export class CharacterService {
   private characters: Character[] = [];
   private moves: Map<string, any> = new Map();
+  private characterTypes: CharacterType[] = [];
 
   constructor() {
     this.loadCharacters();
@@ -20,6 +21,12 @@ export class CharacterService {
       const parsedMoves = JSON.parse(movesRaw).moves;
       this.moves = new Map(parsedMoves.map((m: any) => [m.id, m]));
 
+      const typesRaw = fs.readFileSync(
+        path.resolve(process.cwd(), config.characterTypesDataPath),
+        'utf-8'
+      );
+      this.characterTypes = JSON.parse(typesRaw);
+
       const charactersData = fs.readFileSync(
         path.resolve(process.cwd(), config.charactersDataPath),
         'utf-8'
@@ -27,6 +34,11 @@ export class CharacterService {
       const parsedData = JSON.parse(charactersData);
       this.characters = parsedData.characters.map((c: any) => ({
         ...c,
+        types: (c.types || [])
+          .map((name: string) =>
+            this.characterTypes.find(t => t.name === name)
+          )
+          .filter(Boolean),
         availableAbilities: (c.availableAbilities || [])
           .map((id: string) => this.moves.get(id))
           .filter(Boolean),
