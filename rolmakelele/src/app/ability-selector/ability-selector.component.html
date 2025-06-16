@@ -1,6 +1,13 @@
 <mat-accordion>
   <mat-expansion-panel *ngFor="let ab of abilities" hideToggle>
     <mat-expansion-panel-header class="align-items-center gap-2">
+      <button
+          class="btn btn-outline-primary btn-sm  "
+          style="margin-right: 20px;"
+          (click)="toggleAbility(ab.id); $event.stopPropagation()"
+        >
+          {{ selectedIds.includes(ab.id) ? "Quitar" : "Añadir" }}
+        </button>
       <img
         [src]="ab.img ? serverUrl + ab.img : 'https://placehold.co/40x40/png'"
         alt="icon"
@@ -8,7 +15,8 @@
         height="40"
       />
       <mat-panel-title
-        class="flex-grow-1 text-nowrap d-flex align-items-center gap-1"
+        class="flex-grow-1 d-flex align-items-center gap-1 text-truncate"
+        style="min-width: 0"
       >
         {{ ab.name }}
         <!-- <mat-chip color="warn" selected *ngIf="ab.unique">Única</mat-chip> -->
@@ -16,14 +24,6 @@
           <app-unique-tag></app-unique-tag>
         }
       </mat-panel-title>
-      <mat-panel-description>
-        <button
-          class="btn btn-outline-primary btn-sm"
-          (click)="toggleAbility(ab.id); $event.stopPropagation()"
-        >
-          {{ selectedIds.includes(ab.id) ? "Quitar" : "Añadir" }}
-        </button>
-      </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
       {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
