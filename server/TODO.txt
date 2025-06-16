@@ -1,0 +1,82 @@
+TODO
+-cAMBIAR A SISTEMA DE NIVELES LO BUFFOS Y QUE NO SEA NUMERICO
+-IMplementar prioridades
+-programar estaados alterados: quemado, paralizado, borracho, dormido
+-programar habilidades 
+-Javi
+    Tipo: Barman, Friki
+    "speed": 200,
+    "health": 127,
+    "attack": 63.75,
+    "defense": 191.25,
+    "specialAttack": 191.25,
+    "specialDefense": 200,
+    "critical": 0,
+    "evasion": 0
+
+    Ataques:
+        -Agita la coctelera: buff asi mismo velocidad y ataque especial y el resto sube un poco la velocidad 
+            tipo: unico
+        -Tragito coctel: Pierde vida a cambio de aumentar ataque especial
+            typo: barman
+            effecto extra: 50% de no perder vida, un 20% de perder doble de vida
+        -cocktel molotov: daño de ataque especial con un 10% de quemar
+            typo: barman
+            effecto extra: Sube la probabilidad de quemar al objetivo un 30%
+            
+-Jp
+    Tipo: Friki
+    "speed": 127,
+    "health": 63.75,
+    "attack": 191.25,
+    "defense": 63.75,
+    "specialAttack": 127,
+    "specialDefense": 63.75,
+    "critical": 0,
+    "evasion": 0
+    Ataques:
+        -Hacer cachimba: carga durante un turno y se sube la evasion, defensa y ataque especial
+            tipo: unico
+        -Tirar facto: hace daño de ataque especial y baja la defensa del objetivo
+            tipo: defult, especial
+        -Tirar carbones: daño fisico con un 10% de quemar
+            tipo: defult, fisico
+            efecto extra: Sube la probabilidad de quemar al objetivo un 30%
+-José 
+    "speed":  63.75,
+    "health": 127,
+    "attack": 127,
+    "defense": 63.75,
+    "specialAttack": 191.25,
+    "specialDefense": 63.75,
+    "critical": 0,
+    "evasion": 0
+    Ataques:
+            -No se la he chupado a mi padre te la voy a chuar a ti ¡GILIPOLLAS!: daño masivo de especial se sube el ataque especial
+                tipo: unico
+            -De la primera guaya que te meto...: daños fisico con un 10% de paralizar
+                tipo: defult, fisico
+            -... te vuelvo paraguayo: aumenta el daño en caso sufrir un estado alterado
+                tipo: defult, fisico
+
+-Pipa moro borracho cabrom 
+    "speed":  63.75,
+    "health": 127,
+    "attack": 127,
+    "defense": 63.75,
+    "specialAttack": 191.25,
+    "specialDefense": 63.75,
+    "critical": 0,
+    "evasion": 0
+    Ataques:
+           -Achio piho: hace retoceder a un enemigo
+                tipo: unico
+           -Un segarro amigo: baja la defensa especial
+                tipo: status
+                effecto extra: hace daño fisico
+
+           
+
+
+
+

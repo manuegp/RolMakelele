@@ -58,4 +58,9 @@ export class CharacterBoxComponent {
     if (current > base) return 'blue';
     return 'black';
   }
+
+  // get CurrentHealth(): number {
+
+  // }
+
 }

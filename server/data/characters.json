@@ -80,6 +80,24 @@
         "m002",
         "m003"
       ]
+    },
+     {
+      "id": "c005",
+      "name": "Dr. Enfermo",
+      "types": ["Techno"],
+      "stats": {
+        "speed": 200,
+        "health": 127,
+        "attack": 63.75,
+        "defense": 191.25,
+        "specialAttack": 191.25,
+        "specialDefense": 200,
+        "critical": 0,
+        "evasion": 0
+      },
+      "availableAbilities": [
+        
+      ]
     }
 
   ]
