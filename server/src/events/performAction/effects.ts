@@ -4,6 +4,7 @@ import {
   Player,
   CharacterState,
   Ability,
+  Effect,
   ActionResult
 } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
@@ -27,8 +28,11 @@ export function applyAbilityEffects(
   const sameType =
     ability.type && sourceCharacter.types?.some(t => t.name === ability.type);
 
-  for (const effect of ability.effects) {
-    const modifiedEffect = { ...effect, value: effect.value * (sameType ? 1.2 : 1) };
+  function processEffect(effect: Effect) {
+    const modifiedEffect = {
+      ...effect,
+      value: effect.value * (sameType ? 1.2 : 1)
+    };
     if (effect.target === 'self') {
       if (effect.type === 'buff') {
         applyBuff(sourceCharacter, modifiedEffect, actionResult, 'source');
@@ -49,7 +53,7 @@ export function applyAbilityEffects(
             isSpectator: false,
             isSystem: true
           });
-          continue;
+          return;
         }
 
         const { amount, attackPortion, reduction, isCrit } = calculateDamage(
@@ -92,5 +96,8 @@ export function applyAbilityEffects(
       }
     }
   }
+
+  ability.effects.forEach(processEffect);
+  ability.extraEffects?.forEach(processEffect);
 }
 

@@ -6,12 +6,14 @@ import { GameService } from '../services/game.service';
 import { Character, GameRoom } from '../models/game.types';
 import { AbilitySelectorComponent } from '../ability-selector/ability-selector.component';
 import { ChartComponent } from "../chart/chart.component";
+import { MatBadgeModule } from '@angular/material/badge';
+import { TypeService } from '../services/type.service';
 
 
 @Component({
   selector: 'app-character-selection',
   standalone: true,
-  imports: [CommonModule, FormsModule, AbilitySelectorComponent, ChartComponent],
+  imports: [CommonModule, FormsModule, AbilitySelectorComponent, ChartComponent, MatBadgeModule],
   templateUrl: './character-selection.component.html'
 })
 export class CharacterSelectionComponent implements OnInit {
@@ -20,7 +22,11 @@ export class CharacterSelectionComponent implements OnInit {
   roomId!: string;
   room: GameRoom | null = null;
 
-  constructor(private game: GameService, private route: ActivatedRoute) {}
+  constructor(
+    private game: GameService,
+    private route: ActivatedRoute,
+    public types: TypeService
+  ) {}
 
   ngOnInit() {
     this.roomId = this.route.snapshot.paramMap.get('roomId')!;

@@ -28,10 +28,12 @@
   <div class="mb-1">
     <span
       *ngFor="let t of character.types"
-      class="badge me-1"
-      [style.backgroundColor]="t.color"
-      >{{ t.name }}</span
-    >
+      class="me-1"
+      matBadge="{{ t.name }}"
+      matBadgeOverlap="false"
+      matBadgeSize="small"
+      [style.--mat-badge-background-color]="t.color"
+    ></span>
   </div>
 
   <div class="progress mt-2" style="height: 8px;">

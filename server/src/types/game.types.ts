@@ -49,6 +49,8 @@ export interface Ability {
   /** Tipo elemental o afinidad de la habilidad */
   type?: string;
   effects: Effect[];
+  /** Efectos adicionales de la habilidad */
+  extraEffects?: Effect[];
   /** Ruta a la imagen que representa la habilidad */
   img?: string;
 }

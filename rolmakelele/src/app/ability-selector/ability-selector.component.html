@@ -22,7 +22,14 @@
     <p>
       {{ ab.description }}
       <small class="text-muted">({{ ab.category }})</small>
-      <span *ngIf="ab.type" class="badge bg-secondary ms-2">{{ ab.type }}</span>
+      <span
+        *ngIf="ab.type"
+        class="me-2"
+        matBadge="{{ ab.type }}"
+        matBadgeOverlap="false"
+        matBadgeSize="small"
+        [style.--mat-badge-background-color]="types.getColor(ab.type)"
+      ></span>
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">
@@ -35,5 +42,19 @@
         </span>
       </li>
     </ul>
+    <div *ngIf="ab.extraEffects?.length">
+      <strong>Efectos extra:</strong>
+      <ul>
+        <li *ngFor="let effect of ab.extraEffects">
+          <span>{{ effect.type }} sobre {{ effect.target }}</span>
+          <span *ngIf="effect.stat"> ({{ effect.stat }})</span>
+          <span> : {{ effect.value }}</span>
+          <span *ngIf="effect.duration"> ({{ effect.duration }} turnos)</span>
+          <span *ngIf="effect.ignoreDefense">
+            (ignora defensa {{ effect.ignoreDefense * 100 }}%)
+          </span>
+        </li>
+      </ul>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>

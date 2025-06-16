@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Ability, Character } from '../models/game.types';
 import { GameService } from '../services/game.service';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBadgeModule } from '@angular/material/badge';
 import { environment } from '../../environments/environment';
+import { TypeService } from '../services/type.service';
 
 @Component({
   selector: 'app-ability-selector',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule],
+  imports: [CommonModule, MatExpansionModule, MatBadgeModule],
   templateUrl: './ability-selector.component.html',
 })
 export class AbilitySelectorComponent implements OnInit {
@@ -19,7 +21,7 @@ export class AbilitySelectorComponent implements OnInit {
   abilities: Ability[] = [];
   readonly serverUrl = environment.apiBase;
 
-  constructor(private game: GameService) {}
+  constructor(private game: GameService, public types: TypeService) {}
 
   ngOnInit() {
     this.game

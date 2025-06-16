@@ -22,10 +22,12 @@
             <div class="mb-2">
               <span
                 *ngFor="let t of char.types"
-                class="badge me-1"
-                [style.backgroundColor]="t.color"
-                >{{ t.name }}</span
-              >
+                class="me-1"
+                matBadge="{{ t.name }}"
+                matBadgeOverlap="false"
+                matBadgeSize="small"
+                [style.--mat-badge-background-color]="t.color"
+              ></span>
             </div>
 
             <ng-container *ngIf="isSelected(char.id)">

@@ -2,12 +2,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CharacterState, Stats } from '../../models/game.types';
 import { NgxTooltip } from '@ngx-popovers/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
+import { TypeService } from '../../services/type.service';
 import { LABELS_MAP } from '../../constants/stats.map';
 
 @Component({
   selector: 'app-character-box',
   standalone: true,
-  imports: [CommonModule, NgxTooltip],
+  imports: [CommonModule, NgxTooltip, MatBadgeModule],
   templateUrl: './character-box.component.html',
   styleUrl: './character-box.component.scss'
 })
@@ -27,6 +29,8 @@ export class CharacterBoxComponent {
     'evasion'
   ];
   readonly labels = LABELS_MAP;
+
+  constructor(public types: TypeService) {}
 
   get healthPercent(): number {
     if (!this.character) {
