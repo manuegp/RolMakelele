@@ -19,6 +19,14 @@
                 {{ isSelected(char.id) ? "Quitar" : "Seleccionar" }}
               </button>
             </div>
+            <div class="mb-2">
+              <span
+                *ngFor="let t of char.types"
+                class="badge me-1"
+                [style.backgroundColor]="t.color"
+                >{{ t.name }}</span
+              >
+            </div>
 
             <ng-container *ngIf="isSelected(char.id)">
               <ul class="list-unstyled small mb-3">

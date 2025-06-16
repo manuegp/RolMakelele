@@ -20,7 +20,9 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-      {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
+      {{ ab.description }}
+      <small class="text-muted">({{ ab.category }})</small>
+      <span *ngIf="ab.type" class="badge bg-secondary ms-2">{{ ab.type }}</span>
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">

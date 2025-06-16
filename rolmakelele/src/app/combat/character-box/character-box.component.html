@@ -25,6 +25,14 @@
   [autoUpdate]="true"
 >
   <div class="fw-bold">{{ character.name }}</div>
+  <div class="mb-1">
+    <span
+      *ngFor="let t of character.types"
+      class="badge me-1"
+      [style.backgroundColor]="t.color"
+      >{{ t.name }}</span
+    >
+  </div>
 
   <div class="progress mt-2" style="height: 8px;">
     <div

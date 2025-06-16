@@ -12,7 +12,8 @@
         }
       ],
       "id": "m001",
-      "img": "/public/assets/abilities/insult.png"
+      "img": "/public/assets/abilities/insult.png",
+      "type": "Friki"
     },
     {
       "name": "Puñetazo",
@@ -43,7 +44,8 @@
         }
       ],
       "id": "m003",
-      "img": "/public/assets/abilities/drink.png"
+      "img": "/public/assets/abilities/drink.png",
+      "type": "Musico"
     }
 
   ]
