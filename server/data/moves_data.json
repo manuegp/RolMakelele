@@ -46,6 +46,21 @@
       ],
       "id": "m003",
       "img": "/public/assets/abilities/drink.png"
+    },
+    {
+      "name": "Proeza Legendaria",
+      "description": "Una técnica secreta que solo domina Tewi",
+      "category": "physical",
+      "unique": true,
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 40
+        }
+      ],
+      "id": "m004",
+      "img": "/public/assets/abilities/fist.png"
     }
 
   ]

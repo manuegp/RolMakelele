@@ -44,8 +44,6 @@ export interface Ability {
   description: string;
   /** Tipo de habilidad: fisico, especial o de estado */
   category: 'physical' | 'special' | 'status';
-  /** Tipo elemental o afinidad de la habilidad */
-  type?: string;
   effects: Effect[];
   /** Efectos adicionales de la habilidad */
   extraEffects?: Effect[];

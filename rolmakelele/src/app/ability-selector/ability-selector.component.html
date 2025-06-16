@@ -20,15 +20,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-      {{ ab.description }}
-      <small class="text-muted">({{ ab.category }})</small>
-      <mat-chip
-        *ngIf="ab.type"
-        class="me-2 text-white"
-        [style.backgroundColor]="types.getColor(ab.type)"
-      >
-        {{ ab.type }}
-      </mat-chip>
+      {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">

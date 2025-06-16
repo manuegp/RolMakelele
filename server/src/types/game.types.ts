@@ -48,6 +48,8 @@ export interface Ability {
   category: 'physical' | 'special' | 'status';
   /** Tipo elemental o afinidad de la habilidad */
   type?: string;
+  /** Indica si la habilidad es exclusiva de un personaje */
+  unique?: boolean;
   effects: Effect[];
   /** Efectos adicionales de la habilidad */
   extraEffects?: Effect[];
