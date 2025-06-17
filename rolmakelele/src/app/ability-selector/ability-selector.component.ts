@@ -85,7 +85,7 @@ export class AbilitySelectorComponent implements OnInit {
         const status = effect.status ? STATUS_LABELS[effect.status] || effect.status : '';
         text = `Aplica estado ${status}`;
         if (effect.statusChance !== undefined) {
-          text += ` (${effect.statusChance * 100}%)`;
+          text += ` (${Math.round(effect.statusChance * 100)}%)`;
         }
         break;
       case 'cure':
@@ -99,7 +99,8 @@ export class AbilitySelectorComponent implements OnInit {
     }
 
     if (effect.chance !== undefined && effect.chance < 1) {
-      text += ` (${effect.chance * 100}%)`;
+      const perc = Math.round(effect.chance * 100);
+      text += ` (${perc}%)`;
     }
 
     return `${targets[effect.target]}: ${text}`;
