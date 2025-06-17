@@ -62,7 +62,7 @@
       ],
       
       "id": "m004",
-      "img": "/public/assets/abilities/drink.png"
+      "img": "/public/assets/abilities/shake.png"
     },
     {
       "name": "Tragito coctel",
@@ -84,7 +84,7 @@
           "statusChance": 0.35
         }
       ],
-      "img": "/public/assets/abilities/drink.png"
+      "img": "/public/assets/abilities/traguito_2.png"
     },
     {
       "name": "Cóctel molotov",
@@ -110,7 +110,7 @@
         }
       ],
       "id": "m006",
-      "img": "/public/assets/abilities/fire.png"
+      "img": "/public/assets/abilities/traguito_1.png"
     },
     {
       "name": "Hacer cachimba",
@@ -123,7 +123,7 @@
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
       ],
       "id": "m007",
-      "img": "/public/assets/abilities/drink.png"
+      "img": "/public/assets/abilities/prender_cachimba.png"
     },
     {
       "name": "Tirar facto",
@@ -159,7 +159,7 @@
         }
       ],
       "id": "m009",
-      "img": "/public/assets/abilities/fire.png"
+      "img": "/public/assets/abilities/fire_cachimba.png"
     },
     {
       "name": "No se la he chupado a mi padre te la voy a chupar a ti ¡GILIPOLLAS!",
@@ -171,7 +171,7 @@
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 2 }
       ],
       "id": "m010",
-      "img": "/public/assets/abilities/insult.png"
+      "img": "/public/assets/abilities/gilipollas.png"
     },
     {
       "name": "De la primera guaya que te meto...",
@@ -187,7 +187,7 @@
         }
       ],
       "id": "m011",
-      "img": "/public/assets/abilities/fist.png"
+      "img": "/public/assets/abilities/primera_guaya.png"
     },
     {
       "name": "... te vuelvo paraguayo",
@@ -200,11 +200,11 @@
         { "type": "buff", "target": "self", "stat": "attack", "value": 1 }
       ],
       "id": "m012",
-      "img": "/public/assets/abilities/fist.png"
+      "img": "/public/assets/abilities/segunda_guaya.png"
     },
     {
       "name": "Achio piho",
-      "description": "Hace retroceder al enemigo",
+      "description": "Paraliza al enemigo",
       "category": "status",
       "unique": true,
       "effects": [
@@ -217,7 +217,7 @@
         }
       ],
       "id": "m013",
-      "img": "/public/assets/abilities/insult.png"
+      "img": "/public/assets/abilities/achio.png"
     },
     {
       "name": "Un segarro amigo",
@@ -231,7 +231,7 @@
         { "type": "damage", "target": "opponent", "value": 15 }
       ],
       "id": "m014",
-      "img": "/public/assets/abilities/fist.png"
+      "img": "/public/assets/abilities/segarro_amego.png"
     }
 
   ]

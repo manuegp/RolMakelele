@@ -8,10 +8,10 @@
         "speed": 135,
         "health": 100,
         "attack": 75,
-        "defense": 127,
+        "defense": 85,
         "specialAttack": 170,
         "specialDefense": 200,
-        "critical": 25.5,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": ["m001", "m002", "m003", "m006", "m009"]
@@ -21,13 +21,13 @@
       "name": "Wanolo",
       "types": ["Programador"],
       "stats": {
-        "speed": 135,
-        "health": 100,
-        "attack": 75,
-        "defense": 127,
-        "specialAttack": 170,
-        "specialDefense": 200,
-        "critical": 25.5,
+        "speed": 110,
+        "health":125,
+        "attack": 102.5,
+        "defense": 200,
+        "specialAttack": 52.5,
+        "specialDefense": 175,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
@@ -46,12 +46,12 @@
       "types": ["Friki", "Musico"],
       "stats": {
         "speed": 135,
-        "health": 100,
-        "attack": 75,
-        "defense": 127,
-        "specialAttack": 170,
-        "specialDefense": 200,
-        "critical": 25.5,
+        "health": 170,
+        "attack": 110,
+        "defense": 100,
+        "specialAttack": 130,
+        "specialDefense": 120,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
@@ -73,10 +73,10 @@
         "speed": 200,
         "health": 127,
         "attack": 63.75,
-        "defense": 191.25,
-        "specialAttack": 191.25,
-        "specialDefense": 200,
-        "critical": 0,
+        "defense": 137.13,
+        "specialAttack":  137.13,
+        "specialDefense": 100,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
@@ -94,12 +94,12 @@
       "types": ["Friki"],
       "stats": {
         "speed": 127,
-        "health": 63.75,
-        "attack": 191.25,
-        "defense": 63.75,
-        "specialAttack": 127,
-        "specialDefense": 63.75,
-        "critical": 0,
+        "health": 100,
+        "attack": 200,
+        "defense": 69,
+        "specialAttack": 200,
+        "specialDefense": 69,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
@@ -116,13 +116,13 @@
       "name": "José",
       "types": ["Friki", "Barman"],
       "stats": {
-        "speed": 63.75,
-        "health": 127,
-        "attack": 127,
-        "defense": 63.75,
-        "specialAttack": 191.25,
-        "specialDefense": 63.75,
-        "critical": 0,
+        "speed": 100,
+        "health": 125,
+        "attack": 230,
+        "defense": 130,
+        "specialAttack": 50,
+        "specialDefense": 130,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
@@ -142,13 +142,13 @@
       "name": "Pipa moro borracho cabrom",
       "types": ["Moro"],
       "stats": {
-        "speed": 63.75,
-        "health": 127,
-        "attack": 127,
-        "defense": 63.75,
-        "specialAttack": 191.25,
-        "specialDefense": 63.75,
-        "critical": 0,
+        "speed": 140,
+        "health": 90,
+        "attack": 150,
+        "defense": 90,
+        "specialAttack": 120,
+        "specialDefense": 175,
+        "critical": 5.1,
         "evasion": 0
       },
       "availableAbilities": [
