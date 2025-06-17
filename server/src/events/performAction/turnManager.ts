@@ -71,14 +71,14 @@ export function processTurn(
     const activePlayer = playerRoom.players.find(p => p.id === nextTurn.playerId);
     const activeChar = activePlayer?.selectedCharacters[nextTurn.characterIndex];
     let skipTurn = false;
-    const statusEffects: { type: 'damage'; target: 'source' | 'target'; value: number }[] = [];
+    const startEffects: ActionResult['effects'] = [];
     if (activeChar && activeChar.status) {
       activeChar.statusTurns = (activeChar.statusTurns || 0) + 1;
       if (activeChar.status === 'burn') {
         const dmg = activeChar.stats.health * 0.125;
         activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
         if (activeChar.currentHealth === 0) activeChar.isAlive = false;
-        statusEffects.push({ type: 'damage', target: 'source', value: dmg });
+        startEffects.push({ type: 'damage', target: 'source', value: dmg });
         io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
           username: 'Sistema',
           message: `${activePlayer?.username} - ${activeChar.name} sufre ${dmg.toFixed(2)} de daño por quemadura`,
@@ -103,7 +103,7 @@ export function processTurn(
           const dmg = activeChar.stats.health * 0.0625;
           activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
           if (activeChar.currentHealth === 0) activeChar.isAlive = false;
-          statusEffects.push({ type: 'damage', target: 'source', value: dmg });
+          startEffects.push({ type: 'damage', target: 'source', value: dmg });
           io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
             username: 'Sistema',
             message: `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg.toFixed(2)} de vida`,
@@ -120,7 +120,7 @@ export function processTurn(
         else if (activeChar.statusTurns === 3) chance = 0.9999;
         else if (activeChar.statusTurns >= 4) chance = 1;
         if (Math.random() < chance) {
-          removeStatus(activeChar, actionResult, 'source');
+          removeStatus(activeChar, startEffects, 'source');
           io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
             username: 'Sistema',
             message: `${activePlayer?.username} - ${activeChar.name} se despertó`,
@@ -141,11 +141,6 @@ export function processTurn(
       }
     }
 
-    if (statusEffects.length > 0) {
-      for (const eff of statusEffects) {
-        actionResult.effects.push({ type: 'damage', target: eff.target, value: eff.value });
-      }
-    }
 
     if (skipTurn) {
       const skipResult: ActionResult = {
@@ -190,7 +185,8 @@ export function processTurn(
     io.to(playerRoom.id).emit(ServerEvents.TURN_STARTED, {
       playerId: nextTurn.playerId,
       characterIndex: nextTurn.characterIndex,
-      timeRemaining: config.turnTimeLimit
+      timeRemaining: config.turnTimeLimit,
+      effects: startEffects
     });
   } else if (!gameEnded) {
     io.to(playerRoom.id).emit(ServerEvents.ACTION_RESULT, { result: actionResult });

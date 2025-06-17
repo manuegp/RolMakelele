@@ -76,15 +76,19 @@ export function applyStatus(character: CharacterState, status: StatusCondition, 
   }
 }
 
-export function removeStatus(character: CharacterState, result?: ActionResult, target: 'source' | 'target' = 'source') {
+export function removeStatus(
+  character: CharacterState,
+  effects?: ActionResult['effects'],
+  target: 'source' | 'target' = 'source'
+) {
   if (character.status) {
     if (character.status === 'burn') {
       character.currentStats!.attack = character.stats.attack;
     } else if (character.status === 'paralysis') {
       character.currentStats!.speed = character.stats.speed;
     }
-    if (result) {
-      result.effects.push({ type: 'status', target, value: 0, status: null });
+    if (effects) {
+      effects.push({ type: 'status', target, value: 0, status: null });
     }
     character.status = undefined;
     character.statusTurns = 0;

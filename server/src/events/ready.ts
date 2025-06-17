@@ -76,7 +76,8 @@ export function registerReady(
       io.to(playerRoom.id).emit(ServerEvents.TURN_STARTED, {
         playerId: turnOrder[0].playerId,
         characterIndex: turnOrder[0].characterIndex,
-        timeRemaining: config.turnTimeLimit
+        timeRemaining: config.turnTimeLimit,
+        effects: []
       });
 
       broadcastRoomsList(io, rooms);
