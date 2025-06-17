@@ -31,7 +31,7 @@
 
             <ng-container *ngIf="isSelected(char.id)">
               <ul class="list-unstyled small mb-3">
-                <app-chart [data]="char.stats"></app-chart>
+                <app-chart [data]="char.stats" [maxValue]="maxStatValue"></app-chart>
               </ul>
               <app-ability-selector
                 [character]="char"

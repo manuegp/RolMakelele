@@ -19,6 +19,7 @@ import { TypeService } from '../services/type.service';
 export class CharacterSelectionComponent implements OnInit {
   selected: { id: string; abilityIds: string[] }[] = [];
   characters: Character[] = [];
+  maxStatValue = 0;
   roomId!: string;
   room: GameRoom | null = null;
 
@@ -31,7 +32,10 @@ export class CharacterSelectionComponent implements OnInit {
   ngOnInit() {
     this.roomId = this.route.snapshot.paramMap.get('roomId')!;
     this.game.fetchCharacters();
-    this.game.characters$.subscribe(c => (this.characters = c));
+    this.game.characters$.subscribe(c => {
+      this.characters = c;
+      this.computeMaxStatValue();
+    });
     this.game.currentRoom$.subscribe(c => (this.room = c));
   }
 
@@ -87,5 +91,17 @@ export class CharacterSelectionComponent implements OnInit {
 
   get getPlayersCount () {
     return this.room?.players ? Object.keys(this.room.players).length : 0;
+  }
+
+  private computeMaxStatValue() {
+    let max = 0;
+    for (const char of this.characters) {
+      for (const value of Object.values(char.stats)) {
+        if (value > max) {
+          max = value;
+        }
+      }
+    }
+    this.maxStatValue = max;
   }
 }
