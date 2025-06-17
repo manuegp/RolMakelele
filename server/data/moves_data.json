@@ -35,13 +35,15 @@
       "name": "Trago de cerveza",
       "description": "Se toma una cerveza para aumentar su defensa especial",
       "category": "status",
+      "type": "Barman",
       "effects": [
         {
           "type": "buff",
           "target": "self",
           "value": 1,
           "stat": "specialDefense"
-        }
+        },
+        { "type": "heal", "target": "self", "value": 15 }
       ],
       "id": "m003",
       "img": "/public/assets/abilities/drink.png"
@@ -56,6 +58,9 @@
       "effects": [
         { "type": "buff", "target": "self", "stat": "speed", "value": 1 },
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+      ],
+      "extraEffects": [
+        { "type": "buff", "target": "allies", "stat": "speed", "value": 1 }
       ],
       "id": "m004",
       "img": "/public/assets/abilities/drink.png"
@@ -208,13 +213,13 @@
     {
       "name": "Un segarro amigo",
       "description": "Baja la defensa especial e inflige daño",
-      "category": "status",
+      "category": "physical",
       "type": "Moro",
       "effects": [
         { "type": "debuff", "target": "opponent", "stat": "specialDefense", "value": -1 }
       ],
       "extraEffects": [
-        { "type": "damage", "target": "opponent", "value": 20 }
+        { "type": "damage", "target": "opponent", "value": 15 }
       ],
       "id": "m014",
       "img": "/public/assets/abilities/fist.png"

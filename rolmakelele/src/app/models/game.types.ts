@@ -16,7 +16,7 @@ export interface Stats {
 
 // Tipos de efectos para las habilidades
 export type EffectType = 'damage' | 'heal' | 'buff' | 'debuff' | 'status';
-export type EffectTarget = 'self' | 'opponent';
+export type EffectTarget = 'self' | 'opponent' | 'allies';
 export type StatType =
   | 'speed'
   | 'health'

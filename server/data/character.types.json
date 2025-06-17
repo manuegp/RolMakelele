@@ -3,8 +3,8 @@
     {"id": "t002", "name":"Techno", "color":"#33FF57"},
     {"id": "t003", "name":"Musico", "color":"#3357FF"},
     {"id": "t004", "name":"Friki", "color":"#FF33A1"},
-    {"id": "t005", "name":"Ingeniero", "color":"#FF33A1"},
-    {"id": "t006", "name":"Moro", "color":"#FF33A1"},
-    {"id": "t006", "name":"Deportista", "color":"#FF33A1"}
-    ,{"id": "t007", "name":"Barman", "color":"#9B59B6"}
+    {"id": "t005", "name":"Ingeniero", "color":"#FFBD33"},
+    {"id": "t006", "name":"Moro", "color":"#33FFF7"},
+    {"id": "t006", "name":"Deportista", "color":"#FF3333"},
+    {"id": "t007", "name":"Barman", "color":"#9B59B6"}
 ]
