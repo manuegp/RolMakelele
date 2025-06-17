@@ -36,28 +36,12 @@
       {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
     </p>
     <ul>
-      <li *ngFor="let effect of ab.effects">
-        <span>{{ effect.type }} sobre {{ effect.target }}</span>
-        <span *ngIf="effect.stat"> ({{ effect.stat }})</span>
-        <span> : {{ effect.value }}</span>
-        <span *ngIf="effect.duration"> ({{ effect.duration }} turnos)</span>
-        <span *ngIf="effect.ignoreDefense">
-          (ignora defensa {{ effect.ignoreDefense * 100 }}%)
-        </span>
-      </li>
+      <li *ngFor="let effect of ab.effects">{{ formatEffect(effect) }}</li>
     </ul>
     <div *ngIf="ab.extraEffects?.length">
       <strong>Efectos extra:</strong>
       <ul>
-        <li *ngFor="let effect of ab.extraEffects">
-          <span>{{ effect.type }} sobre {{ effect.target }}</span>
-          <span *ngIf="effect.stat"> ({{ effect.stat }})</span>
-          <span> : {{ effect.value }}</span>
-          <span *ngIf="effect.duration"> ({{ effect.duration }} turnos)</span>
-          <span *ngIf="effect.ignoreDefense">
-            (ignora defensa {{ effect.ignoreDefense * 100 }}%)
-          </span>
-        </li>
+        <li *ngFor="let effect of ab.extraEffects">{{ formatEffect(effect) }}</li>
       </ul>
     </div>
   </mat-expansion-panel>

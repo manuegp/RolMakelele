@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Ability, Character } from '../models/game.types';
+import { Ability, Character, Effect, EffectTarget } from '../models/game.types';
 import { GameService } from '../services/game.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatChipsModule } from '@angular/material/chips';
 import { environment } from '../../environments/environment';
 import { TypeService } from '../services/type.service';
-import { UniqueTagComponent } from "../unique-tag/unique-tag.component";
+import { UniqueTagComponent } from '../unique-tag/unique-tag.component';
+import { LABELS_MAP } from '../constants/stats.map';
+import { STATUS_LABELS } from '../constants/statuses.map';
 
 @Component({
   selector: 'app-ability-selector',
@@ -38,5 +40,47 @@ export class AbilitySelectorComponent implements OnInit {
       this.selectedIds.push(id);
     }
     this.selectionChange.emit([...this.selectedIds]);
+  }
+
+  formatEffect(effect: Effect): string {
+    const targets: Record<EffectTarget, string> = {
+      self: 'a sí mismo',
+      opponent: 'al enemigo',
+      allies: 'a los aliados',
+    };
+
+    let text = '';
+    switch (effect.type) {
+      case 'damage':
+        text = `Daño ${effect.value}`;
+        if (effect.ignoreDefense) {
+          text += ` (ignora defensa ${effect.ignoreDefense * 100}%)`;
+        }
+        break;
+      case 'heal':
+        text = `Cura ${effect.value}`;
+        break;
+      case 'buff':
+        const buffStat = effect.stat ? LABELS_MAP[effect.stat] || effect.stat : '';
+        text = `Aumenta ${buffStat} +${effect.value}`;
+        break;
+      case 'debuff':
+        const debuffStat = effect.stat ? LABELS_MAP[effect.stat] || effect.stat : '';
+        text = `Reduce ${debuffStat} ${effect.value}`;
+        break;
+      case 'status':
+        const status = effect.status ? STATUS_LABELS[effect.status] || effect.status : '';
+        text = `Aplica estado ${status}`;
+        if (effect.statusChance !== undefined) {
+          text += ` (${effect.statusChance * 100}%)`;
+        }
+        break;
+    }
+
+    if (effect.duration) {
+      text += ` durante ${effect.duration} turnos`;
+    }
+
+    return `${targets[effect.target]}: ${text}`;
   }
 }
