@@ -83,6 +83,12 @@ export function applyAbilityEffects(
         const calcParts = [`Base ${modifiedEffect.value}%`];
         if (attackPortion) calcParts.push(`Atk ${attackPortion.toFixed(2)}`);
         if (reduction) calcParts.push(`- Def ${reduction.toFixed(2)}`);
+        if (
+          ability.category === 'physical' &&
+          sourceCharacter.status === 'burn'
+        ) {
+          calcParts.push('Quemado x0.5');
+        }
         if (isCrit) calcParts.push('x2 Crit');
         const calcString = calcParts.join(' ');
 
