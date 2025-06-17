@@ -81,8 +81,8 @@ export function applyAbilityEffects(
         actionResult.effects.push({ type: 'damage', target: 'target', value: amount });
 
         const calcParts = [`Base ${modifiedEffect.value}%`];
-        if (attackPortion) calcParts.push(`Atk ${attackPortion.toFixed(2)}`);
-        if (reduction) calcParts.push(`- Def ${reduction.toFixed(2)}`);
+        if (attackPortion) calcParts.push(`Atk ${Math.round(attackPortion)}`);
+        if (reduction) calcParts.push(`- Def ${Math.round(reduction)}`);
         if (
           ability.category === 'physical' &&
           sourceCharacter.status === 'burn'
@@ -94,7 +94,7 @@ export function applyAbilityEffects(
 
         io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
           username: 'Sistema',
-          message: `${sourcePlayer.username} - ${sourceCharacter.name} causó ${amount.toFixed(2)} de daño a ${targetPlayer.username} - ${targetCharacter.name}`,
+          message: `${sourcePlayer.username} - ${sourceCharacter.name} causó ${amount} de daño a ${targetPlayer.username} - ${targetCharacter.name}`,
           tooltip: calcString,
           timestamp: new Date(),
           isSpectator: false,

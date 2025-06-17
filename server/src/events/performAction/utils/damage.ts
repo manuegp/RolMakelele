@@ -41,5 +41,5 @@ export function calculateDamage(
     damage *= 2;
   }
 
-  return { amount: damage, attackPortion, reduction, isCrit };
+  return { amount: Math.round(damage), attackPortion, reduction, isCrit };
 }

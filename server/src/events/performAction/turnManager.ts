@@ -75,13 +75,13 @@ export function processTurn(
     if (activeChar && activeChar.status) {
       activeChar.statusTurns = (activeChar.statusTurns || 0) + 1;
       if (activeChar.status === 'burn') {
-        const dmg = activeChar.stats.health * 0.125;
+        const dmg = Math.round(activeChar.stats.health * 0.125);
         activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
         if (activeChar.currentHealth === 0) activeChar.isAlive = false;
         startEffects.push({ type: 'damage', target: 'source', value: dmg });
         io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
           username: 'Sistema',
-          message: `${activePlayer?.username} - ${activeChar.name} sufre ${dmg.toFixed(2)} de daño por quemadura`,
+          message: `${activePlayer?.username} - ${activeChar.name} sufre ${dmg} de daño por quemadura`,
           timestamp: new Date(),
           isSpectator: false,
           isSystem: true
@@ -100,13 +100,13 @@ export function processTurn(
       } else if (activeChar.status === 'drunk') {
         const selfHit = Math.random() < 1 / 3;
         if (selfHit) {
-          const dmg = activeChar.stats.health * 0.0625;
+          const dmg = Math.round(activeChar.stats.health * 0.0625);
           activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
           if (activeChar.currentHealth === 0) activeChar.isAlive = false;
           startEffects.push({ type: 'damage', target: 'source', value: dmg });
           io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
             username: 'Sistema',
-            message: `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg.toFixed(2)} de vida`,
+            message: `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg} de vida`,
             timestamp: new Date(),
             isSpectator: false,
             isSystem: true
