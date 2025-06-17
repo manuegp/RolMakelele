@@ -28,7 +28,7 @@
       ],
       "id": "m002",
       "img": "/public/assets/abilities/fist.png",
-      "extraEffects": [{"type":"buff","target":"self","stat":"attack","value":10,"duration":2}]
+      "extraEffects": [{"type":"buff","target":"self","stat":"attack","value":1,"duration":2}]
 
     },
     {
@@ -39,7 +39,7 @@
         {
           "type": "buff",
           "target": "self",
-          "value": 30,
+          "value": 1,
           "duration": 5,
           "stat": "specialDefense"
         }

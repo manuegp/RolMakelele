@@ -62,6 +62,8 @@ export interface Character {
   id: string;
   name: string;
   stats: Stats;
+  /** Niveles de modificadores para cada estadística (-6 a 6) */
+  statStages?: Stats;
   types: CharacterType[];
   availableAbilities: Ability[];
   abilities: Ability[];
@@ -82,6 +84,7 @@ export interface CharacterType {
 export interface CharacterState extends Character {
   currentHealth: number;
   isAlive: boolean;
+  statStages?: Stats;
 }
 
 // Definición de un jugador

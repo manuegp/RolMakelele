@@ -257,10 +257,26 @@ export class GameService {
                 (eff.type === 'buff' || eff.type === 'debuff') &&
                 eff.stat
               ) {
+                if (!char.statStages) {
+                  char.statStages = {
+                    speed: 0,
+                    health: 0,
+                    attack: 0,
+                    defense: 0,
+                    specialAttack: 0,
+                    specialDefense: 0,
+                    critical: 0,
+                    evasion: 0,
+                  };
+                }
                 if (!char.currentStats) {
                   char.currentStats = { ...char.stats };
                 }
-                char.currentStats[eff.stat] += eff.value;
+                const current = char.statStages[eff.stat] || 0;
+                const newStage = Math.max(-6, Math.min(6, current + eff.value));
+                char.statStages[eff.stat] = newStage;
+                const base = char.stats[eff.stat];
+                char.currentStats[eff.stat] = Math.max(1, base * (1 + 0.5 * newStage));
               }
             }
           }

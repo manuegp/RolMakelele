@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import config from "../../config/config";
 import { GameRoom, ActionResult } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
+import { updateStatStage } from "./utils/effects";
 import { broadcastRoomsList } from '../../utils/roomHelpers';
 
 export function processTurn(
@@ -77,8 +78,8 @@ export function processTurn(
             if (activeEffect.remainingDuration <= 0) {
               expiredEffects.push(i);
               if ((activeEffect.effect.type === 'buff' || activeEffect.effect.type === 'debuff') &&
-                  activeEffect.effect.stat && character.currentStats) {
-                character.currentStats[activeEffect.effect.stat] -= activeEffect.effect.value;
+                  activeEffect.effect.stat) {
+                updateStatStage(character, activeEffect.effect.stat, -activeEffect.effect.value);
               }
             }
           }

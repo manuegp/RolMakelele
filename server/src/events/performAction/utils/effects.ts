@@ -1,30 +1,56 @@
-import { CharacterState, Effect, ActionResult } from '../../../types/game.types';
+import { CharacterState, Effect, ActionResult, StatType } from '../../../types/game.types';
+
+export function updateStatStage(character: CharacterState, stat: StatType, delta: number): number {
+  if (!character.statStages) {
+    character.statStages = {
+      speed: 0,
+      health: 0,
+      attack: 0,
+      defense: 0,
+      specialAttack: 0,
+      specialDefense: 0,
+      critical: 0,
+      evasion: 0
+    };
+  }
+  if (!character.currentStats) {
+    character.currentStats = { ...character.stats };
+  }
+  const current = character.statStages[stat] || 0;
+  const newStage = Math.max(-6, Math.min(6, current + delta));
+  const appliedDelta = newStage - current;
+  character.statStages[stat] = newStage;
+  const base = character.stats[stat];
+  const modified = Math.max(1, base * (1 + 0.5 * newStage));
+  character.currentStats[stat] = modified;
+  return appliedDelta;
+}
 
 export function applyBuff(character: CharacterState, effect: Effect, result: ActionResult, target: 'source' | 'target') {
-  if (effect.stat && character.currentStats) {
-    const statValue = (character.currentStats[effect.stat] || 0) + effect.value;
-    character.currentStats[effect.stat] = statValue;
+  if (effect.stat) {
+    const applied = updateStatStage(character, effect.stat, effect.value);
     if (effect.duration && effect.duration > 0) {
       if (!character.activeEffects) {
         character.activeEffects = [];
       }
-      character.activeEffects.push({ effect, remainingDuration: effect.duration });
+      const storedEffect = { ...effect, value: applied };
+      character.activeEffects.push({ effect: storedEffect, remainingDuration: effect.duration });
     }
-    result.effects.push({ type: 'buff', target, stat: effect.stat, value: effect.value, duration: effect.duration });
+    result.effects.push({ type: 'buff', target, stat: effect.stat, value: applied, duration: effect.duration });
   }
 }
 
 export function applyDebuff(character: CharacterState, effect: Effect, result: ActionResult, target: 'source' | 'target') {
-  if (effect.stat && character.currentStats) {
-    const statValue = (character.currentStats[effect.stat] || 0) + effect.value;
-    character.currentStats[effect.stat] = target === 'target' ? Math.max(1, statValue) : statValue;
+  if (effect.stat) {
+    const applied = updateStatStage(character, effect.stat, effect.value);
     if (effect.duration && effect.duration > 0) {
       if (!character.activeEffects) {
         character.activeEffects = [];
       }
-      character.activeEffects.push({ effect, remainingDuration: effect.duration });
+      const storedEffect = { ...effect, value: applied };
+      character.activeEffects.push({ effect: storedEffect, remainingDuration: effect.duration });
     }
-    result.effects.push({ type: 'debuff', target, stat: effect.stat, value: effect.value, duration: effect.duration });
+    result.effects.push({ type: 'debuff', target, stat: effect.stat, value: applied, duration: effect.duration });
   }
 }
 

@@ -3,6 +3,9 @@
     <div *ngFor="let key of statKeys" class="mb-1">
       <span [style.color]="getStatColor(key)">
         {{ labels[key] }}: {{ getStatValue(key) }}
+        <ng-container *ngIf="getStatStage(key) !== 0">
+          ({{ getStatStage(key) > 0 ? '+' : '' }}{{ getStatStage(key) }})
+        </ng-container>
       </span>
     </div>
   </div>

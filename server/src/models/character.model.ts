@@ -77,6 +77,16 @@ export class CharacterService {
         .map(a => ({ ...a })),
       currentHealth: character.stats.health,
       isAlive: true,
+      statStages: {
+        speed: 0,
+        health: 0,
+        attack: 0,
+        defense: 0,
+        specialAttack: 0,
+        specialDefense: 0,
+        critical: 0,
+        evasion: 0
+      },
       currentStats: { ...character.stats },
       activeEffects: []
     };

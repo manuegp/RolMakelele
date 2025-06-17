@@ -59,6 +59,11 @@ export class CharacterBoxComponent {
     return 'black';
   }
 
+  getStatStage(stat: keyof Stats): number {
+    if (!this.character || !this.character.statStages) return 0;
+    return this.character.statStages[stat] || 0;
+  }
+
   // get CurrentHealth(): number {
 
   // }
