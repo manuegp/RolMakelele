@@ -8,6 +8,7 @@ import {
   ActionResult
 } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
+import { sendSystemMessage } from '../../utils/messages';
 import {
   applyBuff,
   applyDebuff,
@@ -60,13 +61,11 @@ export function applyAbilityEffects(
         const evasionChance = targetCharacter.currentStats?.evasion || 0;
         if (Math.random() < evasionChance / 100) {
           actionResult.effects.push({ type: 'damage', target: 'target', value: 0 });
-          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `${targetPlayer.username} - ${targetCharacter.name} esquivó el ataque`,
-            timestamp: new Date(),
-            isSpectator: false,
-            isSystem: true
-          });
+          sendSystemMessage(
+            io,
+            playerRoom.id,
+            `${targetPlayer.username} - ${targetCharacter.name} esquivó el ataque`
+          );
           return;
         }
 
@@ -99,14 +98,12 @@ export function applyAbilityEffects(
         if (isCrit) calcParts.push('x2 Crit');
         const calcString = calcParts.join(' ');
 
-        io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-          username: 'Sistema',
-          message: `${sourcePlayer.username} - ${sourceCharacter.name} causó ${amount} de daño a ${targetPlayer.username} - ${targetCharacter.name}`,
-          tooltip: calcString,
-          timestamp: new Date(),
-          isSpectator: false,
-          isSystem: true
-        });
+        sendSystemMessage(
+          io,
+          playerRoom.id,
+          `${sourcePlayer.username} - ${sourceCharacter.name} causó ${amount} de daño a ${targetPlayer.username} - ${targetCharacter.name}`,
+          { tooltip: calcString }
+        );
       } else if (effect.type === 'debuff') {
         applyDebuff(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'heal') {

@@ -3,6 +3,7 @@ import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
 import { ClientEvents, ServerEvents } from '../types/socket.types';
 import { broadcastRoomsList, findPlayerRoom } from '../utils/roomHelpers';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerReady(
   io: Server,
@@ -65,13 +66,7 @@ export function registerReady(
         room: playerRoom,
         turnOrder
       });
-      io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-        username: 'Sistema',
-        message: 'El juego ha comenzado',
-        timestamp: new Date(),
-        isSpectator: false,
-        isSystem: true
-      });
+      sendSystemMessage(io, playerRoom.id, 'El juego ha comenzado');
 
       io.to(playerRoom.id).emit(ServerEvents.TURN_STARTED, {
         playerId: turnOrder[0].playerId,

@@ -4,6 +4,7 @@ import { GameRoom, ActionResult } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
 import { updateStatStage, removeStatus } from "./utils/effects";
 import { broadcastRoomsList } from '../../utils/roomHelpers';
+import { sendSystemMessage } from '../../utils/messages';
 
 export function processTurn(
   io: Server,
@@ -24,13 +25,7 @@ export function processTurn(
           winnerId: winner.id,
           winnerUsername: winner.username
         });
-        io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-          username: 'Sistema',
-          message: `El juego ha terminado. Ganador: ${winner.username}`,
-          timestamp: new Date(),
-          isSpectator: false,
-          isSystem: true
-        });
+        sendSystemMessage(io, playerRoom.id, `El juego ha terminado. Ganador: ${winner.username}`);
       }
       break;
     }
@@ -79,23 +74,19 @@ export function processTurn(
         activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
         if (activeChar.currentHealth === 0) activeChar.isAlive = false;
         startEffects.push({ type: 'damage', target: 'source', value: dmg });
-        io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-          username: 'Sistema',
-          message: `${activePlayer?.username} - ${activeChar.name} sufre ${dmg} de daño por quemadura`,
-          timestamp: new Date(),
-          isSpectator: false,
-          isSystem: true
-        });
+        sendSystemMessage(
+          io,
+          playerRoom.id,
+          `${activePlayer?.username} - ${activeChar.name} sufre ${dmg} de daño por quemadura`
+        );
       } else if (activeChar.status === 'paralysis') {
         if (Math.random() < 0.25) {
           skipTurn = true;
-          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `${activePlayer?.username} - ${activeChar.name} está paralizado y pierde el turno`,
-            timestamp: new Date(),
-            isSpectator: false,
-            isSystem: true
-          });
+          sendSystemMessage(
+            io,
+            playerRoom.id,
+            `${activePlayer?.username} - ${activeChar.name} está paralizado y pierde el turno`
+          );
         }
       } else if (activeChar.status === 'drunk') {
         const selfHit = Math.random() < 1 / 3;
@@ -104,13 +95,11 @@ export function processTurn(
           activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
           if (activeChar.currentHealth === 0) activeChar.isAlive = false;
           startEffects.push({ type: 'damage', target: 'source', value: dmg });
-          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg} de vida`,
-            timestamp: new Date(),
-            isSpectator: false,
-            isSystem: true
-          });
+          sendSystemMessage(
+            io,
+            playerRoom.id,
+            `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg} de vida`
+          );
         }
         skipTurn = true;
       } else if (activeChar.status === 'sleep') {
@@ -121,22 +110,18 @@ export function processTurn(
         else if (activeChar.statusTurns >= 4) chance = 1;
         if (Math.random() < chance) {
           removeStatus(activeChar, startEffects, 'source');
-          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `${activePlayer?.username} - ${activeChar.name} se despertó`,
-            timestamp: new Date(),
-            isSpectator: false,
-            isSystem: true
-          });
+          sendSystemMessage(
+            io,
+            playerRoom.id,
+            `${activePlayer?.username} - ${activeChar.name} se despertó`
+          );
         } else {
           skipTurn = true;
-          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `${activePlayer?.username} - ${activeChar.name} está dormido`,
-            timestamp: new Date(),
-            isSpectator: false,
-            isSystem: true
-          });
+          sendSystemMessage(
+            io,
+            playerRoom.id,
+            `${activePlayer?.username} - ${activeChar.name} está dormido`
+          );
         }
       }
     }

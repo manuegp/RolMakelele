@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ClientEvents, ServerEvents } from "../types/socket.types";
 import { broadcastRoomsList } from '../utils/roomHelpers';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
@@ -33,13 +34,7 @@ export function registerLeaveRoom(io: Server, socket: Socket, rooms: Map<string,
               winnerUsername: winner.username,
               reason: 'player_left'
             });
-            io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
-              username: 'Sistema',
-              message: `El juego ha terminado. Ganador: ${winner.username}`,
-              timestamp: new Date(),
-              isSpectator: false,
-              isSystem: true
-            });
+            sendSystemMessage(io, roomId, `El juego ha terminado. Ganador: ${winner.username}`);
             rooms.delete(roomId);
           }
         }else if (room.status === 'character_selection') {

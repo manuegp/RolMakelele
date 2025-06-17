@@ -3,6 +3,7 @@ import config from '../config/config';
 import { GameRoom, Player } from '../types/game.types';
 import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types';
 import { broadcastRoomsList } from '../utils/roomHelpers';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerJoinRoom(
   io: Server,
@@ -49,13 +50,7 @@ export function registerJoinRoom(
         socket.join(data.roomId);
         socket.emit(ServerEvents.ROOM_JOINED, { room });
         io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
-        io.to(data.roomId).emit(ServerEvents.CHAT_MESSAGE, {
-          username: 'Sistema',
-          message: `${data.username} se ha reconectado`,
-          timestamp: new Date(),
-          isSpectator: false,
-          isSystem: true
-        });
+        sendSystemMessage(io, data.roomId, `${data.username} se ha reconectado`);
         return;
       } else {
         socket.emit(ServerEvents.ERROR, {

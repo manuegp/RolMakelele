@@ -3,15 +3,11 @@ import http from 'http';
 import { Server } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
 import cors from 'cors';
-import fs from 'fs';
 import path from 'path';
+import characterService from './models/character.model';
 
 import config from './config/config';
-import {
-  GameRoom,
-  Character,
-  CharacterType
-} from './types/game.types';
+import { GameRoom } from './types/game.types';
 import { ServerEvents } from './types/socket.types';
 
 import { registerHealthRoute } from './routes/health';
@@ -55,44 +51,7 @@ instrument(io, { auth: false });
 
 const rooms: Map<string, GameRoom> = new Map();
 const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
-let characters: Character[] = [];
-let moves: Map<string, any> = new Map();
-let characterTypes: CharacterType[] = [];
-
-try {
-  const movesRaw = fs.readFileSync(
-    path.resolve(process.cwd(), config.movesDataPath),
-    'utf-8'
-  );
-  const parsedMoves = JSON.parse(movesRaw).moves;
-  moves = new Map(parsedMoves.map((m: any) => [m.id, m]));
-
-  const typesRaw = fs.readFileSync(
-    path.resolve(process.cwd(), config.characterTypesDataPath),
-    'utf-8'
-  );
-  characterTypes = JSON.parse(typesRaw);
-
-  const data = fs.readFileSync(
-    path.resolve(process.cwd(), config.charactersDataPath),
-    'utf-8'
-  );
-  const parsed = JSON.parse(data);
-  characters = parsed.characters.map((c: any) => ({
-    ...c,
-    types: (c.types || [])
-      .map((name: string) => characterTypes.find(t => t.name === name))
-      .filter(Boolean),
-    availableAbilities: (c.availableAbilities || []).map((id: string) => moves.get(id)).filter(Boolean),
-    abilities: c.abilities
-      ? c.abilities.map((id: string) => moves.get(id)).filter(Boolean)
-      : []
-  }));
-  console.log(`Cargados ${characters.length} personajes`);
-} catch (error) {
-  console.error('Error al cargar los personajes:', error);
-  process.exit(1);
-}
+const characters = characterService.getAllCharacters();
 
 // API routes
 registerHealthRoute(app);

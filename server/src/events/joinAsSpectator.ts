@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { GameRoom } from '../types/game.types';
 import { ClientEvents, ServerEvents, JoinRoomData } from '../types/socket.types';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerJoinAsSpectator(
   io: Server,
@@ -32,12 +33,6 @@ export function registerJoinAsSpectator(
 
     io.to(data.roomId).emit(ServerEvents.ROOM_UPDATED, { room });
 
-    io.to(data.roomId).emit(ServerEvents.CHAT_MESSAGE, {
-      username: 'Sistema',
-      message: `${data.username} se ha unido como espectador`,
-      timestamp: new Date(),
-      isSpectator: true,
-      isSystem: true
-    });
+    sendSystemMessage(io, data.roomId, `${data.username} se ha unido como espectador`, { isSpectator: true });
   });
 }

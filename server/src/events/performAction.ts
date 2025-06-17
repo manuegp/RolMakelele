@@ -4,6 +4,7 @@ import { ClientEvents, ServerEvents, PerformActionData } from "../types/socket.t
 import { validateAction } from './performAction/validation';
 import { applyAbilityEffects } from './performAction/effects';
 import { processTurn } from './performAction/turnManager';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerPerformAction(io: Server, socket: Socket, rooms: Map<string, GameRoom>) {
 
@@ -40,13 +41,11 @@ export function registerPerformAction(io: Server, socket: Socket, rooms: Map<str
       actionResult
     );
 
-    io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
-      username: 'Sistema',
-      message: `${sourcePlayer.username} - ${sourceCharacter.name} usó ${ability.name} sobre ${targetPlayer.username} - ${targetCharacter.name}`,
-      timestamp: new Date(),
-      isSpectator: false,
-      isSystem: true
-    });
+    sendSystemMessage(
+      io,
+      playerRoom.id,
+      `${sourcePlayer.username} - ${sourceCharacter.name} usó ${ability.name} sobre ${targetPlayer.username} - ${targetCharacter.name}`
+    );
 
     processTurn(io, rooms, playerRoom, actionResult);
   });

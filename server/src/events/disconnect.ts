@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { GameRoom } from "../types/game.types";
 import { ServerEvents } from "../types/socket.types";
 import { broadcastRoomsList } from '../utils/roomHelpers';
+import { sendSystemMessage } from '../utils/messages';
 
 export function registerDisconnect(
   io: Server,
@@ -38,13 +39,11 @@ export function registerDisconnect(
                 winnerUsername: winner.username,
                 reason: 'player_disconnected_timeout'
               });
-              io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
-                username: 'Sistema',
-                message: `El juego ha terminado. Ganador: ${winner.username}`,
-                timestamp: new Date(),
-                isSpectator: false,
-                isSystem: true
-              });
+              sendSystemMessage(
+                io,
+                roomId,
+                `El juego ha terminado. Ganador: ${winner.username}`
+              );
               rooms.delete(roomId);
             }
             broadcastRoomsList(io, rooms);
@@ -54,13 +53,7 @@ export function registerDisconnect(
         disconnectTimers.set(key, timer);
 
         io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
-        io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
-          username: 'Sistema',
-          message: `${player.username} se ha desconectado`,
-          timestamp: new Date(),
-          isSpectator: false,
-          isSystem: true
-        });
+        sendSystemMessage(io, roomId, `${player.username} se ha desconectado`);
       }
       
       // Buscar como espectador
@@ -78,13 +71,7 @@ export function registerDisconnect(
           io.to(roomId).emit(ServerEvents.ROOM_UPDATED, { room });
           
           // Enviar mensaje de chat
-          io.to(roomId).emit(ServerEvents.CHAT_MESSAGE, {
-            username: 'Sistema',
-            message: `Un espectador se ha desconectado`,
-            timestamp: new Date(),
-            isSpectator: true,
-            isSystem: true
-          });
+          sendSystemMessage(io, roomId, `Un espectador se ha desconectado`, { isSpectator: true });
         }
       }
     }
