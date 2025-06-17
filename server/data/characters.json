@@ -12,7 +12,7 @@
         "specialAttack": 170,
         "specialDefense": 200,
         "critical": 25.5,
-        "evasion": 38.25
+        "evasion": 0
       },
       "availableAbilities": [
         "m001",
@@ -33,7 +33,7 @@
         "specialAttack": 170,
         "specialDefense": 200,
         "critical": 25.5,
-        "evasion": 38.25
+        "evasion": 0
       },
       "availableAbilities": [
         "m001",
@@ -53,7 +53,7 @@
         "specialAttack": 170,
         "specialDefense": 200,
         "critical": 25.5,
-        "evasion": 38.25
+        "evasion": 0
       },
       "availableAbilities": [
         "m001",
@@ -73,7 +73,7 @@
         "specialAttack": 170,
         "specialDefense": 200,
         "critical": 25.5,
-        "evasion": 38.25
+        "evasion": 0
       },
       "availableAbilities": [
         "m001",
