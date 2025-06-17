@@ -124,6 +124,8 @@ export interface GameRoom {
     playerId: string;
     characterIndex: number;
   };
+  /** Index in turnOrder pointing to currentTurn */
+  turnIndex?: number;
   turnOrder?: {
     playerId: string;
     characterIndex: number;
