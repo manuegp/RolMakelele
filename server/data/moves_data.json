@@ -46,37 +46,7 @@
       "id": "m003",
       "img": "/public/assets/abilities/drink.png"
     },
-    {
-      "name": "Proeza Legendaria",
-      "description": "Una técnica secreta que solo domina Tewi",
-      "category": "physical",
-      "unique": true,
-      "effects": [
-        {
-          "type": "damage",
-          "target": "opponent",
-          "value": 40
-        }
-      ],
-      "id": "m004",
-      "img": "/public/assets/abilities/fist.png"
-    },
-    {
-      "name": "Quemadura Segura",
-      "description": "Ataque de prueba que siempre quema al rival",
-      "category": "special",
-      "effects": [
-        {
-          "type": "damage",
-          "target": "opponent",
-          "value": 0,
-          "status": "burn",
-          "statusChance": 1
-        }
-      ],
-      "id": "m005",
-      "img": "/public/assets/abilities/fire.png"
-    },
+   
     {
       "name": "Agita la coctelera",
       "description": "Aumenta su velocidad y ataque especial",
@@ -87,7 +57,7 @@
         { "type": "buff", "target": "self", "stat": "speed", "value": 1 },
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
       ],
-      "id": "m006",
+      "id": "m004",
       "img": "/public/assets/abilities/drink.png"
     },
     {
@@ -98,7 +68,7 @@
       "effects": [
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
       ],
-      "id": "m007",
+      "id": "m005",
       "img": "/public/assets/abilities/drink.png"
     },
     {
@@ -124,7 +94,7 @@
           "statusChance": 0.3
         }
       ],
-      "id": "m008",
+      "id": "m006",
       "img": "/public/assets/abilities/fire.png"
     },
     {
@@ -137,7 +107,7 @@
         { "type": "buff", "target": "self", "stat": "defense", "value": 1 },
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
       ],
-      "id": "m009",
+      "id": "m007",
       "img": "/public/assets/abilities/drink.png"
     },
     {
@@ -148,7 +118,7 @@
         { "type": "damage", "target": "opponent", "value": 30 },
         { "type": "debuff", "target": "opponent", "stat": "defense", "value": -1 }
       ],
-      "id": "m010",
+      "id": "m008",
       "img": "/public/assets/abilities/insult.png"
     },
     {
@@ -173,7 +143,7 @@
           "statusChance": 0.3
         }
       ],
-      "id": "m011",
+      "id": "m009",
       "img": "/public/assets/abilities/fire.png"
     },
     {
@@ -185,7 +155,7 @@
         { "type": "damage", "target": "opponent", "value": 45 },
         { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
       ],
-      "id": "m012",
+      "id": "m010",
       "img": "/public/assets/abilities/insult.png"
     },
     {
@@ -201,7 +171,7 @@
           "statusChance": 0.1
         }
       ],
-      "id": "m013",
+      "id": "m011",
       "img": "/public/assets/abilities/fist.png"
     },
     {
@@ -214,13 +184,14 @@
       "extraEffects": [
         { "type": "buff", "target": "self", "stat": "attack", "value": 1 }
       ],
-      "id": "m014",
+      "id": "m012",
       "img": "/public/assets/abilities/fist.png"
     },
     {
       "name": "Achio piho",
       "description": "Hace retroceder al enemigo",
       "category": "status",
+      "type": "Moro",
       "unique": true,
       "effects": [
         {
@@ -231,20 +202,21 @@
           "statusChance": 1
         }
       ],
-      "id": "m015",
+      "id": "m013",
       "img": "/public/assets/abilities/insult.png"
     },
     {
       "name": "Un segarro amigo",
       "description": "Baja la defensa especial e inflige daño",
       "category": "status",
+      "type": "Moro",
       "effects": [
         { "type": "debuff", "target": "opponent", "stat": "specialDefense", "value": -1 }
       ],
       "extraEffects": [
         { "type": "damage", "target": "opponent", "value": 20 }
       ],
-      "id": "m016",
+      "id": "m014",
       "img": "/public/assets/abilities/fist.png"
     }
 
