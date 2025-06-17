@@ -114,7 +114,7 @@
     {
       "id": "c007",
       "name": "José",
-      "types": ["Friki"],
+      "types": ["Friki", "Barman"],
       "stats": {
         "speed": 63.75,
         "health": 127,
