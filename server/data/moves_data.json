@@ -74,6 +74,16 @@
         { "type": "damage", "target": "self", "value": 10 }
       ],
       "id": "m005",
+       "extraEffects": [
+        { "type": "heal", "target": "self", "value": 25, "chance": 0.65 },
+        {
+          "type": "status",
+          "target": "self",
+          "value": 0,
+          "status": "drunk",
+          "statusChance": 0.35
+        }
+      ],
       "img": "/public/assets/abilities/drink.png"
     },
     {
