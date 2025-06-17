@@ -9,6 +9,7 @@ import { TypeService } from '../services/type.service';
 import { UniqueTagComponent } from '../unique-tag/unique-tag.component';
 import { LABELS_MAP } from '../constants/stats.map';
 import { STATUS_LABELS } from '../constants/statuses.map';
+import { CATEGORY_LABELS, CATEGORY_COLORS } from '../constants/categories.map';
 
 @Component({
   selector: 'app-ability-selector',
@@ -25,6 +26,14 @@ export class AbilitySelectorComponent implements OnInit {
   readonly serverUrl = environment.apiBase;
 
   constructor(private game: GameService, public types: TypeService) {}
+
+  getCategoryLabel(cat: Ability['category']): string {
+    return CATEGORY_LABELS[cat];
+  }
+
+  getCategoryColor(cat: Ability['category']): string {
+    return CATEGORY_COLORS[cat];
+  }
 
   ngOnInit() {
     this.game

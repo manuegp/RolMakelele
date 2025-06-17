@@ -30,10 +30,16 @@
         >
           {{ ab.type }}
         </mat-chip>
+        <mat-chip
+          selected
+          [style.backgroundColor]="getCategoryColor(ab.category)"
+        >
+          {{ getCategoryLabel(ab.category) }}
+        </mat-chip>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <p>
-      {{ ab.description }} <small class="text-muted">({{ ab.category }})</small>
+      {{ ab.description }}
     </p>
     <ul>
       <li *ngFor="let effect of ab.effects">{{ formatEffect(effect) }}</li>
