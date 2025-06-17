@@ -34,6 +34,12 @@ export class CharacterBoxComponent {
   readonly statusLabels = STATUS_LABELS;
   readonly statusColors = STATUS_COLORS;
 
+  readonly infinity = '\u221E';
+
+  formatDuration(value: number): string {
+    return isFinite(value) ? value.toString() : this.infinity;
+  }
+
   getStatusColor(status: StatusCondition): string {
     return this.statusColors[status] || '#ccc';
   }

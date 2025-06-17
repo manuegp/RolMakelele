@@ -8,6 +8,16 @@
         </ng-container>
       </span>
     </div>
+    <div *ngIf="character?.activeEffects?.length" class="mt-2">
+      <strong>Efectos:</strong>
+      <div *ngFor="let eff of character.activeEffects">
+        <span>
+          {{ labels[eff.effect.stat!] }}:
+          {{ eff.effect.value > 0 ? '+' : '' }}{{ eff.effect.value }}
+          ({{ formatDuration(eff.remainingDuration) }} turnos)
+        </span>
+      </div>
+    </div>
   </div>
 </ng-template>
 

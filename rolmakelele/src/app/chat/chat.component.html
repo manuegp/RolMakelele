@@ -10,7 +10,13 @@
         }}
       </span>
       <strong>{{ msg.username }}: </strong>
-      <span [attr.title]="msg.tooltip || null">{{ msg.message }}</span>
+      <span
+        ngxTooltip
+        [content]="msg.tooltip"
+        arrow
+        [autoUpdate]="true"
+        [innerHTML]="formatMessage(msg)"
+      ></span>
     </div>
   </div>
   <form class="input-group mt-2" (ngSubmit)="send()">
