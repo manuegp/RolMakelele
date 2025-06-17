@@ -1,8 +1,12 @@
 TODO
--cAMBIAR A SISTEMA DE NIVELES LO BUFFOS Y QUE NO SEA NUMERICO
--IMplementar prioridades
--programar estaados alterados: quemado, paralizado, borracho, dormido
+-revisar movimientos: 
+    -agitar coctelera - no aplica el buffo a los demas
+    -Tragito coctel - no aplica daño de vuelta
+    -Hacer cachimba - no carga un turno
+
 -programar habilidades 
+
+
 -Javi
     Tipo: Barman, Friki
     "speed": 200,
