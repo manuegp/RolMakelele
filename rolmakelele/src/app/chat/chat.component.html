@@ -11,8 +11,7 @@
       </span>
       <strong>{{ msg.username }}: </strong>
       <span
-        ngxTooltip
-        [content]="msg.tooltip"
+        [ngxTooltip]="msg.tooltip || ''"
         arrow
         [autoUpdate]="true"
         [innerHTML]="formatMessage(msg)"
