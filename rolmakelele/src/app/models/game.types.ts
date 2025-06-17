@@ -15,7 +15,7 @@ export interface Stats {
 }
 
 // Tipos de efectos para las habilidades
-export type EffectType = 'damage' | 'heal' | 'buff' | 'debuff';
+export type EffectType = 'damage' | 'heal' | 'buff' | 'debuff' | 'status';
 export type EffectTarget = 'self' | 'opponent';
 export type StatType =
   | 'speed'
@@ -27,6 +27,8 @@ export type StatType =
   | 'critical'
   | 'evasion';
 
+export type StatusCondition = 'burn' | 'paralysis' | 'drunk' | 'sleep';
+
 // Definición de un efecto
 export interface Effect {
   type: EffectType;
@@ -35,6 +37,7 @@ export interface Effect {
   stat?: StatType;
   duration?: number;
   ignoreDefense?: number;
+  status?: StatusCondition | null;
 }
 
 // Definición de una habilidad
@@ -68,6 +71,8 @@ export interface Character {
     effect: Effect;
     remainingDuration: number;
   }[];
+  status?: StatusCondition | null;
+  statusTurns?: number;
 }
 
 export interface CharacterType {
@@ -140,6 +145,7 @@ export interface ActionResult {
     stat?: StatType;
     value: number;
     duration?: number;
+    status?: StatusCondition | null;
   }[];
   isDead?: boolean;
 }

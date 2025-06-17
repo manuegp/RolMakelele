@@ -277,9 +277,10 @@ export class GameService {
                 char.statStages[eff.stat] = newStage;
                 const base = char.stats[eff.stat];
                 char.currentStats[eff.stat] = Math.max(1, base * (1 + 0.5 * newStage));
+              } else if (eff.type === 'status') {
+                char.status = eff.status ?? null;
               }
             }
-          }
           if (data.nextTurn) {
             room.currentTurn = {
               playerId: data.nextTurn.playerId,

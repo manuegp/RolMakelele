@@ -11,7 +11,8 @@ import { ServerEvents } from "../../types/socket.types";
 import {
   applyBuff,
   applyDebuff,
-  applyHeal
+  applyHeal,
+  applyStatus
 } from "./utils/effects";
 import { calculateDamage } from "./utils/damage";
 
@@ -40,6 +41,8 @@ export function applyAbilityEffects(
         applyHeal(sourceCharacter, modifiedEffect, actionResult, 'source');
       } else if (effect.type === 'debuff') {
         applyDebuff(sourceCharacter, modifiedEffect, actionResult, 'source');
+      } else if (effect.type === 'status' && effect.status) {
+        applyStatus(sourceCharacter, effect.status, actionResult, 'source');
       }
     } else if (effect.target === 'opponent') {
       if (effect.type === 'damage') {
@@ -93,6 +96,8 @@ export function applyAbilityEffects(
         applyHeal(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'buff') {
         applyBuff(targetCharacter, modifiedEffect, actionResult, 'target');
+      } else if (effect.type === 'status' && effect.status) {
+        applyStatus(targetCharacter, effect.status, actionResult, 'target');
       }
     }
   }

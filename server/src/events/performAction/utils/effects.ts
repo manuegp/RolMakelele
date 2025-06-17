@@ -1,4 +1,4 @@
-import { CharacterState, Effect, ActionResult, StatType } from '../../../types/game.types';
+import { CharacterState, Effect, ActionResult, StatType, StatusCondition } from '../../../types/game.types';
 
 export function updateStatStage(character: CharacterState, stat: StatType, delta: number): number {
   if (!character.statStages) {
@@ -58,4 +58,35 @@ export function applyHeal(character: CharacterState, effect: Effect, result: Act
   const healAmount = effect.value;
   character.currentHealth = Math.min(character.currentHealth + healAmount, character.stats.health);
   result.effects.push({ type: 'heal', target, value: healAmount });
+}
+
+export function applyStatus(character: CharacterState, status: StatusCondition, result: ActionResult, target: 'source' | 'target') {
+  if (!character.status) {
+    character.status = status;
+    character.statusTurns = 0;
+    if (!character.currentStats) {
+      character.currentStats = { ...character.stats };
+    }
+    if (status === 'burn') {
+      character.currentStats.attack *= 0.5;
+    } else if (status === 'paralysis') {
+      character.currentStats.speed *= 0.5;
+    }
+    result.effects.push({ type: 'status', target, value: 0, status });
+  }
+}
+
+export function removeStatus(character: CharacterState, result?: ActionResult, target: 'source' | 'target' = 'source') {
+  if (character.status) {
+    if (character.status === 'burn') {
+      character.currentStats!.attack = character.stats.attack;
+    } else if (character.status === 'paralysis') {
+      character.currentStats!.speed = character.stats.speed;
+    }
+    if (result) {
+      result.effects.push({ type: 'status', target, value: 0, status: null });
+    }
+    character.status = undefined;
+    character.statusTurns = 0;
+  }
 }
