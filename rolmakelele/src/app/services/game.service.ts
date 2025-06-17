@@ -158,6 +158,7 @@ export class GameService {
               this.turnInfo$.next({
                 ...data.room.currentTurn,
                 timeRemaining: null,
+                effects: [],
               });
             }
             this.router.navigate(['/combat', roomId]);
@@ -210,6 +211,7 @@ export class GameService {
             playerId: first.playerId,
             characterIndex: first.characterIndex,
             timeRemaining: null,
+            effects: [],
           });
           this.router.navigate(['/combat', data.room.id]);
         });
