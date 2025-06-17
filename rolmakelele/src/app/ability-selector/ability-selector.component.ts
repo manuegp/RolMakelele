@@ -67,7 +67,11 @@ export class AbilitySelectorComponent implements OnInit {
         }
         break;
       case 'heal':
-        text = `Cura ${effect.value}`;
+        if (effect.healLost) {
+          text = `Cura vida perdida + ${effect.value}`;
+        } else {
+          text = `Cura ${effect.value}`;
+        }
         break;
       case 'buff':
         const buffStat = effect.stat ? LABELS_MAP[effect.stat] || effect.stat : '';
@@ -84,10 +88,18 @@ export class AbilitySelectorComponent implements OnInit {
           text += ` (${effect.statusChance * 100}%)`;
         }
         break;
+      case 'cure':
+        const cureStatus = effect.status ? STATUS_LABELS[effect.status] || effect.status : 'alterado';
+        text = `Elimina estado ${cureStatus}`;
+        break;
     }
 
     if (effect.duration) {
       text += ` durante ${effect.duration} turnos`;
+    }
+
+    if (effect.chance !== undefined && effect.chance < 1) {
+      text += ` (${effect.chance * 100}%)`;
     }
 
     return `${targets[effect.target]}: ${text}`;

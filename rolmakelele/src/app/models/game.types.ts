@@ -15,7 +15,13 @@ export interface Stats {
 }
 
 // Tipos de efectos para las habilidades
-export type EffectType = 'damage' | 'heal' | 'buff' | 'debuff' | 'status';
+export type EffectType =
+  | 'damage'
+  | 'heal'
+  | 'buff'
+  | 'debuff'
+  | 'status'
+  | 'cure';
 export type EffectTarget = 'self' | 'opponent' | 'allies';
 export type StatType =
   | 'speed'
@@ -40,6 +46,10 @@ export interface Effect {
   status?: StatusCondition | null;
   /** Probability to apply the status (0-1) */
   statusChance?: number;
+  /** Probability to apply the effect (0-1) */
+  chance?: number;
+  /** If true, heals the lost HP in addition to value */
+  healLost?: boolean;
 }
 
 // Definición de una habilidad

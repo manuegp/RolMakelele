@@ -78,10 +78,32 @@ export function applyDebuff(
   }
 }
 
-export function applyHeal(character: CharacterState, effect: Effect, result: ActionResult, target: 'source' | 'target') {
-  const healAmount = effect.value;
-  character.currentHealth = Math.min(character.currentHealth + healAmount, character.stats.health);
+export function applyHeal(
+  character: CharacterState,
+  effect: Effect,
+  result: ActionResult,
+  target: 'source' | 'target'
+) {
+  let healAmount = effect.value;
+  if (effect.healLost) {
+    healAmount += character.stats.health - character.currentHealth;
+  }
+  character.currentHealth = Math.min(
+    character.currentHealth + healAmount,
+    character.stats.health
+  );
   result.effects.push({ type: 'heal', target, value: healAmount });
+}
+
+export function applyCure(
+  character: CharacterState,
+  status: StatusCondition | null,
+  result: ActionResult,
+  target: 'source' | 'target'
+) {
+  if (!status || character.status === status) {
+    removeStatus(character, result.effects, target);
+  }
 }
 
 export function applyStatus(character: CharacterState, status: StatusCondition, result: ActionResult, target: 'source' | 'target') {

@@ -12,7 +12,8 @@ import {
   applyBuff,
   applyDebuff,
   applyHeal,
-  applyStatus
+  applyStatus,
+  applyCure
 } from "./utils/effects";
 import { calculateDamage } from "./utils/damage";
 
@@ -30,13 +31,17 @@ export function applyAbilityEffects(
     ability.type && sourceCharacter.types?.some(t => t.name === ability.type);
 
   function processEffect(effect: Effect) {
+    if (Math.random() > (effect.chance ?? 1)) {
+      return;
+    }
     const modifiedEffect = {
       ...effect,
       value: effect.value * (sameType ? 1.2 : 1)
     };
-    const statusRoll = effect.status
-      ? Math.random() < (effect.statusChance ?? 1)
-      : false;
+    const statusRoll =
+      effect.type === 'status' && effect.status
+        ? Math.random() < (effect.statusChance ?? 1)
+        : false;
     if (effect.target === 'self') {
       if (effect.type === 'buff') {
         applyBuff(sourceCharacter, modifiedEffect, actionResult, 'source');
@@ -44,6 +49,8 @@ export function applyAbilityEffects(
         applyHeal(sourceCharacter, modifiedEffect, actionResult, 'source');
       } else if (effect.type === 'debuff') {
         applyDebuff(sourceCharacter, modifiedEffect, actionResult, 'source');
+      } else if (effect.type === 'cure') {
+        applyCure(sourceCharacter, effect.status ?? null, actionResult, 'source');
       }
       if (statusRoll && effect.status) {
         applyStatus(sourceCharacter, effect.status, actionResult, 'source');
@@ -106,9 +113,27 @@ export function applyAbilityEffects(
         applyHeal(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'buff') {
         applyBuff(targetCharacter, modifiedEffect, actionResult, 'target');
+      } else if (effect.type === 'cure') {
+        applyCure(targetCharacter, effect.status ?? null, actionResult, 'target');
       }
       if (statusRoll && effect.status) {
         applyStatus(targetCharacter, effect.status, actionResult, 'target');
+      }
+    } else if (effect.target === 'allies') {
+      for (const ally of sourcePlayer.selectedCharacters) {
+        if (!ally.isAlive) continue;
+        if (effect.type === 'buff') {
+          applyBuff(ally, modifiedEffect, actionResult, 'target');
+        } else if (effect.type === 'heal') {
+          applyHeal(ally, modifiedEffect, actionResult, 'target');
+        } else if (effect.type === 'debuff') {
+          applyDebuff(ally, modifiedEffect, actionResult, 'target');
+        } else if (effect.type === 'cure') {
+          applyCure(ally, effect.status ?? null, actionResult, 'target');
+        }
+        if (statusRoll && effect.status) {
+          applyStatus(ally, effect.status, actionResult, 'target');
+        }
       }
     }
   }

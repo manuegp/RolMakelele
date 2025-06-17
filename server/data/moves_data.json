@@ -67,11 +67,13 @@
     },
     {
       "name": "Tragito coctel",
-      "description": "Aumenta su ataque especial perdiendo algo de vida",
+      "description": "Aumenta su ataque especial y puede curar o eliminar la borrachera",
       "category": "status",
       "type": "Barman",
       "effects": [
-        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 },
+        { "type": "heal", "target": "self", "value": 10, "chance": 0.65, "healLost": true },
+        { "type": "cure", "target": "self", "status": "drunk", "value": 0, "chance": 0.35 }
       ],
       "id": "m005",
       "img": "/public/assets/abilities/drink.png"
