@@ -43,12 +43,21 @@ export function processTurn(
       }
     }
 
-    playerRoom.turnOrder.sort((a, b) => b.speed - a.speed);
-    const currentTurnIndex = playerRoom.turnOrder.findIndex(
-      t => t.playerId === playerRoom.currentTurn?.playerId &&
-           t.characterIndex === playerRoom.currentTurn?.characterIndex
-    );
-    let nextTurnIndex = (currentTurnIndex + 1) % playerRoom.turnOrder.length;
+    let currentTurnIndex =
+      playerRoom.turnIndex ??
+      playerRoom.turnOrder.findIndex(
+        (t) =>
+          t.playerId === playerRoom.currentTurn?.playerId &&
+          t.characterIndex === playerRoom.currentTurn?.characterIndex,
+      );
+    if (currentTurnIndex < 0) currentTurnIndex = 0;
+
+    let nextTurnIndex = currentTurnIndex + 1;
+    const newRound = nextTurnIndex >= playerRoom.turnOrder.length;
+    if (newRound) {
+      playerRoom.turnOrder.sort((a, b) => b.speed - a.speed);
+      nextTurnIndex = 0;
+    }
     let nextTurn = playerRoom.turnOrder[nextTurnIndex];
     let safetyCounter = playerRoom.turnOrder.length;
     while (safetyCounter > 0) {
@@ -62,6 +71,7 @@ export function processTurn(
     }
 
     playerRoom.currentTurn = nextTurn;
+    playerRoom.turnIndex = nextTurnIndex;
 
     const activePlayer = playerRoom.players.find(p => p.id === nextTurn.playerId);
     const activeChar = activePlayer?.selectedCharacters[nextTurn.characterIndex];

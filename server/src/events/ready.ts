@@ -60,6 +60,7 @@ export function registerReady(
 
       turnOrder.sort((a, b) => b.speed - a.speed);
       playerRoom.turnOrder = turnOrder;
+      playerRoom.turnIndex = 0;
       playerRoom.currentTurn = turnOrder[0];
 
       io.to(playerRoom.id).emit(ServerEvents.GAME_STARTED, {

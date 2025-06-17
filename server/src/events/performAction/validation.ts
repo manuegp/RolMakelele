@@ -45,6 +45,14 @@ export function validateAction(
     return null;
   }
 
+  if (playerRoom.currentTurn.characterIndex !== data.sourceCharacterIndex) {
+    socket.emit(ServerEvents.ERROR, {
+      message: 'No es el turno de este personaje',
+      code: 'WRONG_CHARACTER_TURN'
+    });
+    return null;
+  }
+
   const sourcePlayer = playerRoom.players.find(p => p.id === socket.id);
   const targetPlayer = playerRoom.players.find(p => p.id === data.targetPlayerId);
 
