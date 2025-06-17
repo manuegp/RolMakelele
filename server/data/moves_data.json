@@ -42,38 +42,36 @@
           "target": "self",
           "value": 1,
           "stat": "specialDefense"
-        },
-        { "type": "heal", "target": "self", "value": 15 }
+        }
       ],
       "id": "m003",
-      "img": "/public/assets/abilities/drink.png"
+      "img": "/public/assets/abilities/drink.png",
+      "extraEffects": [{ "type": "heal", "target": "self", "value": 15 }]
+
     },
    
     {
       "name": "Agita la coctelera",
       "description": "Aumenta su velocidad y ataque especial",
       "category": "status",
-      "type": "Barman",
       "unique": true,
       "effects": [
         { "type": "buff", "target": "self", "stat": "speed", "value": 1 },
-        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 },
+       { "type": "buff", "target": "allies", "stat": "speed", "value": 1 }
       ],
-      "extraEffects": [
-        { "type": "buff", "target": "allies", "stat": "speed", "value": 1 }
-      ],
+      
       "id": "m004",
       "img": "/public/assets/abilities/drink.png"
     },
     {
       "name": "Tragito coctel",
-      "description": "Aumenta su ataque especial y puede curar o eliminar la borrachera",
+      "description": "Aumenta su ataque especial perdiendo algo de vida",
       "category": "status",
       "type": "Barman",
       "effects": [
-        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 },
-        { "type": "heal", "target": "self", "value": 10, "chance": 0.65, "healLost": true },
-        { "type": "cure", "target": "self", "status": "drunk", "value": 0, "chance": 0.35 }
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 2 },
+        { "type": "damage", "target": "self", "value": 10 }
       ],
       "id": "m005",
       "img": "/public/assets/abilities/drink.png"
@@ -160,7 +158,7 @@
       "unique": true,
       "effects": [
         { "type": "damage", "target": "opponent", "value": 45 },
-        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 2 }
       ],
       "id": "m010",
       "img": "/public/assets/abilities/insult.png"
@@ -198,7 +196,6 @@
       "name": "Achio piho",
       "description": "Hace retroceder al enemigo",
       "category": "status",
-      "type": "Moro",
       "unique": true,
       "effects": [
         {
