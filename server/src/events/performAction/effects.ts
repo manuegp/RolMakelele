@@ -34,6 +34,9 @@ export function applyAbilityEffects(
       ...effect,
       value: effect.value * (sameType ? 1.2 : 1)
     };
+    const statusRoll = effect.status
+      ? Math.random() < (effect.statusChance ?? 1)
+      : false;
     if (effect.target === 'self') {
       if (effect.type === 'buff') {
         applyBuff(sourceCharacter, modifiedEffect, actionResult, 'source');
@@ -41,7 +44,8 @@ export function applyAbilityEffects(
         applyHeal(sourceCharacter, modifiedEffect, actionResult, 'source');
       } else if (effect.type === 'debuff') {
         applyDebuff(sourceCharacter, modifiedEffect, actionResult, 'source');
-      } else if (effect.type === 'status' && effect.status) {
+      }
+      if (statusRoll && effect.status) {
         applyStatus(sourceCharacter, effect.status, actionResult, 'source');
       }
     } else if (effect.target === 'opponent') {
@@ -96,7 +100,8 @@ export function applyAbilityEffects(
         applyHeal(targetCharacter, modifiedEffect, actionResult, 'target');
       } else if (effect.type === 'buff') {
         applyBuff(targetCharacter, modifiedEffect, actionResult, 'target');
-      } else if (effect.type === 'status' && effect.status) {
+      }
+      if (statusRoll && effect.status) {
         applyStatus(targetCharacter, effect.status, actionResult, 'target');
       }
     }

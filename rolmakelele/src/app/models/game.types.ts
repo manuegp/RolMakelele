@@ -38,6 +38,8 @@ export interface Effect {
   duration?: number;
   ignoreDefense?: number;
   status?: StatusCondition | null;
+  /** Probability to apply the status (0-1) */
+  statusChance?: number;
 }
 
 // Definición de una habilidad

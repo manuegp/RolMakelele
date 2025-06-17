@@ -61,6 +61,22 @@
       ],
       "id": "m004",
       "img": "/public/assets/abilities/fist.png"
+    },
+    {
+      "name": "Quemadura Segura",
+      "description": "Ataque de prueba que siempre quema al rival",
+      "category": "special",
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 0,
+          "status": "burn",
+          "statusChance": 1
+        }
+      ],
+      "id": "m005",
+      "img": "/public/assets/abilities/fire.png"
     }
 
   ]
