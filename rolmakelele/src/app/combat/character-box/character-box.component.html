@@ -27,7 +27,17 @@
   arrow
   [autoUpdate]="true"
 >
-  <div class="fw-bold">{{ character.name }}</div>
+  <div class="fw-bold d-flex align-items-center justify-content-center gap-1">
+    {{ character.name }}
+    <mat-chip
+      *ngIf="character.status"
+      [ngStyle]="{ 'background-color': getStatusColor(character.status) }"
+      class="text-white"
+      size="small"
+    >
+      {{ statusLabels[character.status] }}
+    </mat-chip>
+  </div>
   <!-- <div class="mb-1">
     <mat-chip
       *ngFor="let t of character.types"

@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import config from "../../config/config";
 import { GameRoom, ActionResult } from "../../types/game.types";
 import { ServerEvents } from "../../types/socket.types";
-import { updateStatStage } from "./utils/effects";
+import { updateStatStage, removeStatus } from "./utils/effects";
 import { broadcastRoomsList } from '../../utils/roomHelpers';
 
 export function processTurn(
@@ -68,6 +68,93 @@ export function processTurn(
 
     playerRoom.currentTurn = nextTurn;
 
+    const activePlayer = playerRoom.players.find(p => p.id === nextTurn.playerId);
+    const activeChar = activePlayer?.selectedCharacters[nextTurn.characterIndex];
+    let skipTurn = false;
+    const startEffects: ActionResult['effects'] = [];
+    if (activeChar && activeChar.status) {
+      activeChar.statusTurns = (activeChar.statusTurns || 0) + 1;
+      if (activeChar.status === 'burn') {
+        const dmg = activeChar.stats.health * 0.125;
+        activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
+        if (activeChar.currentHealth === 0) activeChar.isAlive = false;
+        startEffects.push({ type: 'damage', target: 'source', value: dmg });
+        io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+          username: 'Sistema',
+          message: `${activePlayer?.username} - ${activeChar.name} sufre ${dmg.toFixed(2)} de daño por quemadura`,
+          timestamp: new Date(),
+          isSpectator: false,
+          isSystem: true
+        });
+      } else if (activeChar.status === 'paralysis') {
+        if (Math.random() < 0.25) {
+          skipTurn = true;
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `${activePlayer?.username} - ${activeChar.name} está paralizado y pierde el turno`,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
+          });
+        }
+      } else if (activeChar.status === 'drunk') {
+        const selfHit = Math.random() < 1 / 3;
+        if (selfHit) {
+          const dmg = activeChar.stats.health * 0.0625;
+          activeChar.currentHealth = Math.max(0, activeChar.currentHealth - dmg);
+          if (activeChar.currentHealth === 0) activeChar.isAlive = false;
+          startEffects.push({ type: 'damage', target: 'source', value: dmg });
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `${activePlayer?.username} - ${activeChar.name} se golpeó a sí mismo y perdió ${dmg.toFixed(2)} de vida`,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
+          });
+        }
+        skipTurn = true;
+      } else if (activeChar.status === 'sleep') {
+        let chance = 0;
+        if (activeChar.statusTurns === 1) chance = 0.3333;
+        else if (activeChar.statusTurns === 2) chance = 0.6666;
+        else if (activeChar.statusTurns === 3) chance = 0.9999;
+        else if (activeChar.statusTurns >= 4) chance = 1;
+        if (Math.random() < chance) {
+          removeStatus(activeChar, startEffects, 'source');
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `${activePlayer?.username} - ${activeChar.name} se despertó`,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
+          });
+        } else {
+          skipTurn = true;
+          io.to(playerRoom.id).emit(ServerEvents.CHAT_MESSAGE, {
+            username: 'Sistema',
+            message: `${activePlayer?.username} - ${activeChar.name} está dormido`,
+            timestamp: new Date(),
+            isSpectator: false,
+            isSystem: true
+          });
+        }
+      }
+    }
+
+
+    if (skipTurn) {
+      const skipResult: ActionResult = {
+        playerId: nextTurn.playerId,
+        sourceCharacterIndex: nextTurn.characterIndex,
+        targetPlayerId: nextTurn.playerId,
+        targetCharacterIndex: nextTurn.characterIndex,
+        ability: { id: 'skip', name: 'Skip', description: 'Turno perdido', category: 'status', effects: [] },
+        effects: []
+      };
+      processTurn(io, rooms, playerRoom, skipResult);
+      return;
+    }
+
     for (const player of playerRoom.players) {
       for (const character of player.selectedCharacters) {
         if (character.activeEffects) {
@@ -98,7 +185,8 @@ export function processTurn(
     io.to(playerRoom.id).emit(ServerEvents.TURN_STARTED, {
       playerId: nextTurn.playerId,
       characterIndex: nextTurn.characterIndex,
-      timeRemaining: config.turnTimeLimit
+      timeRemaining: config.turnTimeLimit,
+      effects: startEffects
     });
   } else if (!gameEnded) {
     io.to(playerRoom.id).emit(ServerEvents.ACTION_RESULT, { result: actionResult });

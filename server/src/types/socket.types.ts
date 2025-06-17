@@ -87,6 +87,7 @@ export interface TurnStartedData {
   playerId: string;
   characterIndex: number;
   timeRemaining: number;
+  effects: ActionResult['effects'];
 }
 
 export interface ActionResultData {

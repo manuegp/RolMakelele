@@ -88,7 +88,9 @@ export class CharacterService {
         evasion: 0
       },
       currentStats: { ...character.stats },
-      activeEffects: []
+      activeEffects: [],
+      status: undefined,
+      statusTurns: 0
     };
   }
 }

@@ -9,6 +9,8 @@ import {
   Player,
   GameAction,
   Ability,
+  CharacterState,
+  ActionResult,
 } from '../models/game.types';
 import { environment } from '../../environments/environment';
 import {
@@ -156,6 +158,7 @@ export class GameService {
               this.turnInfo$.next({
                 ...data.room.currentTurn,
                 timeRemaining: null,
+                effects: [],
               });
             }
             this.router.navigate(['/combat', roomId]);
@@ -208,21 +211,27 @@ export class GameService {
             playerId: first.playerId,
             characterIndex: first.characterIndex,
             timeRemaining: null,
+            effects: [],
           });
           this.router.navigate(['/combat', data.room.id]);
         });
       });
       this.socket.on(ServerEvents.TURN_STARTED, (data: TurnStartedData) => {
         this.zone.run(() => {
-          this.turnInfo$.next(data);
           const room = this.currentRoom$.value;
           if (room) {
             room.currentTurn = {
               playerId: data.playerId,
               characterIndex: data.characterIndex,
             };
+            const player = room.players.find(p => p.id === data.playerId);
+            const char = player?.selectedCharacters[data.characterIndex];
+            if (char) {
+              this.applyEffects(char, char, data.effects);
+            }
             this.currentRoom$.next({ ...room });
           }
+          this.turnInfo$.next(data);
         });
       });
       this.socket.on(ServerEvents.ACTION_RESULT, (data: ActionResultData) => {
@@ -240,45 +249,7 @@ export class GameService {
               sourcePlayer.selectedCharacters[data.result.sourceCharacterIndex];
             const targetChar =
               targetPlayer.selectedCharacters[data.result.targetCharacterIndex];
-            for (const eff of data.result.effects) {
-              const char = eff.target === 'source' ? sourceChar : targetChar;
-              if (eff.type === 'damage') {
-                char.currentHealth = Math.max(
-                  0,
-                  char.currentHealth - eff.value,
-                );
-                if (char.currentHealth === 0) char.isAlive = false;
-              } else if (eff.type === 'heal') {
-                char.currentHealth = Math.min(
-                  char.stats.health,
-                  char.currentHealth + eff.value,
-                );
-              } else if (
-                (eff.type === 'buff' || eff.type === 'debuff') &&
-                eff.stat
-              ) {
-                if (!char.statStages) {
-                  char.statStages = {
-                    speed: 0,
-                    health: 0,
-                    attack: 0,
-                    defense: 0,
-                    specialAttack: 0,
-                    specialDefense: 0,
-                    critical: 0,
-                    evasion: 0,
-                  };
-                }
-                if (!char.currentStats) {
-                  char.currentStats = { ...char.stats };
-                }
-                const current = char.statStages[eff.stat] || 0;
-                const newStage = Math.max(-6, Math.min(6, current + eff.value));
-                char.statStages[eff.stat] = newStage;
-                const base = char.stats[eff.stat];
-                char.currentStats[eff.stat] = Math.max(1, base * (1 + 0.5 * newStage));
-              }
-            }
+            this.applyEffects(sourceChar, targetChar, data.result.effects);
           }
           if (data.nextTurn) {
             room.currentTurn = {
@@ -334,6 +305,49 @@ export class GameService {
           });
         },
       );
+    }
+  }
+
+  private applyEffects(
+    sourceChar: CharacterState,
+    targetChar: CharacterState,
+    effects: ActionResult['effects']
+  ) {
+    for (const eff of effects) {
+      const char = eff.target === 'source' ? sourceChar : targetChar;
+      if (eff.type === 'damage') {
+        char.currentHealth = Math.max(0, char.currentHealth - eff.value);
+        if (char.currentHealth === 0) char.isAlive = false;
+      } else if (eff.type === 'heal') {
+        char.currentHealth = Math.min(
+          char.stats.health,
+          char.currentHealth + eff.value,
+        );
+      } else if ((eff.type === 'buff' || eff.type === 'debuff') && eff.stat) {
+        if (!char.statStages) {
+          char.statStages = {
+            speed: 0,
+            health: 0,
+            attack: 0,
+            defense: 0,
+            specialAttack: 0,
+            specialDefense: 0,
+            critical: 0,
+            evasion: 0,
+          };
+        }
+        if (!char.currentStats) {
+          char.currentStats = { ...char.stats };
+        }
+        const current = char.statStages[eff.stat] || 0;
+        const newStage = Math.max(-6, Math.min(6, current + eff.value));
+        char.statStages[eff.stat] = newStage;
+        const base = char.stats[eff.stat];
+        char.currentStats[eff.stat] = Math.max(1, base * (1 + 0.5 * newStage));
+      }
+      if (eff.status !== undefined) {
+        char.status = eff.status ?? null;
+      }
     }
   }
 

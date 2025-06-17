@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CharacterState, Stats } from '../../models/game.types';
+import { CharacterState, Stats, StatusCondition } from '../../models/game.types';
 import { NgxTooltip } from '@ngx-popovers/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { TypeService } from '../../services/type.service';
 import { LABELS_MAP } from '../../constants/stats.map';
+import { STATUS_COLORS, STATUS_LABELS } from '../../constants/statuses.map';
 
 @Component({
   selector: 'app-character-box',
@@ -29,6 +30,13 @@ export class CharacterBoxComponent {
     'evasion'
   ];
   readonly labels = LABELS_MAP;
+
+  readonly statusLabels = STATUS_LABELS;
+  readonly statusColors = STATUS_COLORS;
+
+  getStatusColor(status: StatusCondition): string {
+    return this.statusColors[status] || '#ccc';
+  }
 
   constructor(public types: TypeService) {}
 
