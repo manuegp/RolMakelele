@@ -6,5 +6,5 @@
     {"id": "t005", "name":"Ingeniero", "color":"#FF33A1"},
     {"id": "t006", "name":"Moro", "color":"#FF33A1"},
     {"id": "t006", "name":"Deportista", "color":"#FF33A1"}
-
+    ,{"id": "t007", "name":"Barman", "color":"#9B59B6"}
 ]

@@ -76,6 +76,176 @@
       ],
       "id": "m005",
       "img": "/public/assets/abilities/fire.png"
+    },
+    {
+      "name": "Agita la coctelera",
+      "description": "Aumenta su velocidad y ataque especial",
+      "category": "status",
+      "type": "Barman",
+      "unique": true,
+      "effects": [
+        { "type": "buff", "target": "self", "stat": "speed", "value": 1 },
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+      ],
+      "id": "m006",
+      "img": "/public/assets/abilities/drink.png"
+    },
+    {
+      "name": "Tragito coctel",
+      "description": "Aumenta su ataque especial perdiendo algo de vida",
+      "category": "status",
+      "type": "Barman",
+      "effects": [
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+      ],
+      "id": "m007",
+      "img": "/public/assets/abilities/drink.png"
+    },
+    {
+      "name": "Cóctel molotov",
+      "description": "Ataque especial con posibilidad de quemar",
+      "category": "special",
+      "type": "Barman",
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 35,
+          "status": "burn",
+          "statusChance": 0.1
+        }
+      ],
+      "extraEffects": [
+        {
+          "type": "status",
+          "target": "opponent",
+          "value": 0,
+          "status": "burn",
+          "statusChance": 0.3
+        }
+      ],
+      "id": "m008",
+      "img": "/public/assets/abilities/fire.png"
+    },
+    {
+      "name": "Hacer cachimba",
+      "description": "Carga un turno y aumenta evasión, defensa y ataque especial",
+      "category": "status",
+      "unique": true,
+      "effects": [
+        { "type": "buff", "target": "self", "stat": "evasion", "value": 1 },
+        { "type": "buff", "target": "self", "stat": "defense", "value": 1 },
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+      ],
+      "id": "m009",
+      "img": "/public/assets/abilities/drink.png"
+    },
+    {
+      "name": "Tirar facto",
+      "description": "Daño especial que reduce la defensa del objetivo",
+      "category": "special",
+      "effects": [
+        { "type": "damage", "target": "opponent", "value": 30 },
+        { "type": "debuff", "target": "opponent", "stat": "defense", "value": -1 }
+      ],
+      "id": "m010",
+      "img": "/public/assets/abilities/insult.png"
+    },
+    {
+      "name": "Tirar carbones",
+      "description": "Daño físico con posibilidad de quemar",
+      "category": "physical",
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 30,
+          "status": "burn",
+          "statusChance": 0.1
+        }
+      ],
+      "extraEffects": [
+        {
+          "type": "status",
+          "target": "opponent",
+          "value": 0,
+          "status": "burn",
+          "statusChance": 0.3
+        }
+      ],
+      "id": "m011",
+      "img": "/public/assets/abilities/fire.png"
+    },
+    {
+      "name": "No se la he chupado a mi padre te la voy a chupar a ti ¡GILIPOLLAS!",
+      "description": "Ataque especial muy potente que aumenta el ataque especial",
+      "category": "special",
+      "unique": true,
+      "effects": [
+        { "type": "damage", "target": "opponent", "value": 45 },
+        { "type": "buff", "target": "self", "stat": "specialAttack", "value": 1 }
+      ],
+      "id": "m012",
+      "img": "/public/assets/abilities/insult.png"
+    },
+    {
+      "name": "De la primera guaya que te meto...",
+      "description": "Golpe físico con probabilidad de paralizar",
+      "category": "physical",
+      "effects": [
+        {
+          "type": "damage",
+          "target": "opponent",
+          "value": 30,
+          "status": "paralysis",
+          "statusChance": 0.1
+        }
+      ],
+      "id": "m013",
+      "img": "/public/assets/abilities/fist.png"
+    },
+    {
+      "name": "... te vuelvo paraguayo",
+      "description": "Aumenta el daño si sufre un estado alterado",
+      "category": "physical",
+      "effects": [
+        { "type": "damage", "target": "opponent", "value": 35 }
+      ],
+      "extraEffects": [
+        { "type": "buff", "target": "self", "stat": "attack", "value": 1 }
+      ],
+      "id": "m014",
+      "img": "/public/assets/abilities/fist.png"
+    },
+    {
+      "name": "Achio piho",
+      "description": "Hace retroceder al enemigo",
+      "category": "status",
+      "unique": true,
+      "effects": [
+        {
+          "type": "status",
+          "target": "opponent",
+          "value": 0,
+          "status": "paralysis",
+          "statusChance": 1
+        }
+      ],
+      "id": "m015",
+      "img": "/public/assets/abilities/insult.png"
+    },
+    {
+      "name": "Un segarro amigo",
+      "description": "Baja la defensa especial e inflige daño",
+      "category": "status",
+      "effects": [
+        { "type": "debuff", "target": "opponent", "stat": "specialDefense", "value": -1 }
+      ],
+      "extraEffects": [
+        { "type": "damage", "target": "opponent", "value": 20 }
+      ],
+      "id": "m016",
+      "img": "/public/assets/abilities/fist.png"
     }
 
   ]

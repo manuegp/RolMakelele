@@ -85,7 +85,7 @@
         "m005"
       ]
     },
-     {
+    {
       "id": "c005",
       "name": "Dr. Enfermo",
       "types": ["Techno"],
@@ -100,7 +100,86 @@
         "evasion": 0
       },
       "availableAbilities": [
-        
+
+      ]
+    },
+    {
+      "id": "c006",
+      "name": "Javi",
+      "types": ["Barman", "Friki"],
+      "stats": {
+        "speed": 200,
+        "health": 127,
+        "attack": 63.75,
+        "defense": 191.25,
+        "specialAttack": 191.25,
+        "specialDefense": 200,
+        "critical": 0,
+        "evasion": 0
+      },
+      "availableAbilities": [
+        "m006",
+        "m007",
+        "m008"
+      ]
+    },
+    {
+      "id": "c007",
+      "name": "Jp",
+      "types": ["Friki"],
+      "stats": {
+        "speed": 127,
+        "health": 63.75,
+        "attack": 191.25,
+        "defense": 63.75,
+        "specialAttack": 127,
+        "specialDefense": 63.75,
+        "critical": 0,
+        "evasion": 0
+      },
+      "availableAbilities": [
+        "m009",
+        "m010",
+        "m011"
+      ]
+    },
+    {
+      "id": "c008",
+      "name": "José",
+      "types": ["Friki"],
+      "stats": {
+        "speed": 63.75,
+        "health": 127,
+        "attack": 127,
+        "defense": 63.75,
+        "specialAttack": 191.25,
+        "specialDefense": 63.75,
+        "critical": 0,
+        "evasion": 0
+      },
+      "availableAbilities": [
+        "m012",
+        "m013",
+        "m014"
+      ]
+    },
+    {
+      "id": "c009",
+      "name": "Pipa moro borracho cabrom",
+      "types": ["Moro"],
+      "stats": {
+        "speed": 63.75,
+        "health": 127,
+        "attack": 127,
+        "defense": 63.75,
+        "specialAttack": 191.25,
+        "specialDefense": 63.75,
+        "critical": 0,
+        "evasion": 0
+      },
+      "availableAbilities": [
+        "m015",
+        "m016"
       ]
     }
 
