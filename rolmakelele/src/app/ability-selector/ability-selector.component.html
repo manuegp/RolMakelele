@@ -23,6 +23,13 @@
         @if (ab.unique) {
           <app-unique-tag></app-unique-tag>
         }
+        <mat-chip
+          *ngIf="ab.type"
+          selected
+          [style.backgroundColor]="types.getColor(ab.type)"
+        >
+          {{ ab.type }}
+        </mat-chip>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <p>
